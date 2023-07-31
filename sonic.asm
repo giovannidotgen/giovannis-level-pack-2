@@ -2890,6 +2890,7 @@ Level_TtlCardLoop:
 	Level_SkipTtlCard:
 		moveq	#palid_Sonic,d0
 		bsr.w	PalLoad1	; load Sonic's palette
+		bsr.w	PalCycle_ToRAM
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformLayers
 		bset	#2,(v_fg_scroll_flags).w
@@ -3103,6 +3104,7 @@ loc_3BC8:
 		rts	
 ; ===========================================================================
 
+		include	"_inc\PalCycle_ToRAM.asm"
 		include	"_inc\DynPaletteTransition.asm"
 		include	"_inc\LZWaterFeatures.asm"
 		include	"_inc\MoveSonicInDemo.asm"
