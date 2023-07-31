@@ -3042,6 +3042,7 @@ Level_MainLoop:
 		jsr	(BuildSprites).l
 		jsr	(ObjPosLoad).l
 		jsr	(RingsManager).l		
+		bsr.w	DynPaletteTransition	; GIO: dynamic palette transition handling		
 		bsr.w	PaletteCycle
 		bsr.w	RunPLC
 		bsr.w	OscillateNumDo
@@ -3102,6 +3103,7 @@ loc_3BC8:
 		rts	
 ; ===========================================================================
 
+		include	"_inc\DynPaletteTransition.asm"
 		include	"_inc\LZWaterFeatures.asm"
 		include	"_inc\MoveSonicInDemo.asm"
 
