@@ -6,22 +6,22 @@ v_errortype:	equ $FFFFFC44	; error type
 
 v_128x128:	equ   $FF0000	; 128x128 tile mappings ($A400 bytes)
 
-v_palflags		=	$FFFF8000	; GIO: Palette changer flags. (1 byte. Bit 0 = above water. Bit 1 = below water. Bit 2 = palette cycle. Other bits MUST stay 0.)
-v_awcount		=	$FFFF8001	; GIO: Counter for number of above water palette entries to be changed. (1 byte)
-v_bwcount		=	$FFFF8002	; GIO: Counter for number of below water palette entries to be changed. (1 byte)
-v_paltime		=	$FFFF8003	; GIO: Frequency of palette changes. (1 byte)
-v_paltimecur	=	$FFFF8004	; GIO: Actual timer used for palette transitioning. (1 byte)
-v_pcyccount		=	$FFFF8005	; GIO: Counter for number of palette cycle entries to be changed. (1 byte)
-p_awtarget		=	$FFFF8006	; GIO: ROM pointer to the above water target palette. (4 bytes)
-p_bwtarget		=	$FFFF800A	; GIO: ROM pointer to the below water target palette. (4 bytes)
-p_awreplace		=	$FFFF800E	; GIO: RAM pointer to the first above water palette entry to be replaced. (4 bytes)
-p_bwreplace		=	$FFFF8012	; GIO: RAM pointer to the first below water palette entry to be replaced. (4 bytes)
-p_pcyctarget	=	$FFFF8016	; GIO: ROM pointer to the palette cycle target palette. (4 bytes)
-v_palcycleram	= 	$FFFF801A	; GIO: Buffer for the palette cycling data (as much RAM as you want)
-
-
 v_lvllayoutfg:	equ $FFFFA400	; level layout ROM address (4 bytes)
 v_lvllayoutbg:	equ $FFFFA404	; background layout ROM address (4 bytes)
+
+v_palflags		=	$FFFFA410	; GIO: Palette changer flags. (1 byte. Bit 0 = above water. Bit 1 = below water. Bit 2 = palette cycle. Other bits MUST stay 0.)
+v_awcount		=	$FFFFA411	; GIO: Counter for number of above water palette entries to be changed. (1 byte)
+v_bwcount		=	$FFFFA412	; GIO: Counter for number of below water palette entries to be changed. (1 byte)
+v_paltime		=	$FFFFA413	; GIO: Frequency of palette changes. (1 byte)
+v_paltimecur	=	$FFFFA414	; GIO: Actual timer used for palette transitioning. (1 byte)
+v_pcyccount		=	$FFFFA415	; GIO: Counter for number of palette cycle entries to be changed. (1 byte)
+p_awtarget		=	$FFFFA416	; GIO: ROM pointer to the above water target palette. (4 bytes)
+p_bwtarget		=	$FFFFA41A	; GIO: ROM pointer to the below water target palette. (4 bytes)
+p_awreplace		=	$FFFFA41E	; GIO: RAM pointer to the first above water palette entry to be replaced. (4 bytes)
+p_bwreplace		=	$FFFFA422	; GIO: RAM pointer to the first below water palette entry to be replaced. (4 bytes)
+p_pcyctarget	=	$FFFFA426	; GIO: ROM pointer to the palette cycle target palette. (4 bytes)
+v_palcycleram	= 	$FFFFA42A	; GIO: Buffer for the palette cycling data (as much RAM as you want)
+
 
 v_bgscroll_buffer:	equ	$FFFFA800	; background scroll buffer ($200 bytes)
 v_ngfx_buffer:	equ $FFFFAA00	; Nemesis graphics decompression buffer ($200 bytes)
@@ -330,9 +330,13 @@ v_lamp_wtrpos:	equ v_lastlamp+$20 ; water position at lamppost (2 bytes)
 v_lamp_wtrrout:	equ v_lastlamp+$22 ; water routine at lamppost
 v_lamp_wtrstat:	equ v_lastlamp+$23 ; water state at lamppost
 v_lamp_lives:	equ v_lastlamp+$24 ; lives counter at lamppost
+v_lamp_paltracker:	= $FFFFFE55	; GIO: copy of the v_paltracker that is used in checkpoints.
 v_emeralds:	equ $FFFFFE57	; number of chaos emeralds
 v_emldlist:	equ $FFFFFE58	; which individual emeralds you have (00 = no; 01 = yes) (6 bytes)
 v_oscillate:	equ $FFFFFE5E	; values which oscillate - for swinging platforms, et al ($42 bytes)
+
+v_paltracker:	= $FFFFFEA0	; GIO: palette tracker for your level. Feel free to change the RAM address. It is recommended to use something that is reset upon level beginning. (1 byte)
+
 v_ani0_time:	equ $FFFFFEC0	; synchronised sprite animation 0 - time until next frame (used for synchronised animations)
 v_ani0_frame:	equ $FFFFFEC1	; synchronised sprite animation 0 - current frame
 v_ani1_time:	equ $FFFFFEC2	; synchronised sprite animation 1 - time until next frame
