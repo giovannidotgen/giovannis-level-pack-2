@@ -32,7 +32,7 @@ Conv_Main:	; Routine 0
 
 Conv_Action:	; Routine 2
 		bsr.s	@movesonic
-		out_of_range.s	@delete
+		out_of_range_S3.s	@delete
 		rts	
 
 	@delete:

@@ -3,15 +3,12 @@
 ; ---------------------------------------------------------------------------
 
 RememberState:
-		out_of_range.w	@offscreen
+		out_of_range_S3.w	@offscreen
 		bra.w	DisplaySprite
 
 	@offscreen:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@delete
-		bclr	#7,2(a2,d0.w)
-
-	@delete:
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.w	DeleteObject	; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 		bra.w	DeleteObject

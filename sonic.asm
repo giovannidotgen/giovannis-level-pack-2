@@ -2160,6 +2160,7 @@ GM_Title:
 		move.w	#0,($FFFFFFEA).w ; unused variable
 		move.w	#(id_GHZ<<8),(v_zone).w	; set level to GHZ (00)
 		move.w	#0,(v_pcyc_time).w ; disable palette cycling
+		move.b	#0,(Level_started_flag).w	; Disable ring rendering		
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformLayers
 		lea	(v_16x16).w,a1
@@ -2930,6 +2931,8 @@ Level_ChkWater:
 
 Level_LoadObj:
 		jsr	(ObjPosLoad).l
+		move.b	#0,(Rings_manager_routine).w
+		jsr	(RingsManager).l		
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		moveq	#0,d0
@@ -3016,6 +3019,7 @@ Level_ClrCardArt:
 		jsr	(AddPLC).l	; load animal gfx (level no. + $15)
 
 Level_StartGame:
+		move.b	#1,(Level_started_flag).w	; render rings
 		bclr	#7,(v_gamemode).w ; subtract $80 from mode to end pre-level stuff
 
 ; ---------------------------------------------------------------------------
@@ -3046,6 +3050,7 @@ Level_MainLoop:
 	Level_SkipScroll:
 		jsr	(BuildSprites).l
 		jsr	(ObjPosLoad).l
+		jsr	(RingsManager).l		
 		bsr.w	PaletteCycle
 		bsr.w	RunPLC
 		bsr.w	OscillateNumDo
@@ -3300,6 +3305,7 @@ GM_Special:
 		moveq	#palid_Special,d0
 		bsr.w	PalLoad1	; load special stage palette
 		jsr	(SS_Load).l		; load SS layout data
+		move.b	#0,(Level_started_flag).w	; Don't render rings		
 		move.l	#0,(v_screenposx).w
 		move.l	#0,(v_screenposy).w
 		move.b	#id_SonicSpecial,(v_player).w ; load special stage Sonic object
@@ -3775,6 +3781,7 @@ GM_Continue:
 		move.b	#bgm_Continue,d0
 		bsr.w	PlaySound	; play continue	music
 		move.w	#659,(v_demolength).w ; set time delay to 11 seconds
+		move.b	#0,(Level_started_flag).w	; Don't render special rings		
 		clr.l	(v_screenposx).w
 		move.l	#$1000000,(v_screenposy).w
 		move.b	#id_ContSonic,(v_player).w ; load Sonic object
@@ -5839,6 +5846,7 @@ Map_Missile:	include	"_maps\Buzz Bomber Missile.asm"
 		include	"_incObj\25 & 37 Rings.asm"
 		include	"_incObj\4B Giant Ring.asm"
 		include	"_incObj\7C Ring Flash.asm"
+		include "_incObj\07 Attracted Ring from Sonic 3.asm"
 
 		include	"_anim\Rings.asm"
 		if Revision=0
@@ -6268,10 +6276,20 @@ BldSpr_ScrPos:	dc.l 0				; blank
 BuildSprites:
 		lea	(v_spritetablebuffer).w,a2 ; set address for sprite table
 		moveq	#0,d5
+		moveq	#0,d4
 		lea	(v_spritequeue).w,a4
 		moveq	#7,d7
 
-	@priorityLoop:
+	BuildSprites_PriorityLoop:
+		cmpi.w	#$07-$02,d7
+		bne.s	BuildSpritesCont
+		tst.b	(Level_started_flag).w
+		beq.s	BuildSpritesCont
+		movem.l	d7/a4,-(sp)
+		bsr.w	BuildRings
+		movem.l	(sp)+,d7/a4
+
+BuildSpritesCont:	
 		tst.w	(a4)	; are there objects left to draw?
 		beq.w	@nextPriority	; if not, branch
 		moveq	#2,d6
@@ -6358,7 +6376,7 @@ BuildSprites:
 
 	@nextPriority:
 		lea	$80(a4),a4
-		dbf	d7,@priorityLoop
+		dbf	d7,BuildSprites_PriorityLoop
 		move.b	d5,(v_spritecount).w
 		cmpi.b	#$50,d5
 		beq.s	@spriteLimit
@@ -6541,229 +6559,12 @@ BuildSpr_FlipXY:
 
 		include	"_incObj\sub ChkObjectVisible.asm"
 
-; ---------------------------------------------------------------------------
-; Subroutine to	load a level's objects
-; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-ObjPosLoad:
-		moveq	#0,d0
-		move.b	(v_opl_routine).w,d0
-		move.w	OPL_Index(pc,d0.w),d0
-		jmp	OPL_Index(pc,d0.w)
-; End of function ObjPosLoad
-
-; ===========================================================================
-OPL_Index:	dc.w OPL_Main-OPL_Index
-		dc.w OPL_Next-OPL_Index
-; ===========================================================================
-
-OPL_Main:
-		addq.b	#2,(v_opl_routine).w
-		move.w	(v_zone).w,d0
-		lsl.b	#6,d0
-		lsr.w	#4,d0
-		lea	(ObjPos_Index).l,a0
-		movea.l	a0,a1
-		adda.w	(a0,d0.w),a0
-		move.l	a0,(v_opl_data).w
-		move.l	a0,(v_opl_data+4).w
-		adda.w	2(a1,d0.w),a1
-		move.l	a1,(v_opl_data+8).w
-		move.l	a1,(v_opl_data+$C).w
-		lea	(v_objstate).w,a2
-		move.w	#$101,(a2)+
-		move.w	#$5E,d0
-
-OPL_ClrList:
-		clr.l	(a2)+
-		dbf	d0,OPL_ClrList	; clear	pre-destroyed object list
-
-		lea	(v_objstate).w,a2
-		moveq	#0,d2
-		move.w	(v_screenposx).w,d6
-		subi.w	#$80,d6
-		bhs.s	loc_D93C
-		moveq	#0,d6
-
-loc_D93C:
-		andi.w	#$FF80,d6
-		movea.l	(v_opl_data).w,a0
-
-loc_D944:
-		cmp.w	(a0),d6
-		bls.s	loc_D956
-		tst.b	4(a0)
-		bpl.s	loc_D952
-		move.b	(a2),d2
-		addq.b	#1,(a2)
-
-loc_D952:
-		addq.w	#6,a0
-		bra.s	loc_D944
-; ===========================================================================
-
-loc_D956:
-		move.l	a0,(v_opl_data).w
-		movea.l	(v_opl_data+4).w,a0
-		subi.w	#$80,d6
-		blo.s	loc_D976
-
-loc_D964:
-		cmp.w	(a0),d6
-		bls.s	loc_D976
-		tst.b	4(a0)
-		bpl.s	loc_D972
-		addq.b	#1,1(a2)
-
-loc_D972:
-		addq.w	#6,a0
-		bra.s	loc_D964
-; ===========================================================================
-
-loc_D976:
-		move.l	a0,(v_opl_data+4).w
-		move.w	#-1,(v_opl_screen).w
-
-OPL_Next:
-		lea	(v_objstate).w,a2
-		moveq	#0,d2
-		move.w	(v_screenposx).w,d6
-		andi.w	#$FF80,d6
-		cmp.w	(v_opl_screen).w,d6
-		beq.w	locret_DA3A
-		bge.s	loc_D9F6
-		move.w	d6,(v_opl_screen).w
-		movea.l	(v_opl_data+4).w,a0
-		subi.w	#$80,d6
-		blo.s	loc_D9D2
-
-loc_D9A6:
-		cmp.w	-6(a0),d6
-		bge.s	loc_D9D2
-		subq.w	#6,a0
-		tst.b	4(a0)
-		bpl.s	loc_D9BC
-		subq.b	#1,1(a2)
-		move.b	1(a2),d2
-
-loc_D9BC:
-		bsr.w	loc_DA3C
-		bne.s	loc_D9C6
-		subq.w	#6,a0
-		bra.s	loc_D9A6
-; ===========================================================================
-
-loc_D9C6:
-		tst.b	4(a0)
-		bpl.s	loc_D9D0
-		addq.b	#1,1(a2)
-
-loc_D9D0:
-		addq.w	#6,a0
-
-loc_D9D2:
-		move.l	a0,(v_opl_data+4).w
-		movea.l	(v_opl_data).w,a0
-		addi.w	#$300,d6
-
-loc_D9DE:
-		cmp.w	-6(a0),d6
-		bgt.s	loc_D9F0
-		tst.b	-2(a0)
-		bpl.s	loc_D9EC
-		subq.b	#1,(a2)
-
-loc_D9EC:
-		subq.w	#6,a0
-		bra.s	loc_D9DE
-; ===========================================================================
-
-loc_D9F0:
-		move.l	a0,(v_opl_data).w
-		rts	
-; ===========================================================================
-
-loc_D9F6:
-		move.w	d6,(v_opl_screen).w
-		movea.l	(v_opl_data).w,a0
-		addi.w	#$280,d6
-
-loc_DA02:
-		cmp.w	(a0),d6
-		bls.s	loc_DA16
-		tst.b	4(a0)
-		bpl.s	loc_DA10
-		move.b	(a2),d2
-		addq.b	#1,(a2)
-
-loc_DA10:
-		bsr.w	loc_DA3C
-		beq.s	loc_DA02
-
-loc_DA16:
-		move.l	a0,(v_opl_data).w
-		movea.l	(v_opl_data+4).w,a0
-		subi.w	#$300,d6
-		blo.s	loc_DA36
-
-loc_DA24:
-		cmp.w	(a0),d6
-		bls.s	loc_DA36
-		tst.b	4(a0)
-		bpl.s	loc_DA32
-		addq.b	#1,1(a2)
-
-loc_DA32:
-		addq.w	#6,a0
-		bra.s	loc_DA24
-; ===========================================================================
-
-loc_DA36:
-		move.l	a0,(v_opl_data+4).w
-
-locret_DA3A:
-		rts	
-; ===========================================================================
-
-loc_DA3C:
-		tst.b	4(a0)
-		bpl.s	OPL_MakeItem
-		bset	#7,2(a2,d2.w)
-		beq.s	OPL_MakeItem
-		addq.w	#6,a0
-		moveq	#0,d0
-		rts	
-; ===========================================================================
-
-OPL_MakeItem:
-		bsr.w	FindFreeObj
-		bne.s	locret_DA8A
-		move.w	(a0)+,obX(a1)
-		move.w	(a0)+,d0
-		move.w	d0,d1
-		andi.w	#$FFF,d0
-		move.w	d0,obY(a1)
-		rol.w	#2,d1
-		andi.b	#3,d1
-		move.b	d1,obRender(a1)
-		move.b	d1,obStatus(a1)
-		move.b	(a0)+,d0
-		bpl.s	loc_DA80
-		andi.b	#$7F,d0
-		move.b	d2,obRespawnNo(a1)
-
-loc_DA80:
-		move.b	d0,0(a1)
-		move.b	(a0)+,obSubtype(a1)
-		moveq	#0,d0
-
-locret_DA8A:
-		rts	
+		include "_incObj\Objects Manager.asm"
 
 		include	"_incObj\sub FindFreeObj.asm"
+		
+		include "_incObj\Rings Manager.asm"
+		
 		include	"_incObj\41 Springs.asm"
 		include	"_anim\Springs.asm"
 Map_Spring:	include	"_maps\Springs.asm"
@@ -9256,6 +9057,101 @@ ObjPos_SBZ1pf6:	incbin	"objpos\sbz1pf6.bin"
 ObjPos_End:	incbin	"objpos\ending.bin"
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
+
+; ---------------------------------------------------------------------------
+; Ring locations index
+; ---------------------------------------------------------------------------
+RingPos_Index:	dc.w Rings_GHZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_GHZ2-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_GHZ3-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_GHZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_LZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_LZ2-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_LZ3-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SBZ3-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_MZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_MZ2-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_MZ3-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_MZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SLZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SLZ2-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SLZ3-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SLZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SYZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SYZ2-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SYZ3-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SYZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SBZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SBZ2-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_FZ-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_SBZ1-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_End-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_End-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_End-RingPos_Index, Rings_Null-RingPos_Index
+		dc.w Rings_End-RingPos_Index, Rings_Null-RingPos_Index
+Rings_GHZ1:	dc.l    0
+			incbin	rings\ghz1.bin
+		even
+Rings_GHZ2:	dc.l    0
+			incbin	rings\ghz2.bin
+		even
+Rings_GHZ3:	dc.l    0
+			incbin	rings\ghz3.bin
+		even
+Rings_LZ1:	dc.l    0
+			incbin	rings\lz1.bin
+		even
+Rings_LZ2:	dc.l    0
+			incbin	rings\lz2.bin
+		even
+Rings_LZ3:	dc.l    0
+			incbin	rings\lz3.bin
+		even
+Rings_SBZ3:	dc.l    0
+			incbin	rings\sbz3.bin
+		even
+Rings_MZ1:	dc.l    0
+			incbin	rings\mz1.bin
+		even
+Rings_MZ2:	dc.l    0
+			incbin	rings\mz2.bin
+		even
+Rings_MZ3:	dc.l    0
+			incbin	rings\mz3.bin
+		even
+Rings_SLZ1:	dc.l    0
+			incbin	rings\slz1.bin
+		even
+Rings_SLZ2:	dc.l    0
+			incbin	rings\slz2.bin
+		even
+Rings_SLZ3:	dc.l    0
+			incbin	rings\slz3.bin
+		even
+Rings_SYZ1:	dc.l    0
+			incbin	rings\syz1.bin
+		even
+Rings_SYZ2:	dc.l    0
+			incbin	rings\syz2.bin
+		even
+Rings_SYZ3:	dc.l    0
+			incbin	rings\syz3.bin
+		even
+Rings_SBZ1:	dc.l    0
+			incbin	rings\sbz1.bin
+		even
+Rings_SBZ2:	dc.l    0
+			incbin	rings\sbz2.bin
+		even
+Rings_FZ:	dc.l    0
+			incbin	rings\fz.bin
+		even
+Rings_End:	dc.l    0
+			incbin	rings\ending.bin
+		even
+Rings_Null:	dc.b $FF, $FF, 0, 0
+; ---------------------------------------------------------------------------
+
 
 		if Revision=0
 		dcb.b $62A,$FF

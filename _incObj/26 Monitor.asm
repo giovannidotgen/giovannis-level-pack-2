@@ -24,11 +24,10 @@ Mon_Main:	; Routine 0
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
 		move.b	#$F,obActWid(a0)
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		bclr	#7,2(a2,d0.w)
-		btst	#0,2(a2,d0.w)	; has monitor been broken?
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		movea.w	d0,a2	; load address into a2
+		;bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
+		btst	#0,(a2)	; has monitor been broken?
 		beq.s	@notbroken	; if not, branch
 		move.b	#8,obRoutine(a0) ; run "Mon_Display" routine
 		move.b	#$B,obFrame(a0)	; use broken monitor frame
@@ -133,9 +132,8 @@ Mon_Animate:	; Routine 6
 		bsr.w	AnimateSprite
 
 Mon_Display:	; Routine 8
-		bsr.w	DisplaySprite
-		out_of_range.w	DeleteObject
-		rts	
+		bra.w	RememberState
+
 ; ===========================================================================
 
 Mon_BreakOpen:	; Routine 4
@@ -157,9 +155,8 @@ Mon_Explode:
 		move.w	obY(a0),obY(a1)
 
 	@fail:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		bset	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		movea.w	d0,a2	; load address into a2
+		bset	#0,(a2)
 		move.b	#9,obAnim(a0)	; set monitor type to broken
 		bra.w	DisplaySprite

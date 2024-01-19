@@ -96,8 +96,13 @@ Cat_Head:	; Routine 2
 		bmi.w	loc_16C96
 		moveq	#0,d0
 		move.b	ob2ndRout(a0),d0
-		move.w	Cat_Index2(pc,d0.w),d1
-		jsr	Cat_Index2(pc,d1.w)
+		add.b	d0,d0
+		lea		Cat_Index2,a3
+		adda.l	d0,a3
+		movea.l	(a3),a3
+;		move.w	Cat_Index2(pc,d0.w),d1
+		jsr		(a3)
+		moveq	#0,d0
 		move.b	$2B(a0),d1
 		bpl.s	@display
 		lea	(Ani_Cat).l,a1
@@ -115,15 +120,14 @@ Cat_Head:	; Routine 2
 		move.b	d0,obFrame(a0)
 
 	@display:
-		out_of_range.w	Cat_ChkGone
+		out_of_range_S3.w	Cat_ChkGone
 		jmp	(DisplaySprite).l
 
 	Cat_ChkGone:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@delete
-		bclr	#7,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@delete		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 
 	@delete:
 		move.b	#$A,obRoutine(a0)	; goto Cat_Delete next
@@ -133,8 +137,8 @@ Cat_Head:	; Routine 2
 Cat_Delete:	; Routine $A
 		jmp	(DeleteObject).l
 ; ===========================================================================
-Cat_Index2:	dc.w @wait-Cat_Index2
-		dc.w loc_16B02-Cat_Index2
+Cat_Index2:	dc.l @wait
+			dc.l loc_16B02
 ; ===========================================================================
 
 @wait:
@@ -147,11 +151,11 @@ Cat_Index2:	dc.w @wait-Cat_Index2
 		addq.b	#2,ob2ndRout(a0)
 		move.b	#$10,$2A(a0)
 		move.w	#-$C0,obVelX(a0)
-		move.w	#$40,obInertia(a0)
+		move.w	#$40,obAnim(a0)	; Not actually animation related: this is where the inertia is stored
 		bchg	#4,$2B(a0)
 		bne.s	loc_16AFC
 		clr.w	obVelX(a0)
-		neg.w	obInertia(a0)
+		neg.w	obAnim(a0)
 
 loc_16AFC:
 		bset	#7,$2B(a0)
@@ -217,7 +221,7 @@ loc_16B02:
 		move.w	#0,obVelX(a0)
 		else
 			clr.w	obVelX(a0)
-			clr.w	obInertia(a0)
+			clr.w	obAnim(a0)
 		endc
 		rts	
 ; ===========================================================================
@@ -276,12 +280,12 @@ Cat_BodySeg1:	; Routine 4, 8
 		move.b	$2B(a1),$2B(a0)
 		move.b	ob2ndRout(a1),ob2ndRout(a0)
 		beq.w	loc_16C64
-		move.w	obInertia(a1),obInertia(a0)
+		move.w	obAnim(a1),obAnim(a0)
 		move.w	obVelX(a1),d0
 		if Revision=0
-		add.w	obInertia(a1),d0
+		add.w	obAnim(a1),d0
 		else
-			add.w	obInertia(a0),d0
+			add.w	obAnim(a0),d0
 		endc
 		move.w	d0,obVelX(a0)
 		move.l	obX(a0),d2

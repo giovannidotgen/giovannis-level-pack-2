@@ -65,7 +65,7 @@ LBall_Action:	; Routine 2
 		bsr.w	AnimateSprite
 
 LBall_ChkDel:
-		out_of_range.w	DeleteObject
+		out_of_range_S3.w	DeleteObject
 		rts	
 ; ===========================================================================
 LBall_TypeIndex:dc.w LBall_Type00-LBall_TypeIndex, LBall_Type00-LBall_TypeIndex

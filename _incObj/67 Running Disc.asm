@@ -152,7 +152,7 @@ Disc_MoveSpot:
 ; ===========================================================================
 
 Disc_ChkDel:
-		out_of_range.s	@delete,disc_origX(a0)
+		out_of_range_S3.s	@delete,disc_origX(a0)
 		jmp	(DisplaySprite).l
 
 	@delete:

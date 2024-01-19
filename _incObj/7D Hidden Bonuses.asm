@@ -50,7 +50,7 @@ Bonus_Main:	; Routine 0
 		jsr	(AddPoints).l
 
 	@chkdel:
-		out_of_range.s	@delete
+		out_of_range_S3.s	@delete
 		rts	
 
 	@delete:
@@ -66,7 +66,7 @@ Bonus_Main:	; Routine 0
 Bonus_Display:	; Routine 2
 		subq.w	#1,bonus_timelen(a0) ; decrement display time
 		bmi.s	Bonus_Display_Delete		; if time is zero, branch
-		out_of_range.s	Bonus_Display_Delete
+		out_of_range_S3.s	Bonus_Display_Delete
 		jmp	(DisplaySprite).l
 
 Bonus_Display_Delete:	

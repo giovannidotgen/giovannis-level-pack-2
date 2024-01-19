@@ -36,7 +36,7 @@ Saw_Action:	; Routine 2
 		add.w	d0,d0
 		move.w	@index(pc,d0.w),d1
 		jsr	@index(pc,d1.w)
-		out_of_range.s	@delete,saw_origX(a0)
+		out_of_range_S3.s	@delete,saw_origX(a0)
 		jmp	(DisplaySprite).l
 
 	@delete:

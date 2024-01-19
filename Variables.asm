@@ -192,7 +192,7 @@ f_sonframechg:	equ $FFFFF767	; flag set to update Sonic's sprite frame
 v_anglebuffer:	equ $FFFFF768	; angle of collision block that Sonic or object is standing on
 
 v_opl_routine:	equ $FFFFF76C	; ObjPosLoad - routine counter
-v_opl_screen:	equ $FFFFF76E	; ObjPosLoad - screen variable
+v_opl_screen:	equ Camera_Y_pos_last	; ObjPosLoad - screen variable (LEGACY)
 v_opl_data:	equ $FFFFF770	; ObjPosLoad - data buffer ($10 bytes)
 
 v_ssangle:	equ $FFFFF780	; Special Stage angle (2 bytes)
@@ -353,3 +353,19 @@ v_creditsnum:	equ $FFFFFFF4	; credits index number (2 bytes)
 v_megadrive:	equ $FFFFFFF8	; Megadrive machine type
 f_debugmode:	equ $FFFFFFFA	; debug mode flag (sometimes 2 bytes)
 v_init:		equ $FFFFFFFC	; 'init' text string (4 bytes)
+
+Max_Rings = 759 ; default. maximum number possible is 759
+Rings_Space = (Max_Rings+1)*2
+
+Object_Respawn_Table = $FFFF8000
+Camera_X_pos_last = $FFFFFE2A
+Camera_Y_pos_last = $FFFFF76E
+
+Ring_Positions = $FFFF8300
+Ring_start_addr_ROM = Ring_Positions+Rings_Space
+Ring_end_addr_ROM = Ring_Positions+Rings_Space+4
+Ring_start_addr_RAM = Ring_Positions+Rings_Space+8
+Perfect_rings_left = Ring_Positions+Rings_Space+$A
+Rings_manager_routine = Ring_Positions+Rings_Space+$C
+Level_started_flag = Ring_Positions+Rings_Space+$D
+Ring_consumption_table = Ring_Positions+Rings_Space+$E

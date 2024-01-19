@@ -7,7 +7,7 @@ Prison:
 		move.b	obRoutine(a0),d0
 		move.w	Pri_Index(pc,d0.w),d1
 		jsr	Pri_Index(pc,d1.w)
-		out_of_range.s	@delete
+		out_of_range_S3.s	@delete
 		jmp	(DisplaySprite).l
 
 	@delete:

@@ -42,11 +42,11 @@ Sto_Main:	; Routine 0
 		beq.s	@isSBZ3
 
 @chkdel:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@delete
-		bclr	#7,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@delete		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
+
 
 	@delete:
 		jmp	(DeleteObject).l
@@ -56,11 +56,10 @@ Sto_Main:	; Routine 0
 		move.w	#$41F0,obGfx(a0)
 		cmpi.w	#$A80,obX(a0)
 		bne.s	@isSBZ12
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@isSBZ12
-		btst	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@isSBZ12		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		btst	#0,(a2)
 		beq.s	@isSBZ12
 		clr.b	(v_obj6B).w
 		bra.s	@chkdel
@@ -85,11 +84,10 @@ Sto_Main:	; Routine 0
 		bset	#4,obRender(a0)
 
 	@chkgone:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	Sto_Action
-		bclr	#7,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	Sto_Action		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 
 Sto_Action:	; Routine 2
 		move.w	obX(a0),-(sp)
@@ -112,19 +110,18 @@ Sto_Action:	; Routine 2
 		bsr.w	SolidObject
 
 	@chkdel:
-		out_of_range.s	@chkgone,sto_origX(a0)
+		out_of_range_S3.s	@chkgone,sto_origX(a0)
 		jmp	(DisplaySprite).l
 
 	@chkgone:
 		cmpi.b	#id_LZ,(v_zone).w
 		bne.s	@delete
 		clr.b	(v_obj6B).w
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@delete
-		bclr	#7,2(a2,d0.w)
-
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@delete		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
+		
 	@delete:
 		jmp	(DeleteObject).l
 ; ===========================================================================
@@ -171,11 +168,10 @@ Sto_Action:	; Routine 2
 		addq.b	#1,obSubtype(a0)
 		move.w	#$B4,$36(a0)
 		clr.b	sto_active(a0)
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@loc_15DC2
-		bset	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@loc_15DC2		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bset	#0,(a2)
 		bra.s	@loc_15DC2
 ; ===========================================================================
 
@@ -208,11 +204,10 @@ Sto_Action:	; Routine 2
 @loc_15E3C:
 		subq.b	#1,obSubtype(a0)
 		clr.b	sto_active(a0)
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@loc_15E1E
-		bclr	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@loc_15E1E		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#0,(a2)
 		bra.s	@loc_15E1E
 ; ===========================================================================
 
@@ -304,11 +299,10 @@ Sto_Action:	; Routine 2
 		btst	#0,(a2,d0.w)
 		beq.s	@locret_15F5C
 		move.b	#1,sto_active(a0)
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	@loc_15F3E
-		bset	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	@loc_15F3E		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 
 @loc_15F3E:
 		subi.l	#$10000,obX(a0)

@@ -7,7 +7,7 @@ LabyrinthConvey:
 		move.b	obRoutine(a0),d0
 		move.w	LCon_Index(pc,d0.w),d1
 		jsr	LCon_Index(pc,d1.w)
-		out_of_range.s	loc_1236A,$30(a0)
+		out_of_range_S3.s	loc_1236A,$30(a0)
 
 LCon_Display:
 		bra.w	DisplaySprite

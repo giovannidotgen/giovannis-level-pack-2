@@ -192,7 +192,7 @@ Geyser_Action:	; Routine 2
 		bsr.w	AnimateSprite
 
 Geyser_ChkDel:
-		out_of_range.w	DeleteObject
+		out_of_range_S3.w	DeleteObject
 		rts	
 ; ===========================================================================
 Geyser_Types:	dc.w Geyser_Type00-Geyser_Types

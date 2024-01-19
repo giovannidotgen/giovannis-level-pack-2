@@ -13,9 +13,17 @@ BossSpikeball:
 		subi.w	#$80,d1
 		andi.w	#$FF80,d1
 		sub.w	d1,d0
-		bmi.w	Obj7A_Delete
 		cmpi.w	#$280,d0
-		bhi.w	Obj7A_Delete
+		bls.s	Obj7B_NoDel
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	Obj7B_Delete		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
+
+Obj7B_Delete:
+		jmp	DeleteObject	; and delete object
+
+Obj7B_NoDel:
 		jmp	(DisplaySprite).l
 ; ===========================================================================
 Obj7B_Index:	dc.w Obj7B_Main-Obj7B_Index

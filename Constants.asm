@@ -129,7 +129,7 @@ obScreenY:	equ $A	; y-axis position for screen-fixed items (2 bytes)
 obY:		equ $C	; y-axis position (2-4 bytes)
 obVelX:		equ $10	; x-axis velocity (2 bytes)
 obVelY:		equ $12	; y-axis velocity (2 bytes)
-obInertia:	equ $14	; potential speed (2 bytes)
+respawn_index = $14
 obHeight:	equ $16	; height/2
 obWidth:	equ $17	; width/2
 obPriority:	equ $18	; sprite stack priority -- 0 is front
@@ -140,6 +140,7 @@ obAnim:		equ $1C	; current animation
 obNextAni:	equ $1D	; next animation
 obTimeFrame:	equ $1E	; time to next frame
 obDelayAni:	equ $1F	; time to delay animation
+obInertia:	equ $20	; potential speed (2 bytes)
 obColType:	equ $20	; collision response type
 obColProp:	equ $21	; collision extra property
 obStatus:	equ $22	; orientation or mode
@@ -176,7 +177,6 @@ anim_frame_duration: equ $1E ; time to next frame
 collision_flags: equ $20 ; collision response type
 collision_property: equ $21 ; collision extra property
 status:		equ $22	; orientation or mode
-respawn_index:	equ $23	; respawn list index number
 routine:	equ $24	; routine number
 routine_secondary: equ $25 ; secondary routine number
 angle:		equ $26	; angle

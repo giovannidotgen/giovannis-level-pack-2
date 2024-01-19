@@ -101,17 +101,16 @@ LWall_Solid:	; Routine 2
 		bsr.w	DisplaySprite
 		tst.b	lwall_flag(a0)	; is wall already moving?
 		bne.s	@moving		; if yes, branch
-		out_of_range.s	@chkgone
+		out_of_range_S3.s	@chkgone
 
 	@moving:
 		rts	
 ; ===========================================================================
 
 @chkgone:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		bclr	#7,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 		move.b	#8,obRoutine(a0)
 		rts	
 ; ===========================================================================

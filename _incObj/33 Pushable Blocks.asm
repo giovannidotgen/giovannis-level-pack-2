@@ -43,12 +43,11 @@ PushB_Main:	; Routine 0
 		move.w	#$C2B8,obGfx(a0)
 
 	@chkgone:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	loc_BF6E
-		bclr	#7,2(a2,d0.w)
-		bset	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	loc_BF6E		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
+		bset	#0,(a2)
 		bne.w	DeleteObject
 
 loc_BF6E:	; Routine 2
@@ -76,12 +75,12 @@ loc_BF6E:	; Routine 2
 		bset	#7,obSubtype(a0)
 
 	loc_BFC6:
-		out_of_range.s	loc_ppppp
+		out_of_range_S3.s	loc_ppppp
 		bra.w	DisplaySprite
 ; ===========================================================================
 
 loc_ppppp:
-		out_of_range.s	loc_C016,$34(a0)
+		out_of_range_S3.s	loc_C016,$34(a0)
 		move.w	$34(a0),obX(a0)
 		move.w	$36(a0),obY(a0)
 		move.b	#4,obRoutine(a0)
@@ -89,11 +88,10 @@ loc_ppppp:
 ; ===========================================================================
 
 loc_C016:
-		lea	(v_objstate).w,a2
-		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
-		beq.s	loc_C028
-		bclr	#0,2(a2,d0.w)
+		move.w	respawn_index(a0),d0	; get address in respawn table
+		beq.s	loc_C028		; if it's zero, don't remember object
+		movea.w	d0,a2	; load address into a2
+		bclr	#0,(a2)
 
 loc_C028:
 		bra.w	DeleteObject

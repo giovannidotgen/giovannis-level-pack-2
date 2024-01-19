@@ -7,6 +7,7 @@
 
 ReactToItem:
 		nop	
+		jsr	(Touch_Rings).l		
 		move.w	obX(a0),d2	; load Sonic's x-axis position
 		move.w	obY(a0),d3	; load Sonic's y-axis position
 		subq.w	#8,d2

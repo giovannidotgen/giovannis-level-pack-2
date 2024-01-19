@@ -24,5 +24,5 @@ WSnd_PlaySnd:	; Routine 2
 		jsr	(PlaySound_Special).l	; play waterfall sound
 
 	WSnd_ChkDel:
-		out_of_range.w	DeleteObject
+		out_of_range_S3.w	DeleteObject
 		rts	

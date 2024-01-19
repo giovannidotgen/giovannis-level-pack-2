@@ -7,7 +7,7 @@ SpinConvey:
 		move.b	obRoutine(a0),d0
 		move.w	SpinC_Index(pc,d0.w),d1
 		jsr	SpinC_Index(pc,d1.w)
-		out_of_range.s	loc_1629A,$30(a0)
+		out_of_range_S3.s	loc_1629A,$30(a0)
 
 SpinC_Display:
 		jmp	(DisplaySprite).l

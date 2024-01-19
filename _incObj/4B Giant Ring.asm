@@ -36,7 +36,7 @@ GRing_Okay:
 
 GRing_Animate:	; Routine 2
 		move.b	(v_ani1_frame).w,obFrame(a0)
-		out_of_range.w	DeleteObject
+		out_of_range_S3.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 
