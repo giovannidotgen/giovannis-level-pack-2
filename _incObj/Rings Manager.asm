@@ -132,7 +132,7 @@ loc_170D0:
 	movea.w	(Ring_start_addr_RAM).w,a4
 	cmpi.w	#$5A,$30(a0)
 	bcc.w	return_17166
-	tst.b	($FFFFFE2C).w	; does Sonic have a lightning shield?
+	cmpi.b	#2,($FFFFFE2C).w	; does Sonic have a lightning shield?
 	beq.s	Touch_Rings_NoAttraction	; if not, branch
 	move.w	8(a0),d2
 	move.w	$C(a0),d3
@@ -194,7 +194,7 @@ loc_17142:
 	bhi.w	loc_1715C
 
 loc_17148:
-	tst.b	($FFFFFE2C).w
+	cmpi.b	#2,($FFFFFE2C).w
 	bne.s	AttractRing
 	
 loc_17148_cont:

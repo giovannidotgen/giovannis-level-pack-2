@@ -29,7 +29,7 @@ Obj07_sub_2:
 		bsr.w	Obj07_Move
 		movea.w	$34(a0),a1
 		cmpi.b	#2,(v_shield).w
-		bne.s	Obj07_sub_3
+		beq.s	Obj07_sub_3
 		move.b	#id_RingLoss,(a0)	; Load object 37 (scattered rings)
 		move.b	#2,obRoutine(a0)
 		move.b	#-1,(v_ani3_time).w
