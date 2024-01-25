@@ -15,10 +15,11 @@ Sonic_Loops:
 	;@isstarlight:
 		move.w	obY(a0),d0		; MJ: Load Y position
 		move.w	obX(a0),d1		; MJ: Load X position
-		andi.w	#$780,d0		; MJ: keep Y position within 800 pixels (in multiples of 80)
-		add.w	d0,d0			; MJ: multiply by 2 (Because every 80 bytes switch from FG to BG..)
+		andi.w	#$1F80,d0		; MJ/GIO: keep Y position within $2000 pixels (in multiples of 80)
+		add.w	d0,d0			; MJ: multiply by 2
+		add.w	d0,d0			; GIO: multiply by 2 again (Because every 100 bytes switch from FG to BG..)		
 		lsr.w	#7,d1			; MJ: divide X position by 80 (00 = 0, 80 = 1, etc)
-		andi.w	#$7F,d1			; MJ: keep within 4000 pixels (4000 / 80 = 80)
+		andi.w	#$FF,d1			; MJ/GIO: keep within 8000 pixels ($8000 / $80 = $100)
 		add.w	d1,d0			; MJ: add together
 		movea.l	(v_lvllayoutfg).w,a1	; MJ: Load address of layout
 		move.b	(a1,d0.w),d1		; MJ: collect correct 128x128 chunk ID based on the position of Sonic

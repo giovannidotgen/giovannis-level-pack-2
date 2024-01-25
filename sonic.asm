@@ -5055,14 +5055,14 @@ GetBlockData:
 		endc
 		; Turn Y coordinate into index into level layout
 		move.w	d4,d3		; MJ: copy Y position to d3
-		andi.w	#$780,d3	; MJ: get within 780 (Not 380) (E00 pixels (not 700)) in multiples of 80
+		andi.w  #$1F80,d3	; GIO: Levels are now 256x128 chunks
 		; Turn X coordinate into index into level layout
 		lsr.w	#3,d5		; MJ: divide X position by 8
 		move.w	d5,d0		; MJ: copy to d0
 		lsr.w	#4,d0		; MJ: divide by 10 (Not 20)
-		andi.w	#$7F,d0		; MJ: get within 7F
+		andi.w	#$FF,d0		; MJ: get within FF
 		; Get chunk from level layout
-		lsl.w	#1,d3		; MJ: multiply by 2 (So it skips the BG)
+		lsl.w	#2,d3		; MJ/GIO: multiply by 4 (So it skips the BG)
 		add.w	d3,d0		; MJ: add calc'd Y pos
 		moveq	#-1,d3		; MJ: prepare FFFF in d3
 		move.b	(a4,d0.w),d3	; MJ: collect correct chunk ID from layout
@@ -5335,7 +5335,7 @@ LevelLayoutLoad:
 		lea	(Level_Index).l,a1
 		movea.l	(a1,d0.w),a1		; MJ: moving the address strait to a1 rather than adding a word to an address
 		move.l	a1,(v_lvllayoutfg).w	; MJ: save location of layout to $FFFFA400
-		lea	$80(a1),a1		; MJ: add 80 (As the BG line is always after the FG line)
+		lea	$100(a1),a1		; MJ: add 100 (As the BG line is always after the FG line)
 		move.l	a1,(v_lvllayoutbg).w	; MJ: save location of layout to $FFFFA404
 		rts				; MJ: Return
 ; End of function LevelLayoutLoad
@@ -6817,6 +6817,10 @@ Sonic_MdJump:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
+        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        ble.s   @skipline       ; if yes, branch
+        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline:		
 		jsr	(ObjectFall).l
 		btst	#6,obStatus(a0)
 		beq.s	loc_12E5C
@@ -6843,6 +6847,10 @@ Sonic_MdJump2:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
+        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        ble.s   @skipline       ; if yes, branch
+        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline:				
 		jsr	(ObjectFall).l
 		btst	#6,obStatus(a0)
 		beq.s	loc_12EA6

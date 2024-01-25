@@ -11,7 +11,7 @@
 ;  d0, d1, d2
 ;  d3 = upper boundary to load object
 ;  d4 = lower boundary to load object
-;  d5 = #$FFF, used to filter out object's y position
+;  d5 = #$1FFF, used to filter out object's y position
 ;  d6 = camera position
 ;
 ;  a0 = address in object placement list
@@ -125,16 +125,16 @@ ObjPosLoad_Main:
 	addi.w	#$200,d4	; set lower boundary
 	subi.w	#$80,d3		; set upper boundary
 	bpl.s	OPL4		; branch, if upper boundary > 0
-	andi.w	#$7FF,d3	; wrap value
+	andi.w	#$1FFF,d3	; wrap value
 	bra.s	ObjMan_Main_Cont
 ; ---------------------------------------------------------------------------
  
 OPL4:	
-	move.w	#$7FF,d0
+	move.w	#$1FFF,d0
 	addq.w	#1,d0
 	cmp.w	d0,d4
 	bls.s	OPL5		; branch, if lower boundary < $7FF
-	andi.w	#$7FF,d4	; wrap value
+	andi.w	#$1FFF,d4	; wrap value
 	bra.s	ObjMan_Main_Cont
 ; ---------------------------------------------------------------------------
  
@@ -151,7 +151,7 @@ OPL5:
 	lea	(ChkLoadObj).l,a6	; set object loading routine
  
 ObjMan_Main_Cont:
-	move.w	#$FFF,d5	; this will be used later when we load objects
+	move.w	#$1FFF,d5	; this will be used later when we load objects
 	move.w	($FFFFF700).w,d6
 	andi.w	#$FF80,d6
 	cmp.w	(Camera_X_pos_last).w,d6	; is the X range the same as last time?
@@ -261,7 +261,7 @@ ObjPosLoad_SameXRange:
 ObjMan_GoingUp_YWrap:
 	subi.w	#$80,d3			; look one chunk up
 	bpl.s	ObjPosLoad_YCheck	; go to y check, if camera y position >= $80
-	andi.w	#$7FF,d3		; else, wrap value
+	andi.w	#$1FFF,d3		; else, wrap value
 	bra.s	ObjPosLoad_YCheck
  
 ; ---------------------------------------------------------------------------
@@ -282,15 +282,15 @@ ObjPosLoad_GoingDown:
  
 ObjMan_GoingDown_YWrap:
 	addi.w	#$180,d3		; look one chunk down
-	cmpi.w	#$7FF,d3
+	cmpi.w	#$1FFF,d3
 	bcs.s	ObjPosLoad_YCheck	; go to  check, if camera y position < $7FF
-	andi.w	#$7FF,d3		; else, wrap value
+	andi.w	#$1FFF,d3		; else, wrap value
 	bra.s	ObjPosLoad_YCheck
 ; ---------------------------------------------------------------------------
  
 ObjMan_GoingDown_NoYWrap:
 	addi.w	#$180,d3			; look one chunk down
-	cmpi.w	#$7FF,d3
+	cmpi.w	#$1FFF,d3
 	bhi.s	ObjPosLoad_SameYRange	; don't do anything, if camera is too close to bottom
  
 ObjPosLoad_YCheck:
@@ -298,7 +298,7 @@ ObjPosLoad_YCheck:
 	bne.s	ObjPosLoad_SameYRange	; branch, if there are none
 	move.w	d3,d4
 	addi.w	#$80,d4
-	move.w	#$FFF,d5	; this will be used later when we load objects
+	move.w	#$1FFF,d5	; this will be used later when we load objects
 	movea.l	($FFFFF774).w,a0	; get next object going left
 	movea.w	($FFFFF77C).w,a3	; and its respawn table index
 	move.l	($FFFFF770).w,d7	; get next object going right
@@ -351,7 +351,7 @@ ObjPosLoad_SameYRange:
 ; input variables:
 ;  d3 = upper boundary to load object
 ;  d4 = lower boundary to load object
-;  d5 = #$FFF, used to filter out object's y position
+;  d5 = #$1FFF, used to filter out object's y position
 ;
 ;  a0 = address in object placement list
 ;  a1 = object

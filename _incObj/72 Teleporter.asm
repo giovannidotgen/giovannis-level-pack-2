@@ -135,7 +135,7 @@ loc_167DA:
 ; ===========================================================================
 
 loc_16800:
-		andi.w	#$7FF,obY(a1)
+		andi.w	#$1FFF,obY(a1)
 		clr.b	obRoutine(a0)
 		clr.b	(f_lockmulti).w
 		move.w	#0,obVelX(a1)

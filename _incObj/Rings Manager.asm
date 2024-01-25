@@ -133,7 +133,7 @@ loc_170D0:
 	cmpi.w	#$5A,$30(a0)
 	bcc.w	return_17166
 	cmpi.b	#2,($FFFFFE2C).w	; does Sonic have a lightning shield?
-	beq.s	Touch_Rings_NoAttraction	; if not, branch
+	bne.s	Touch_Rings_NoAttraction	; if not, branch
 	move.w	8(a0),d2
 	move.w	$C(a0),d3
 	subi.w	#$40,d2
@@ -195,7 +195,7 @@ loc_17142:
 
 loc_17148:
 	cmpi.b	#2,($FFFFFE2C).w
-	bne.s	AttractRing
+	beq.s	AttractRing
 	
 loc_17148_cont:
 	move.w	#$604,(a4)
@@ -260,7 +260,7 @@ loc_1718A:
 	addi.w	#$80,d3
 	move.w	2(a0),d2
 	sub.w	4(a3),d2
-	andi.w	#$7FF,d2
+	andi.w	#$1FFF,d2
 	addi.w	#8,d2
 	bmi.s	loc_171EC
 	cmpi.w	#$F0,d2

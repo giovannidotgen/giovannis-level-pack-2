@@ -15,11 +15,12 @@
 
 FindNearestTile:
 		move.w	d2,d0			; MJ: load Y position
-		andi.w	#$780,d0		; MJ: get within 780 (E00 pixels) in multiples of 80
+		andi.w	#$1F80,d0		; GIO: Levels are now 256x128 chunks
 		add.w	d0,d0			; MJ: multiply by 2
+		add.w	d0,d0			; GIO: multiply by 2 again		
 		move.w	d3,d1			; MJ: load X position
 		lsr.w	#7,d1			; MJ: shift to right side
-		andi.w	#$7F,d1			; MJ: get within 7F
+		andi.w	#$FF,d1			; MJ: get within FF
 		add.w	d1,d0			; MJ: add calc'd Y to calc'd X
 		moveq	#-1,d1			; MJ: prepare FFFF in d3
 		movea.l	(v_lvllayoutfg).w,a1	; MJ: load address of Layout to a1

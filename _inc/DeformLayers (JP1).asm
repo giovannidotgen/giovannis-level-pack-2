@@ -63,7 +63,7 @@ Deform_GHZ:
 	; calculate Y position
 		lea	(v_hscrolltablebuffer).w,a1
 		move.w	(v_screenposy).w,d0
-		andi.w	#$7FF,d0
+		andi.w	#$1FFF,d0
 		lsr.w	#5,d0
 		neg.w	d0
 		addi.w	#$20,d0
@@ -834,10 +834,10 @@ loc_66CC:
 		bgt.s	loc_6724
 		cmpi.w	#-$100,d1
 		bgt.s	loc_66F0
-		andi.w	#$7FF,d1
-		andi.w	#$7FF,(v_player+obY).w
-		andi.w	#$7FF,(v_screenposy).w
-		andi.w	#$3FF,(v_bgscreenposy).w
+		andi.w	#$1FFF,d1
+		andi.w	#$1FFF,(v_player+obY).w
+		andi.w	#$1FFF,(v_screenposy).w
+		andi.w	#$FFF,(v_bgscreenposy).w
 		bra.s	loc_6724
 ; ===========================================================================
 
@@ -855,11 +855,11 @@ loc_66F6:
 loc_6700:
 		cmp.w	(v_limitbtm2).w,d1
 		blt.s	loc_6724
-		subi.w	#$800,d1
+		subi.w	#$2000,d1
 		bcs.s	loc_6720
-		andi.w	#$7FF,(v_player+obY).w
-		subi.w	#$800,(v_screenposy).w
-		andi.w	#$3FF,(v_bgscreenposy).w
+		andi.w	#$1FFF,(v_player+obY).w
+		subi.w	#$2000,(v_screenposy).w
+		andi.w	#$FFF,(v_bgscreenposy).w
 		bra.s	loc_6724
 ; ===========================================================================
 

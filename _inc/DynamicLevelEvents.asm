@@ -69,7 +69,7 @@ DLE_GHZ:
 		move.w	DLE_GHZx(pc,d0.w),d0
 		jmp	DLE_GHZx(pc,d0.w)
 ; ===========================================================================
-DLE_GHZx:	dc.w DLE_GHZ1-DLE_GHZx
+DLE_GHZx:	dc.w locret_6E08-DLE_GHZx
 		dc.w DLE_GHZ2-DLE_GHZx
 		dc.w DLE_GHZ3-DLE_GHZx
 ; ===========================================================================

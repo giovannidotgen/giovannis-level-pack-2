@@ -17,10 +17,10 @@ Debug_Main:	; Routine 0
 		move.w	(v_limittop2).w,(v_limittopdb).w ; buffer level x-boundary
 		move.w	(v_limitbtm1).w,(v_limitbtmdb).w ; buffer level y-boundary
 		move.w	#0,(v_limittop2).w
-		move.w	#$720,(v_limitbtm1).w
-		andi.w	#$7FF,(v_player+obY).w
-		andi.w	#$7FF,(v_screenposy).w
-		andi.w	#$3FF,(v_bgscreenposy).w
+		move.w	#$1F20,(v_limitbtm1).w
+		andi.w	#$1FFF,(v_player+obY).w
+		andi.w	#$1FFF,(v_screenposy).w
+		andi.w	#$FFF,(v_bgscreenposy).w
 		move.b	#0,obFrame(a0)
 		move.b	#id_Walk,obAnim(a0)
 		cmpi.b	#id_Special,(v_gamemode).w ; is game mode $10 (special stage)?
@@ -114,9 +114,9 @@ loc_1D03C:
 		btst	#bitDn,d4	; is down being	pressed?
 		beq.s	loc_1D052	; if not, branch
 		add.l	d1,d2
-		cmpi.l	#$7FF0000,d2
+		cmpi.l	#$1FFF0000,d2
 		bcs.s	loc_1D052
-		move.l	#$7FF0000,d2
+		move.l	#$1FFF0000,d2
 
 loc_1D052:
 		btst	#bitL,d4
