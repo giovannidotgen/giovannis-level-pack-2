@@ -385,7 +385,7 @@ LZWaterSlides:
 		move.w	obY(a1),d0		; MJ: Load Y position
 		add.w	d0,d0			; MJ: multiply by 2
 		add.w	d0,d0			; MJ: multiply by 2 again (Because every 100 bytes switch from FG to BG..)		
-		andi.w	#$1F80,d0		; MJ: keep Y position within 800 pixels (in multiples of 80)
+		andi.w	#$3E00,d0		; MJ: keep Y position within 800 pixels (in multiples of 80)
 		move.w	obX(a1),d1		; MJ: Load Y position
 		lsr.w	#7,d1			; MJ: divide X position by 80 (00 = 0, 80 = 1, etc)
 		andi.w	#$FF,d1			; MJ: keep within 8000 pixels (8000 / 80 = 100)
