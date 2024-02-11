@@ -47,7 +47,7 @@ LZWaterFeatures:
 ; ---------------------------------------------------------------------------
 ; Initial water heights
 ; ---------------------------------------------------------------------------
-WaterHeight:	dc.w $B8	; Labyrinth 1
+WaterHeight:	dc.w $2100	; Labyrinth 1
 		dc.w $328	; Labyrinth 2
 		dc.w $900	; Labyrinth 3
 		dc.w $228	; Scrap Brain 3
@@ -85,59 +85,6 @@ DynWater_Index:	dc.w DynWater_LZ1-DynWater_Index
 ; ===========================================================================
 
 DynWater_LZ1:
-		move.w	(v_screenposx).w,d0
-		move.b	(v_wtr_routine).w,d2
-		bne.s	@routine2
-		move.w	#$B8,d1		; water height
-		cmpi.w	#$600,d0	; has screen reached next position?
-		bcs.s	@setwater	; if not, branch
-		move.w	#$108,d1
-		cmpi.w	#$200,(v_player+obY).w ; is Sonic above $200 y-axis?
-		bcs.s	@sonicishigh	; if yes, branch
-		cmpi.w	#$C00,d0
-		bcs.s	@setwater
-		move.w	#$318,d1
-		cmpi.w	#$1080,d0
-		bcs.s	@setwater
-		move.b	#$80,(f_switch+5).w
-		move.w	#$5C8,d1
-		cmpi.w	#$1380,d0
-		bcs.s	@setwater
-		move.w	#$3A8,d1
-		cmp.w	(v_waterpos2).w,d1 ; has water reached last height?
-		bne.s	@setwater	; if not, branch
-		move.b	#1,(v_wtr_routine).w ; use second routine next
-
-	@setwater:
-		move.w	d1,(v_waterpos3).w
-		rts	
-; ===========================================================================
-
-@sonicishigh:
-		cmpi.w	#$C80,d0
-		bcs.s	@setwater
-		move.w	#$E8,d1
-		cmpi.w	#$1500,d0
-		bcs.s	@setwater
-		move.w	#$108,d1
-		bra.s	@setwater
-; ===========================================================================
-
-@routine2:
-		subq.b	#1,d2
-		bne.s	@skip
-		cmpi.w	#$2E0,(v_player+obY).w ; is Sonic above $2E0 y-axis?
-		bcc.s	@skip		; if not, branch
-		move.w	#$3A8,d1
-		cmpi.w	#$1300,d0
-		bcs.s	@setwater2
-		move.w	#$108,d1
-		move.b	#2,(v_wtr_routine).w
-
-	@setwater2:
-		move.w	d1,(v_waterpos3).w
-
-	@skip:
 		rts	
 ; ===========================================================================
 
@@ -385,7 +332,7 @@ LZWaterSlides:
 		move.w	obY(a1),d0		; MJ: Load Y position
 		add.w	d0,d0			; MJ: multiply by 2
 		add.w	d0,d0			; MJ: multiply by 2 again (Because every 100 bytes switch from FG to BG..)		
-		andi.w	#$3E00,d0		; MJ: keep Y position within 800 pixels (in multiples of 80)
+		andi.w	#$7E00,d0		; MJ: keep Y position within 800 pixels (in multiples of 80)
 		move.w	obX(a1),d1		; MJ: Load Y position
 		lsr.w	#7,d1			; MJ: divide X position by 80 (00 = 0, 80 = 1, etc)
 		andi.w	#$FF,d1			; MJ: keep within 8000 pixels (8000 / 80 = 100)
