@@ -5,7 +5,7 @@ ptr_SonicPlayer:	dc.l SonicPlayer	; $01
 ptr_Obj02:		dc.l NullObject
 ptr_PathSwapper:	dc.l PathSwapper
 ptr_Obj04:		dc.l NullObject
-ptr_Obj05:		dc.l NullObject
+ptr_Obj05:		dc.l SpinDash_dust
 ptr_Obj06:		dc.l NullObject
 ptr_Obj07:		dc.l Obj07
 ptr_Splash:		dc.l Splash		; $08
@@ -149,7 +149,7 @@ id_SonicPlayer:		equ ((ptr_SonicPlayer-Obj_Index)/4)+1		; $01
 id_Obj02:		equ ((ptr_Obj02-Obj_Index)/4)+1
 id_PathSwapper:		equ ((ptr_PathSwapper-Obj_Index)/4)+1
 id_Obj04:		equ ((ptr_Obj04-Obj_Index)/4)+1
-id_Obj05:		equ ((ptr_Obj05-Obj_Index)/4)+1
+id_Dust:		equ ((ptr_Obj05-Obj_Index)/4)+1
 id_Obj06:		equ ((ptr_Obj06-Obj_Index)/4)+1
 id_Obj07:		equ ((ptr_Obj07-Obj_Index)/4)+1
 id_Splash:		equ ((ptr_Splash-Obj_Index)/4)+1		; $08

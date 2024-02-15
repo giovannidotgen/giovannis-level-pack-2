@@ -6549,6 +6549,7 @@ BuildSpr_FlipXY:
 	@return:
 		rts	
 
+		include "_incObj\05 Dust Effects.asm"
 		include	"_incObj\sub ChkObjectVisible.asm"
 
 		include "_incObj\Objects Manager.asm"
@@ -6718,6 +6719,7 @@ Sonic_Main:	; Routine 0
 		move.w	#$600,(v_sonspeedmax).w ; Sonic's top speed
 		move.w	#$C,(v_sonspeedacc).w ; Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w ; Sonic's deceleration
+		move.b	#id_Dust,(v_dust).w		
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debugmode).w	; is debug cheat enabled?
@@ -6787,6 +6789,7 @@ MusicList2:
 		include	"_incObj\Sonic Display.asm"
 		include	"_incObj\Sonic RecordPosition.asm"
 		include	"_incObj\Sonic Water.asm"
+		include "_incObj\Sonic Spindash.asm"
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -6794,6 +6797,7 @@ MusicList2:
 ; ---------------------------------------------------------------------------
 
 Sonic_MdNormal:
+		bsr.w Sonic_SpinDash
 		bsr.w	Sonic_Jump
 		bsr.w	Sonic_SlopeResist
 		bsr.w	Sonic_Move
@@ -6889,7 +6893,7 @@ locret_13302:
 		include	"_incObj\Sonic (part 2).asm"
 		include	"_incObj\Sonic Loops.asm"
 		include	"_incObj\Sonic Animate.asm"
-		include	"_anim\Sonic.asm"
+		include	"_anim\Sonic (without frame IDs).asm"
 		include	"_incObj\Sonic LoadGfx.asm"
 
 		include	"_incObj\0A Drowning Countdown.asm"
@@ -8355,10 +8359,11 @@ Map_Sonic:	include	"_maps\Sonic.asm"
 SonicDynPLC:	include	"_maps\Sonic - Dynamic Gfx Script.asm"
 
 ; ---------------------------------------------------------------------------
-; Uncompressed graphics	- Sonic
+; Uncompressed graphics	- Player related
 ; ---------------------------------------------------------------------------
 Art_Sonic:	incbin	"artunc\Sonic.bin"	; Sonic
 		even
+Art_Dust: incbin	"artunc\spindust.bin"		
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------

@@ -156,6 +156,11 @@ UpdateMusic:
 		jsr	PlaySoundID(pc)
 ; loc_71BC8:
 @nonewsound:
+		tst.b	(v_spindashrevtimer).w
+		beq.s	@cont
+		subq.b	#1,(v_spindashrevtimer).w
+		
+@cont:
 		lea	v_music_dac_track(a6),a5
 		tst.b	(a5)			; Is DAC track playing? (TrackPlaybackControl)
 		bpl.s	@dacdone		; Branch if not
@@ -657,10 +662,10 @@ PlaySoundID:
 		; DANGER! Special SFXes end at $D0, yet this checks until $DF; attempting to
 		; play sounds $D1-$DF will cause a crash! Remove the '+$10' and change the 'blo' to a 'bls'
 		; and uncomment the two lines below to fix this.
-		cmpi.b	#spec__Last+$10,d7	; Is this special sfx ($D0-$DF)?
-		blo.w	Sound_PlaySpecial	; Branch if yes
-		;cmpi.b	#flg__First,d7		; Is this after special sfx but before $E0?
-		;blo.w	@locret			; Return if yes
+		cmpi.b	#spec__Last,d7	; Is this special sfx ($D0-$DF)?
+		bls.w	Sound_PlaySpecial	; Branch if yes
+		cmpi.b	#flg__First,d7		; Is this after special sfx but before $E0?
+		blo.w	Sound_D1toDF		; Branch if yes
 		cmpi.b	#flg__Last,d7		; Is this $E0-$E4?
 		bls.s	Sound_E0toE4		; Branch if yes
 ; locret_71F8C:
@@ -913,14 +918,48 @@ PSGInitBytes:	dc.b $80, $A0, $C0	; Specifically, these configure writes to the P
 ; ---------------------------------------------------------------------------
 ; Play normal sound effect
 ; ---------------------------------------------------------------------------
+
+Sound_D1toDF:
+		tst.b	$27(a6)
+		bne.w	loc_722C6
+		tst.b	4(a6)
+		bne.w	loc_722C6
+		tst.b	$24(a6)
+		bne.w	loc_722C6
+		clr.b	(v_spindashrevflag).w
+		cmp.b	#$D1,d7		; is this the Spin Dash sound?
+		bne.s	@cont3	; if not, branch
+		move.w	d0,-(sp)
+		move.b	(v_spindashrevfreq).w,d0	; store extra frequency
+		tst.b	(v_spindashrevtimer).w	; is the Spin Dash timer active?
+		bne.s	@cont1		; if it is, branch
+		move.b	#-1,d0		; otherwise, reset frequency (becomes 0 on next line)
+		
+@cont1:
+		addq.b	#1,d0
+		cmp.b	#$C,d0		; has the limit been reached?
+		bcc.s	@cont2		; if it has, branch
+		move.b	d0,(v_spindashrevfreq).w	; otherwise, set new frequency
+		
+@cont2:
+		move.b	#1,(v_spindashrevflag).w	; set flag
+		move.b	#60,(v_spindashrevtimer).w	; set timer
+		move.w	(sp)+,d0
+		
+@cont3:
+		movea.l	(Go_SoundIndex).l,a0
+		sub.b	#$A1,d7
+		bra	SoundEffects_Common
+
 ; Sound_A0toCF:
 Sound_PlaySFX:
 		tst.b	f_1up_playing(a6)	; Is 1-up playing?
-		bne.w	@clear_sndprio		; Exit is it is
+		bne.w	loc_722C6		; Exit is it is
 		tst.b	v_fadeout_counter(a6)	; Is music being faded out?
-		bne.w	@clear_sndprio		; Exit if it is
+		bne.w	loc_722C6		; Exit if it is
 		tst.b	f_fadein_flag(a6)	; Is music being faded in?
-		bne.w	@clear_sndprio		; Exit if it is
+		bne.w	loc_722C6		; Exit if it is
+		clr.b	(v_spindashrevflag).w		
 		cmpi.b	#sfx_Ring,d7		; is ring sound	effect played?
 		bne.s	@sfx_notRing		; if not, branch
 		tst.b	v_ring_speaker(a6)	; Is the ring sound playing on right speaker?
@@ -934,12 +973,13 @@ Sound_PlaySFX:
 		cmpi.b	#sfx_Push,d7		; is "pushing" sound played?
 		bne.s	@sfx_notPush		; if not, branch
 		tst.b	f_push_playing(a6)	; Is pushing sound already playing?
-		bne.w	@locret			; Return if not
+		bne.w	locret_722C4			; Return if not
 		move.b	#$80,f_push_playing(a6)	; Mark it as playing
 ; Sound_notA7:
 @sfx_notPush:
 		movea.l	(Go_SoundIndex).l,a0
 		subi.b	#sfx__First,d7		; Make it 0-based
+SoundEffects_Common:		
 		lsl.w	#2,d7			; Convert sfx ID into index
 		movea.l	(a0,d7.w),a3		; SFX data pointer
 		movea.l	a3,a1
@@ -981,7 +1021,8 @@ Sound_PlaySFX:
 		move.b	d0,(psg_input).l
 ; loc_7226E:
 @sfxoverridedone:
-		movea.l	SFX_SFXChannelRAM(pc,d3.w),a5
+		lea		SFX_SFXChannelRAM(pc),a5
+		movea.l	(a5,d3.w),a5		
 		movea.l	a5,a2
 		moveq	#(TrackSz/4)-1,d0	; $30 bytes
 ; loc_72276:
@@ -996,6 +1037,14 @@ Sound_PlaySFX:
 		add.l	a3,d0				; Relative pointer
 		move.l	d0,TrackDataPointer(a5)	; Store track pointer
 		move.w	(a1)+,TrackTranspose(a5)	; load FM/PSG channel modifier
+		tst.b	(v_spindashrevflag).w	; is the Spin Dash sound playing?
+		beq.s	@cont		; if not, branch
+		move.w	d0,-(sp)
+		move.b	(v_spindashrevfreq).w,d0
+		add.b	d0,TrackTranspose(a5)
+		move.w	(sp)+,d0
+		
+@cont:		
 		move.b	#1,TrackDurationTimeout(a5)	; Set duration of first "note"
 		move.b	d6,TrackStackPointer(a5)	; set "gosub" (coord flag $F8) stack init value
 		tst.b	d4				; Is this a PSG channel?
@@ -1012,13 +1061,13 @@ Sound_PlaySFX:
 ; loc_722B8:
 @doneoverride:
 		tst.b	v_sfx_psg3_track+TrackPlaybackControl(a6)	; Is SFX being played?
-		bpl.s	@locret						; Branch if not
+		bpl.s	locret_722C4						; Branch if not
 		bset	#2,v_spcsfx_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
-; locret_722C4:
+locret_722C4:
 @locret:
 		rts	
 ; ===========================================================================
-; loc_722C6:
+loc_722C6:
 @clear_sndprio:
 		clr.b	v_sndprio(a6)	; Clear priority
 		rts	
@@ -2571,6 +2620,7 @@ ptr_sndCD:	dc.l SoundCD
 ptr_sndCE:	dc.l SoundCE
 ptr_sndCF:	dc.l SoundCF
 ptr_sndend
+ptr_sndD1:  dc.l SoundD1
 ; ---------------------------------------------------------------------------
 ; Special sound effect pointers
 ; ---------------------------------------------------------------------------
@@ -2675,6 +2725,8 @@ SoundCF:	incbin	"sound/sfx/SndCF - Signpost.bin"
 		even
 SoundD0:	incbin	"sound/sfx/SndD0 - Waterfall.bin"
 		even
+SoundD1:	incbin	"sound/sfx/SndD1 - Spin Dash Rev.bin"
+		even				
 
 		; Don't let Sega sample cross $8000-byte boundary
 		; (DAC driver doesn't switch banks automatically)

@@ -255,6 +255,7 @@ See_Spring:
 		bset	#1,obStatus(a2)
 		bclr	#3,obStatus(a2)
 		clr.b	$3C(a2)
+		clr.b	f_spindash(a2)
 		move.b	#id_Spring,obAnim(a2) ; change Sonic's animation to "spring" ($10)
 		move.b	#2,obRoutine(a2)
 		move.w	#sfx_Spring,d0

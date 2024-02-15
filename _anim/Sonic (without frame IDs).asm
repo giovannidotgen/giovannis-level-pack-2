@@ -34,6 +34,11 @@ ptr_WaterSlide:	dc.w SonAni_WaterSlide-Ani_Sonic
 ptr_Null:	dc.w SonAni_Null-Ani_Sonic
 ptr_Float3:	dc.w SonAni_Float3-Ani_Sonic
 ptr_Float4:	dc.w SonAni_Float4-Ani_Sonic
+ptr_SpinDash: dc.w SonAni_SpinDash-Ani_Sonic
+ptr_DropDash: dc.w SonAni_DropDash-Ani_Sonic	;20		
+ptr_DashCharge: dc.w SonAni_DashCharge-Ani_Sonic	;21
+ptr_UnderCharge: dc.w SonAni_UnderCharge-Ani_Sonic	;22
+ptr_Dash: 		dc.w SonAni_Dash-Ani_Sonic		;23
 
 SonAni_Walk:	dc.b $FF, 8, 9,	$A, $B,	6, 7, afEnd
 		even
@@ -98,6 +103,22 @@ SonAni_Float3:	dc.b 3,	$3C, $3D, $53, $3E, $54, afEnd
 		even
 SonAni_Float4:	dc.b 3,	$3C, afChange, id_Walk
 		even
+SonAni_SpinDash:	dc.b 0, $58, $59, $58, $5A, $58, $5B, $58, $5C, $58, $5D, afEnd
+		even
+SonAni_DropDash:    dc.b 0, $5E, $5F, $60, $61, $5E, $62, $60, $63, $5E, $64, $60, $65, $5E, $66, $60, $67, afEnd      
+		even
+SonAni_DashCharge:	dc.b 0,  8, 8, 8, 8, 8, 8, 8, 8
+		dc.b	9, 9, 9, 9, $A, $A, $21, $21
+		dc.b	$1E,  $1F,  $20,  $21, $1E,  $1F,  $20,  $21
+		dc.b	$68,  $69,  $6A,  $6B, afBack, 4
+		even
+SonAni_UnderCharge:
+		dc.b 	0,  8, 8, 8, 8, 8, 8, 8, 8
+		dc.b	9, 9, 9, 9, $A, $A, $21, $21
+		dc.b	$1E,  $1F,  $20,  $21,	afBack, 4		
+		even
+SonAni_Dash:	dc.b $FF,  $68,  $69,  $6A,  $6B,     afEnd,     afEnd, afEnd		
+		even
 
 id_Walk:	equ (ptr_Walk-Ani_Sonic)/2	; 0
 id_Run:		equ (ptr_Run-Ani_Sonic)/2	; 1
@@ -130,3 +151,8 @@ id_WaterSlide:	equ (ptr_WaterSlide-Ani_Sonic)/2 ; $1B
 id_Null:	equ (ptr_Null-Ani_Sonic)/2	; $1C
 id_Float3:	equ (ptr_Float3-Ani_Sonic)/2	; $1D
 id_Float4:	equ (ptr_Float4-Ani_Sonic)/2	; $1E
+id_SpinDash: equ (ptr_SpinDash-Ani_Sonic)/2
+id_DropDash: equ (ptr_DropDash-Ani_Sonic)/2
+id_DashCharge: equ (ptr_DashCharge-Ani_Sonic)/2
+id_UnderCharge: equ (ptr_UnderCharge-Ani_Sonic)/2
+id_Dash: equ (ptr_Dash-Ani_Sonic)/2
