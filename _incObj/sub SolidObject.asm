@@ -303,9 +303,15 @@ Solid_ResetFloor:
 		move.w	obVelX(a1),obInertia(a1)
 		btst	#1,obStatus(a1)	; is Sonic in the air?
 		beq.s	@notinair	; if not, branch
+		cmp.b   #$41,(a0)	; GIO: hardcoded check to make the Drop Dash fail if Sonic bounces on a spring
+		bne.s   @skip
+		clr.b   jumpability(a1)
+		clr.w   dropcharge(a1)
+	@skip:					
 		move.l	a0,-(sp)
 		movea.l	a1,a0
 		jsr	(Sonic_ResetOnFloor).l ; reset Sonic as if on floor
+		movea.l a0,a1
 		movea.l	(sp)+,a0
 
 	@notinair:

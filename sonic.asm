@@ -5409,14 +5409,19 @@ loc_74DC:
 		move.l	a0,-(sp)
 		movea.l	a1,a0
 		jsr	(Sonic_ResetOnFloor).l
+		movea.l a0,a1				
 		movea.l	(sp)+,a0
 
 loc_7512:
 		bset	#3,obStatus(a1)
 		bset	#3,obStatus(a0)
 
+		tst.b	hasdropdashed(a1)	; GIO: check if Sonic has just performed a Drop Dash
+		bne.s   Plat_Exit				; if yes, skip his speed being reset
+		move.w	obVelX(a1),obInertia(a1)
+
 Plat_Exit:
-		rts	
+		rts
 ; End of function PlatformObject
 
 ; ---------------------------------------------------------------------------
@@ -6810,6 +6815,7 @@ Sonic_MdNormal:
 ; ===========================================================================
 
 Sonic_MdJump:
+		bsr.w	Sonic_Dropdash
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6840,6 +6846,7 @@ Sonic_MdRoll:
 ; ===========================================================================
 
 Sonic_MdJump2:
+		bsr.w	Sonic_Dropdash
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
@@ -6895,6 +6902,7 @@ locret_13302:
 		include	"_incObj\Sonic Animate.asm"
 		include	"_anim\Sonic (without frame IDs).asm"
 		include	"_incObj\Sonic LoadGfx.asm"
+		include	"_incObj\Sonic Dropdash.asm"		
 
 		include	"_incObj\0A Drowning Countdown.asm"
 

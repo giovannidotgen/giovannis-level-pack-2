@@ -82,6 +82,10 @@ Sonic_LookUp:
 		btst	#bitUp,(v_jpadhold2).w ; is up being pressed?
 		beq.s	Sonic_Duck	; if not, branch
 		move.b	#id_LookUp,obAnim(a0) ; use "looking up" animation
+		addq.b	#1,(v_vertiscrolldelay).w
+		cmp.b	#$78,(v_vertiscrolldelay).w
+		bcs.s	Obj01_ResetScr_Part2
+		move.b	#$78,(v_vertiscrolldelay).w		
 		cmpi.w	#$C8,(v_lookshift).w
 		beq.s	loc_12FC2
 		addq.w	#2,(v_lookshift).w
@@ -92,6 +96,10 @@ Sonic_Duck:
 		btst	#bitDn,(v_jpadhold2).w ; is down being pressed?
 		beq.s	Sonic_ResetScr	; if not, branch
 		move.b	#id_Duck,obAnim(a0) ; use "ducking" animation
+		addq.b	#1,(v_vertiscrolldelay).w
+		cmp.b	#$78,(v_vertiscrolldelay).w
+		bcs.s	Obj01_ResetScr_Part2
+		move.b	#$78,(v_vertiscrolldelay).w			
 		cmpi.w	#8,(v_lookshift).w
 		beq.s	loc_12FC2
 		subq.w	#2,(v_lookshift).w
@@ -99,6 +107,9 @@ Sonic_Duck:
 ; ===========================================================================
 
 Sonic_ResetScr:
+		move.b	#0,(v_vertiscrolldelay).w
+		
+Obj01_ResetScr_Part2:
 		cmpi.w	#$60,(v_lookshift).w ; is screen in its default position?
 		beq.s	loc_12FC2	; if yes, branch
 		bcc.s	loc_12FBE
@@ -213,6 +224,9 @@ loc_1309A:
 		neg.w	d1
 		cmp.w	d1,d0
 		bgt.s	loc_130A6
+		add.w	d5,d0
+		cmp.w	d1,d0
+		ble.s	loc_130A6		
 		move.w	d1,d0
 
 loc_130A6:
@@ -259,6 +273,9 @@ loc_13104:
 		add.w	d5,d0
 		cmp.w	d6,d0
 		blt.s	loc_1310C
+		sub.w	d5,d0
+		cmp.w	d6,d0
+		bge.s	loc_1310C		
 		move.w	d6,d0
 
 loc_1310C:

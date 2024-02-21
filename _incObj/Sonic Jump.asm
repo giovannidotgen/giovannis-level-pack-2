@@ -12,7 +12,7 @@ Sonic_Jump:
 		moveq	#0,d0
 		move.b	obAngle(a0),d0
 		addi.b	#$80,d0
-		bsr.w	sub_14D48
+		jsr	sub_14D48
 		cmpi.w	#6,d1
 		blt.w	locret_1348E
 		move.w	#$680,d2
@@ -35,13 +35,14 @@ loc_1341C:
 		bclr	#5,obStatus(a0)
 		addq.l	#4,sp
 		move.b	#1,$3C(a0)
+		move.b  #1,jumpability(a0)	; GIO: set the jump ability flag		
 		clr.b	$38(a0)
 		move.w	#sfx_Jump,d0
 		jsr	(PlaySound_Special).l	; play jumping sound
-		move.b	#$13,obHeight(a0)
-		move.b	#9,obWidth(a0)
+;		move.b	#$13,obHeight(a0)
+;		move.b	#9,obWidth(a0)		; GIO: commented to fix a bug with the Drop Dash dust not displaying correctly under specific circumstances
 		btst	#2,obStatus(a0)
-		bne.s	loc_13490
+		bne.s	locret_1348E		; GIO: removed roll jump lock
 		move.b	#$E,obHeight(a0)
 		move.b	#7,obWidth(a0)
 		move.b	#id_Roll,obAnim(a0) ; use "jumping" animation

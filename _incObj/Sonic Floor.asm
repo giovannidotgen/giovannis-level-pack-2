@@ -26,21 +26,21 @@ Sonic_Floor:
 		beq.w	loc_136E2
 		cmpi.b	#$C0,d0
 		beq.w	loc_1373E
-		bsr.w	Sonic_HitWall
+		jsr	Sonic_HitWall
 		tst.w	d1
 		bpl.s	loc_135F0
 		sub.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
 
 loc_135F0:
-		bsr.w	sub_14EB4
+		jsr	sub_14EB4
 		tst.w	d1
 		bpl.s	loc_13602
 		add.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
 
 loc_13602:
-		bsr.w	Sonic_HitFloor
+		jsr	Sonic_HitFloor
 		move.b	d1,($FFFFFFEF).w
 		tst.w	d1
 		bpl.s	locret_1367E
@@ -55,8 +55,7 @@ loc_13602:
 loc_1361E:
 		add.w	d1,obY(a0)
 		move.b	d3,obAngle(a0)
-		bsr.w	Sonic_ResetOnFloor
-		move.b	#id_Walk,obAnim(a0)
+;		move.b	#id_Walk,obAnim(a0)
 		move.b	d3,d0
 		addi.b	#$20,d0
 		andi.b	#$40,d0
@@ -72,6 +71,7 @@ loc_1361E:
 loc_1364E:
 		move.w	#0,obVelY(a0)
 		move.w	obVelX(a0),obInertia(a0)
+		bsr.w	Sonic_ResetOnFloor		
 		rts	
 ; ===========================================================================
 
@@ -84,15 +84,19 @@ loc_1365C:
 loc_13670:
 		move.w	obVelY(a0),obInertia(a0)
 		tst.b	d3
-		bpl.s	locret_1367E
+		bpl.s	@resetspeed				; GIO: other Drop Dash related change
 		neg.w	obInertia(a0)
+
+@resetspeed:
+		bsr.w	Sonic_ResetOnFloor		; having a branch to Sonic_ResetOnFloor here allows for Drop Dash calculations to occur
+
 
 locret_1367E:
 		rts	
 ; ===========================================================================
 
 loc_13680:
-		bsr.w	Sonic_HitWall
+		jsr	Sonic_HitWall
 		tst.w	d1
 		bpl.s	loc_1369A
 		sub.w	d1,obX(a0)
@@ -102,7 +106,7 @@ loc_13680:
 ; ===========================================================================
 
 loc_1369A:
-		bsr.w	Sonic_DontRunOnWalls
+		jsr	Sonic_DontRunOnWalls
 		tst.w	d1
 		bpl.s	loc_136B4
 		sub.w	d1,obY(a0)
@@ -117,36 +121,36 @@ locret_136B2:
 loc_136B4:
 		tst.w	obVelY(a0)
 		bmi.s	locret_136E0
-		bsr.w	Sonic_HitFloor
+		jsr	Sonic_HitFloor
 		tst.w	d1
 		bpl.s	locret_136E0
 		add.w	d1,obY(a0)
 		move.b	d3,obAngle(a0)
-		bsr.w	Sonic_ResetOnFloor
-		move.b	#id_Walk,obAnim(a0)
+;		move.b	#id_Walk,obAnim(a0)
 		move.w	#0,obVelY(a0)
 		move.w	obVelX(a0),obInertia(a0)
+		bsr.w	Sonic_ResetOnFloor
 
 locret_136E0:
 		rts	
 ; ===========================================================================
 
 loc_136E2:
-		bsr.w	Sonic_HitWall
+		jsr	Sonic_HitWall
 		tst.w	d1
 		bpl.s	loc_136F4
 		sub.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
 
 loc_136F4:
-		bsr.w	sub_14EB4
+		jsr	sub_14EB4
 		tst.w	d1
 		bpl.s	loc_13706
 		add.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
 
 loc_13706:
-		bsr.w	Sonic_DontRunOnWalls
+		jsr	Sonic_DontRunOnWalls
 		tst.w	d1
 		bpl.s	locret_1373C
 		sub.w	d1,obY(a0)
@@ -160,18 +164,20 @@ loc_13706:
 
 loc_13726:
 		move.b	d3,obAngle(a0)
-		bsr.w	Sonic_ResetOnFloor
 		move.w	obVelY(a0),obInertia(a0)
 		tst.b	d3
-		bpl.s	locret_1373C
+		bpl.s	@resetspeed
 		neg.w	obInertia(a0)
+
+	@resetspeed:
+		bsr.w	Sonic_ResetOnFloor	
 
 locret_1373C:
 		rts	
 ; ===========================================================================
 
 loc_1373E:
-		bsr.w	sub_14EB4
+		jsr	sub_14EB4
 		tst.w	d1
 		bpl.s	loc_13758
 		add.w	d1,obX(a0)
@@ -181,7 +187,7 @@ loc_1373E:
 ; ===========================================================================
 
 loc_13758:
-		bsr.w	Sonic_DontRunOnWalls
+		jsr	Sonic_DontRunOnWalls
 		tst.w	d1
 		bpl.s	loc_13772
 		sub.w	d1,obY(a0)
@@ -196,15 +202,15 @@ locret_13770:
 loc_13772:
 		tst.w	obVelY(a0)
 		bmi.s	locret_1379E
-		bsr.w	Sonic_HitFloor
+		jsr	Sonic_HitFloor
 		tst.w	d1
 		bpl.s	locret_1379E
 		add.w	d1,obY(a0)
 		move.b	d3,obAngle(a0)
-		bsr.w	Sonic_ResetOnFloor
-		move.b	#id_Walk,obAnim(a0)
+;		move.b	#id_Walk,obAnim(a0)
 		move.w	#0,obVelY(a0)
 		move.w	obVelX(a0),obInertia(a0)
+		bsr.w	Sonic_ResetOnFloor
 
 locret_1379E:
 		rts	

@@ -152,12 +152,19 @@ obSubtype:	equ $28	; object subtype
 obSolid:	equ ob2ndRout ; solid status flag
 
 ; Object variables used by Sonic
+jumpability:	equ $2B	; GIO: jump ability marker. set to 1 by Sonic_Jump (1 byte)
+dropcharge:	equ $2C ; GIO: drop dash charge counter. is reset when landing from a jump, and goes all the way to #21. (1 byte, expected to be even)
+dropdash:		equ $2D	; GIO: actual drop dash flag. if sonic lands on the ground while this is set, he actually performs the Drop Dash. (1 byte)
+hasdropdashed:	equ $2E ; GIO: flag that is set when Sonic has just performed a Drop Dash in the current frame. exists to fix a bug related to performing the Drop Dash on objects. (1 byte)
+obDoubleJump:	equ	$2F	; double jump flag
+
 flashtime:	equ $30	; time between flashes after getting hit
 invtime:	equ $32	; time left for invincibility
 shoetime:	equ $34	; time left for speed shoes
 standonobject:	equ $3D	; object Sonic stands on
 f_spindash:		equ	$39 ; flag for the Spin Dash
 spindashcharge: equ $3A ; (2 bytes) charge power for the Spin Dash
+
 
 ; Object variables (Sonic 2 disassembly nomenclature)
 render_flags:	equ 1	; bitfield for x/y flip, display mode
