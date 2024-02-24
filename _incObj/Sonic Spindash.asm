@@ -6,9 +6,7 @@
  
  
 Sonic_SpinDash:
-		tst.b	f_spindash(a0)			; already Spin Dashing?
-		bne.s	loc2_1AC8E		; if set, branch
-		tst.b	f_spindash(a0)			; already Spin Dashing?
+		btst	#0,f_spindash(a0)			; already Spin Dashing?
 		bne.s	loc2_1AC8E		; if set, branch
 		cmpi.b	#id_Duck,obAnim(a0)		; is anim duck
 		bne.s	locret2_1AC8C		; if not, return
@@ -19,7 +17,7 @@ Sonic_SpinDash:
 		move.w	#sfx_SpinDash,d0			; spin sound ($E0 in s2)
 		jsr	(PlaySound_Special).l	; play spin sound
 		addq.l	#4,sp			; Add 4 bytes to the stack return address to skip Sonic_Jump on next rts to Obj01_MdNormal, preventing conflicts with button presses.
-		move.b	#1,f_spindash(a0)		; set Spin Dash flag
+		bset	#0,f_spindash(a0)		; set Spin Dash flag
 		move.w	#0,spindashcharge(a0)		; set charge count to 0
 		move.b	#2,(v_dust+obAnim).w	; ??? $D11C is used for
 						; the smoke/dust object
@@ -40,7 +38,7 @@ loc2_1AC8E:
 		move.b	#7,$17(a0)		; $17(a0) is width/2
 		move.b	#id_Roll,obAnim(a0)		; set animation to roll
 		addq.w	#5,$C(a0)		; $C(a0) is Y coordinate
-		move.b	#0,f_spindash(a0)		; clear Spin Dash flag
+		clr.b	f_spindash(a0)		; clear Spin Dash flag
 		moveq	#0,d0
 		move.b	spindashcharge(a0),d0		; copy charge count
 		add.w	d0,d0			; double it
@@ -98,7 +96,13 @@ loc2_1AD48:
 
 loc2_1AD78:
 		addq.l	#4,sp			; Add 4 bytes to the stack return address to skip Sonic_Jump on next rts to Obj01_MdNormal, preventing conflicts with button presses.
+		cmpi.w	#$60,(v_lookshift).w
+		beq.s	loc2_1AD8C
+		bcc.s	loc2_1AD88
+		addq.w	#4,(v_lookshift).w
 
+loc2_1AD88:
+		subq.w	#2,(v_lookshift).w
 loc2_1AD8C:
 		bsr.w	Sonic_LevelBound
 		bsr.w	Sonic_AnglePos
