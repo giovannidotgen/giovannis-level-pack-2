@@ -272,7 +272,11 @@ sfx_Spring:	equ ((ptr_sndCC-SoundIndex)/4)+sfx__First
 sfx_Switch:	equ ((ptr_sndCD-SoundIndex)/4)+sfx__First
 sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
-sfx_SpinDash:   equ ((ptr_sndD1-SoundIndex)/4)+sfx__First+1
+sfx_SpinDash:   equ ((ptr_sndSpindash-SoundIndex)/4)+sfx__First+1
+sfx_PeeloutCharge:	equ ((ptr_sndPeeloutCharge-SoundIndex)/4)+sfx__First
+sfx_PeeloutRelease:	equ ((ptr_sndPeeloutRelease-SoundIndex)/4)+sfx__First
+sfx_PeeloutStop:	equ ((ptr_sndPeeloutStop-SoundIndex)/4)+sfx__First
+sfx_DropDash:	equ ((ptr_sndDropDash-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects

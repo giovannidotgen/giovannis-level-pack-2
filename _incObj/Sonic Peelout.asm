@@ -14,8 +14,8 @@ Sonic_Peelout:
 		beq.w	@return
 		move.b	#id_Run,obAnim(a0)
 		move.w	#0,spindashcharge(a0)
-;		move.w #sfx_PeeloutCharge,d0 
- ;       jsr (PlaySound_Special).l	; play peelout sound
+		move.w #sfx_PeeloutCharge,d0 
+        jsr (PlaySound_Special).l	; play peelout sound
 		addq.l	#4,sp
 		bset	#1,f_spindash(a0)
 		
@@ -42,8 +42,8 @@ SCDPeelout_Launch:
  
 @dontflip:
 		bclr	#7,obStatus(a0)
-;		move.w	#sfx_PeeloutRelease,d0 
-;       jsr (PlaySound_Special).l	; play release sound
+		move.w	#sfx_PeeloutRelease,d0 
+        jsr (PlaySound_Special).l	; play release sound
 		bra.w	SCDPeelout_ResetScr
 ; ---------------------------------------------------------------------------
  
@@ -70,8 +70,8 @@ SCDPeelout_Charge:				; If still charging the dash...
 		jmp 	SCDPeelout_ResetScr
 		
 SCDPeelout_Stop_Sound:
-;		move.w	#sfx_PeeloutStop,d0
-;       jsr (PlaySound_Special).l	; stop sound		
+		move.w	#sfx_PeeloutStop,d0
+        jsr (PlaySound_Special).l	; stop sound		
 		clr.w	obInertia(a0)
 
 SCDPeelout_ResetScr:

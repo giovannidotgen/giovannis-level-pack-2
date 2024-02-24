@@ -31,7 +31,7 @@ Sonic_Dropdash:
 	cmpi.b #21,dropcharge(a0) ; has it become greater than 20?
 	bne.s  Sonic_DropReturn ; if not, return
     move.b #id_DropDash,obAnim(a0) ; set Sonic's animation to be that of the Drop Dash
-	move.b #sfx_Roll,d0
+	move.b #sfx_Roll,d0				; TODO: Get Clone Driver working
 	jsr	   (PlaySound_Special).l
 	move.b #1,dropdash(a0)		; mark the Drop Dash as ready to be released
 	bra.s  Sonic_DropReturn ; return

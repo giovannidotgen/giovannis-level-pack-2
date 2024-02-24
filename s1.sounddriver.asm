@@ -2619,8 +2619,13 @@ ptr_sndCC:	dc.l SoundCC
 ptr_sndCD:	dc.l SoundCD
 ptr_sndCE:	dc.l SoundCE
 ptr_sndCF:	dc.l SoundCF
+			dc.l SoundD0
+ptr_sndPeeloutCharge:	dc.l	SoundPeeloutCharge
+ptr_sndPeeloutRelease:	dc.l	SoundPeeloutRelease
+ptr_sndPeeloutStop:		dc.l	SoundPeeloutStop
+ptr_sndDropDash:		dc.l    SoundDropDash
 ptr_sndend
-ptr_sndD1:  dc.l SoundD1
+ptr_sndSpindash:  dc.l SoundSpindash
 ; ---------------------------------------------------------------------------
 ; Special sound effect pointers
 ; ---------------------------------------------------------------------------
@@ -2725,8 +2730,16 @@ SoundCF:	incbin	"sound/sfx/SndCF - Signpost.bin"
 		even
 SoundD0:	incbin	"sound/sfx/SndD0 - Waterfall.bin"
 		even
-SoundD1:	incbin	"sound/sfx/SndD1 - Spin Dash Rev.bin"
+SoundSpindash:	incbin	"sound/sfx/SndD1 - Spin Dash Rev.bin"
+		even						
+SoundPeeloutCharge:	incbin	"sound/sfx/Peelout Charge.bin"
 		even				
+SoundPeeloutRelease	incbin	"sound/sfx/Peelout Release.bin"
+		even			
+SoundPeeloutStop:	incbin	"sound/sfx/Peelout Stop.bin"
+		even			
+SoundDropDash:	incbin	"sound/sfx/Drop Dash Sound.bin"
+		even					
 
 		; Don't let Sega sample cross $8000-byte boundary
 		; (DAC driver doesn't switch banks automatically)
