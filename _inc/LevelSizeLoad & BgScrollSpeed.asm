@@ -243,7 +243,10 @@ BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index, BgScroll_LZ-BgScroll_Index
 ; ===========================================================================
 
 BgScroll_GHZ:
-		bra.w	Deform_GHZ
+		move.w	#$0080,($FFFFF708).w			; force X position to 2nd chunk's position (So redraw always occurs at beginning correctly...)
+		asr.w	#$04,d0					; divide by 16
+		move.w	d0,($FFFFF70C).w			; save as BG Y position
+		rts
 ; ===========================================================================
 
 BgScroll_LZ:

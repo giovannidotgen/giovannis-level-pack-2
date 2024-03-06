@@ -49,73 +49,35 @@ Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index
 
 
 Deform_GHZ:
-		move.w	(v_scrshiftx).w,d4
-		ext.l	d4
-		asl.l	#5,d4
-		move.l	d4,d1
-		asl.l	#1,d4
-		add.l	d1,d4
-		moveq	#0,d5
-		bsr.w	ScrollBlock1
-		bsr.w	ScrollBlock4
-		lea	(v_hscrolltablebuffer).w,a1
-		move.w	(v_screenposy).w,d0
-		andi.w	#$1FFF,d0
-		lsr.w	#5,d0
-		neg.w	d0
-		addi.w	#$26,d0
-		move.w	d0,(v_bg2screenposy).w
-		move.w	d0,d4
-		bsr.w	ScrollBlock3
-		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
-		move.w	#$6F,d1
-		sub.w	d4,d1
-		move.w	(v_screenposx).w,d0
-		cmpi.b	#id_Title,(v_gamemode).w
-		bne.s	loc_633C
-		moveq	#0,d0
+		moveq	#$00,d4					; set no X movement redraw
+		move.w	(v_scrshifty).w,d5			; load Y movement
+		ext.l	d5					; extend to long-word
+		asl.l	#$06,d5					; multiply by 100, then divide by 2
+		bsr.w	ScrollBlock2				; perform redraw for Y
+		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w		; save as VSRAM BG scroll position
 
-loc_633C:
-		neg.w	d0
-		swap	d0
-		move.w	(v_bgscreenposx).w,d0
-		neg.w	d0
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$03,d0					; divide by 8
+		move.w	d0,(v_bgscroll_buffer).w			; set speed 1
 
-loc_6346:
-		move.l	d0,(a1)+
-		dbf	d1,loc_6346
-		move.w	#$27,d1
-		move.w	(v_bg2screenposx).w,d0
-		neg.w	d0
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$02,d0					; divide by 4
+		move.w	d0,(v_bgscroll_buffer+2).w			; set speed 2
 
-loc_6356:
-		move.l	d0,(a1)+
-		dbf	d1,loc_6356
-		move.w	(v_bg2screenposx).w,d0
-		addi.w	#0,d0
-		move.w	(v_screenposx).w,d2
-		addi.w	#-$200,d2
-		sub.w	d0,d2
-		ext.l	d2
-		asl.l	#8,d2
-		divs.w	#$68,d2
-		ext.l	d2
-		asl.l	#8,d2
-		moveq	#0,d3
-		move.w	d0,d3
-		move.w	#$47,d1
-		add.w	d4,d1
+		lea	DGHZ_Act1(pc),a0			; load scroll data to use
+		bra.w	DeformScroll				; continue
 
-loc_6384:
-		move.w	d3,d0
-		neg.w	d0
-		move.l	d0,(a1)+
-		swap	d3
-		add.l	d2,d3
-		swap	d3
-		dbf	d1,loc_6384
-		rts	
-; End of function Deform_GHZ
+; ---------------------------------------------------------------------------
+; Scroll data
+; ---------------------------------------------------------------------------
+
+DGHZ_Act1:	dc.w	$A800,  $70				; top 70 scroll
+		dc.w	$A802,  $70				; bottom 70 scroll
+		dc.w	$0000
+
+; ===========================================================================
 
 ; ---------------------------------------------------------------------------
 ; Labyrinth Zone background layer deformation code
