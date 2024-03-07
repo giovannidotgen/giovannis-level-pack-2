@@ -21,8 +21,8 @@ loc_137AE:
 		bclr	#1,obStatus(a0)
 	;	btst	#4,obStatus(a0)	; GIO: is bit 4 of Sonic's status set?
 	;	bne.s	@resetanim		; GIO: if yes, reset his animation
-		btst	#2,obStatus(a0)
-		beq.s	loc_137E4
+	;	btst	#2,obStatus(a0)
+	;	beq.s	loc_137E4
 	@resetanim:	
 		bclr	#2,obStatus(a0)
 		move.b	#$13,obHeight(a0)

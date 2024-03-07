@@ -278,11 +278,11 @@ BgScroll_SYZ:
 ; ===========================================================================
 
 BgScroll_SBZ:
-		asl.l	#4,d0
-		asl.l	#1,d0
-		asr.l	#8,d0
-		move.w	d0,(v_bgscreenposy).w
-		rts	
+		move.w	#$0080,($FFFFF708).w			; force X position to 2nd chunk's position (So redraw always occurs at beginning correctly...)
+		asr.w	#$1,d0						; divide by 2
+		andi.w	#$800,d0
+		move.w	d0,($FFFFF70C).w			; save as BG Y position
+		rts
 ; ===========================================================================
 
 BgScroll_End:
