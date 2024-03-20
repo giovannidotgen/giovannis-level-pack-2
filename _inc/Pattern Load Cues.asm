@@ -225,6 +225,7 @@ PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
 		plcm	Nem_SbzDoor2, $8DE0	; horizontal door
 		plcm	Nem_Electric, $8FC0	; electric orb
 		plcm	Nem_TrapDoor, $9240	; trapdoor
+		plcm	Nem_DiagSpring, $7540		; giant	ball		
 		plcm	Nem_SbzFloor, $7F20	; collapsing floor
 		plcm	Nem_SpinPform, $9BE0	; small	spinning platform
 		plcm	Nem_LzSwitch, $A1E0	; switch
