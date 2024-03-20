@@ -39,6 +39,7 @@ ptr_PLC_Ending:		dc.w PLC_Ending-ArtLoadCues
 ptr_PLC_TryAgain:	dc.w PLC_TryAgain-ArtLoadCues
 ptr_PLC_EggmanSBZ2:	dc.w PLC_EggmanSBZ2-ArtLoadCues
 ptr_PLC_FZBoss:		dc.w PLC_FZBoss-ArtLoadCues
+ptr_PLC_GHZBoss:	dc.w PLC_GHZBoss-ArtLoadCues
 
 plcm:	macro gfx,vram
 	dc.l gfx
@@ -90,13 +91,13 @@ PLC_GHZ:	dc.w ((PLC_GHZ2-PLC_GHZ-2)/6)-1
 		plcm	Nem_Motobug, $9E00	; motobug enemy
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_VSpring, $A5E0	; vertical spring
 
 PLC_GHZ2:	dc.w ((PLC_GHZ2end-PLC_GHZ2-2)/6)-1
 		plcm	Nem_Swing, $7000	; swinging platform
 		plcm	Nem_Bridge, $71C0	; bridge
 		plcm	Nem_SpikePole, $7300	; spiked pole
-		plcm	Nem_Ball, $7540		; giant	ball
+		plcm	Nem_DiagSpring, $7540		; giant	ball
 		plcm	Nem_GhzWall1, $A1E0	; breakable wall
 		plcm	Nem_GhzWall2, $6980	; normal wall
 	PLC_GHZ2end:
@@ -133,7 +134,7 @@ PLC_LZ2:	dc.w ((PLC_LZ2end-PLC_LZ2-2)/6)-1
 		plcm	Nem_Cork, $A000		; cork block
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_VSpring, $A5E0	; vertical spring
 	PLC_LZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Marble
@@ -154,7 +155,7 @@ PLC_MZ2:	dc.w ((PLC_MZ2end-PLC_MZ2-2)/6)-1
 		plcm	Nem_MzSwitch, $A260	; switch
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_VSpring, $A5E0	; vertical spring
 		plcm	Nem_MzBlock, $5700	; green	stone block
 	PLC_MZ2end:
 ; ---------------------------------------------------------------------------
@@ -169,7 +170,7 @@ PLC_SLZ:	dc.w ((PLC_SLZ2-PLC_SLZ-2)/6)-1
 		plcm	Nem_SlzWall, $A260	; breakable wall
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_VSpring, $A5E0	; vertical spring
 
 PLC_SLZ2:	dc.w ((PLC_SLZ2end-PLC_SLZ2-2)/6)-1
 		plcm	Nem_Seesaw, $6E80	; seesaw
@@ -197,7 +198,7 @@ PLC_SYZ2:	dc.w ((PLC_SYZ2end-PLC_SYZ2-2)/6)-1
 		plcm	Nem_LzSwitch, $A1E0	; switch
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_VSpring, $A5E0	; vertical spring
 	PLC_SYZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Scrap Brain
@@ -229,7 +230,7 @@ PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
 		plcm	Nem_LzSwitch, $A1E0	; switch
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
-		plcm	Nem_VSpring, $A660	; vertical spring
+		plcm	Nem_VSpring, $A5E0	; vertical spring
 	PLC_SBZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - title card
@@ -390,6 +391,18 @@ PLC_FZBoss:	dc.w ((PLC_FZBossend-PLC_FZBoss-2)/6)-1
 		plcm	Nem_Exhaust, $A540	; exhaust flame
 	PLC_FZBossend:
 		even
+; ---------------------------------------------------------------------------
+; Pattern load cues - GHZ3 boss
+; ---------------------------------------------------------------------------
+
+PLC_GHZBoss:    dc.w ((PLC_GHZBossend-PLC_GHZBoss-2)/6)-1
+        plcm	Nem_Eggman,$8000
+        plcm 	Nem_Weapons,$8D80
+        plcm 	Nem_Prison,$93A0
+        plcm 	Nem_Ball,$7540
+	PLC_GHZBossend:
+        even
+
 
 ; ---------------------------------------------------------------------------
 ; Pattern load cue IDs
@@ -426,3 +439,4 @@ plcid_Ending:		equ (ptr_PLC_Ending-ArtLoadCues)/2	; $1C
 plcid_TryAgain:		equ (ptr_PLC_TryAgain-ArtLoadCues)/2	; $1D
 plcid_EggmanSBZ2:	equ (ptr_PLC_EggmanSBZ2-ArtLoadCues)/2	; $1E
 plcid_FZBoss:		equ (ptr_PLC_FZBoss-ArtLoadCues)/2	; $1F
+plcid_GHZBoss:		equ (ptr_PLC_GHZBoss-ArtLoadCues)/2	; $20

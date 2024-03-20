@@ -41,7 +41,7 @@ Bom_Action:	; Routine 2
 		move.w	@index(pc,d0.w),d1
 		jsr	@index(pc,d1.w)
 		lea	(Ani_Bomb).l,a1
-		bsr.w	AnimateSprite
+		jsr		AnimateSprite
 		bra.w	RememberState
 ; ===========================================================================
 @index:		dc.w @walk-@index
@@ -140,7 +140,7 @@ Bom_Action:	; Routine 2
 Bom_Display:	; Routine 4
 		bsr.s	loc_11B70
 		lea	(Ani_Bomb).l,a1
-		bsr.w	AnimateSprite
+		jsr		AnimateSprite
 		bra.w	RememberState
 ; ===========================================================================
 
@@ -185,7 +185,7 @@ Bom_End:	; Routine 6
 		bsr.w	SpeedToPos
 		addi.w	#$18,obVelY(a0)
 		lea	(Ani_Bomb).l,a1
-		bsr.w	AnimateSprite
+		jsr		AnimateSprite
 		tst.b	obRender(a0)
 		bpl.w	DeleteObject
 		bra.w	DisplaySprite

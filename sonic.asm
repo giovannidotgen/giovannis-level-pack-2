@@ -5657,8 +5657,8 @@ SlopeObject2:
 		add.w	d1,d0
 
 loc_854E:
-		moveq	#0,d1
-		move.b	(a2,d0.w),d1
+        move.b  (a2,d0.w),d1
+        ext.w   d1
 		move.w	obY(a0),d0
 		sub.w	d1,d0
 		moveq	#0,d1
@@ -6566,7 +6566,12 @@ BuildSpr_FlipXY:
 		
 		include	"_incObj\41 Springs.asm"
 		include	"_anim\Springs.asm"
-Map_Spring:	include	"_maps\Springs.asm"
+Map_Spring:	
+Map_Spring_Red:
+    include "_maps\Red Springs.asm"
+    
+Map_Spring_Green:
+    include "_maps\Green Springs.asm"
 
 		include	"_incObj\42 Newtron.asm"
 		include	"_anim\Newtron.asm"
@@ -8648,6 +8653,8 @@ Nem_HSpring:	incbin	"artnem\Spring Horizontal.bin"
 		even
 Nem_VSpring:	incbin	"artnem\Spring Vertical.bin"
 		even
+Nem_DiagSpring: incbin  "artnem\Spring Diagonal.bin"   ; diagonal spring
+        even		
 Nem_SignPost:	incbin	"artnem\Signpost.bin"	; end of level signpost
 		even
 Nem_Lamp:	incbin	"artnem\Lamppost.bin"

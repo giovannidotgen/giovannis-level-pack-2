@@ -89,9 +89,9 @@ SolidObject2F:
 
 	@notflipped:
 		lsr.w	#1,d5
-		moveq	#0,d3
-		move.b	(a2,d5.w),d3
-		sub.b	(a2),d3
+        move.b  (a2,d5.w),d3
+        sub.b   (a2),d3
+        ext.w   d3
 		move.w	obY(a0),d5
 		sub.w	d3,d5
 		move.b	obHeight(a1),d3
@@ -234,7 +234,7 @@ Solid_Below:
 		move.w	#0,obVelY(a1)	; stop Sonic moving
 
 Solid_TopBtmAir:
-		moveq	#-1,d4
+		moveq	#-2,d4
 		rts	
 ; ===========================================================================
 
@@ -245,7 +245,7 @@ Solid_Squash:
 		movea.l	a1,a0
 		jsr	(KillSonic).l	; kill Sonic
 		movea.l	(sp)+,a0
-		moveq	#-1,d4
+		moveq	#-2,d4
 		rts	
 ; ===========================================================================
 

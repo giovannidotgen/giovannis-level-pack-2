@@ -159,7 +159,7 @@ loc_6ED0:
 		bsr.w	PlaySound	; play boss music
 		move.b	#1,(f_lockscreen).w ; lock screen
 		addq.b	#2,(v_dle_routine).w
-		moveq	#plcid_Boss,d0
+		moveq	#plcid_GHZBoss,d0
 		bra.w	AddPLC		; load boss patterns
 ; ===========================================================================
 
