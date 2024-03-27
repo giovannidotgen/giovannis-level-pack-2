@@ -5153,6 +5153,35 @@ LoadTilesFromStart:
 		lea	(v_bgscreenposx).w,a3
 		movea.l	(v_lvllayoutbg).w,a4	; MJ: Load address of layout BG
 		move.w	#$6000,d2
+		bra.s	DrawChunks
+		; if Revision=0
+		; else
+			; tst.b	(v_zone).w
+			; beq.w	Draw_GHz_Bg
+			; cmpi.b	#id_MZ,(v_zone).w
+			; beq.w	Draw_Mz_Bg
+			; cmpi.w	#(id_SBZ<<8)+0,(v_zone).w
+			; beq.w	Draw_SBz_Bg
+			; cmpi.b	#id_EndZ,(v_zone).w
+			; beq.w	Draw_GHz_Bg
+		; endc
+; End of function LoadTilesFromStart
+
+; ---------------------------------------------------------------------------
+; Subroutine to	refresh the entire background
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+
+RefreshWholeBackground:
+		lea	(vdp_control_port).l,a5
+		lea	(vdp_data_port).l,a6
+		lea	(v_screenposx).w,a3
+		lea	(v_bgscreenposx).w,a3
+		movea.l	(v_lvllayoutbg).w,a4	; MJ: Load address of layout BG
+		move.w	#$6000,d2
+		; bra.s	DrawChunks
 		; if Revision=0
 		; else
 			; tst.b	(v_zone).w

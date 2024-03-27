@@ -243,9 +243,9 @@ BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index, BgScroll_LZ-BgScroll_Index
 ; ===========================================================================
 
 BgScroll_GHZ:
-		move.w	#$0080,($FFFFF708).w			; force X position to 2nd chunk's position (So redraw always occurs at beginning correctly...)
+		move.w	#$0100,(v_bgscreenposx).w			; force X position to 2nd chunk's position (So redraw always occurs at beginning correctly...)
 		asr.w	#$04,d0					; divide by 16
-		move.w	d0,($FFFFF70C).w			; save as BG Y position
+		move.w	d0,(v_bgscreenposy).w			; save as BG Y position
 		rts
 ; ===========================================================================
 
@@ -278,10 +278,8 @@ BgScroll_SYZ:
 ; ===========================================================================
 
 BgScroll_SBZ:
-		move.w	#$0080,($FFFFF708).w			; force X position to 2nd chunk's position (So redraw always occurs at beginning correctly...)
-		asr.w	#$1,d0						; divide by 2
-		andi.w	#$800,d0
-		move.w	d0,($FFFFF70C).w			; save as BG Y position
+		move.w	#$0100,(v_bgscreenposx).w	; force X position to 3rd chunk's position (So redraw always occurs at beginning correctly...)
+		move.w	#0,(v_bgscreenposy).w			; make BG Y position null
 		rts
 ; ===========================================================================
 

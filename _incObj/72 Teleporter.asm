@@ -219,9 +219,11 @@ loc_168A6:
 Tele_Data:	dc.w @type00-Tele_Data, @type01-Tele_Data, @type02-Tele_Data
 		dc.w @type03-Tele_Data, @type04-Tele_Data, @type05-Tele_Data
 		dc.w @type06-Tele_Data, @type07-Tele_Data
-@type00:	dc.w $C,	$15A4, $C0C
-			dc.w	$15A4, $100C
-			dc.w	$15A4, $130C
+@type00:	dc.w $14,	$14A4, $68C
+			dc.w	$14A4, $A8C
+			dc.w	$18A4, $A8C
+			dc.w	$18A4, $E8C
+			dc.w	$18A4, $128C
 @type01:	dc.w 4,	$94, $38C
 @type02:	dc.w $1C, $794,	$2E8
 		dc.w $7A4, $2C0, $7D0

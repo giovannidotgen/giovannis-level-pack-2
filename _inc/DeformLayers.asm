@@ -306,27 +306,47 @@ loc_653C:
 
 
 Deform_SBZ:
-		move.w	(v_scrshiftx).w,d4
-		ext.l	d4
-		asl.l	#6,d4
-		move.w	(v_scrshifty).w,d5
-		ext.l	d5
-		asl.l	#4,d5
-		asl.l	#1,d5
-		bsr.w	ScrollBlock1
-		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
-		lea	(v_hscrolltablebuffer).w,a1
-		move.w	#223,d1
-		move.w	(v_screenposx).w,d0
-		neg.w	d0
-		swap	d0
-		move.w	(v_bgscreenposx).w,d0
-		neg.w	d0
+		moveq	#$00,d4					; set no X movement redraw
 
-loc_6576:
-		move.l	d0,(a1)+
-		dbf	d1,loc_6576
-		rts	
+		cmpi.w	#$F00,(v_screenposy).w	; check if screen is at Y $F00
+		bgt.s	@below					; if so, branch
+		
+		clr.w	(v_bgscreenposy).w
+		tst.b	(v_bgscroll_buffer+4).w	; was bg already top?
+		beq.s	@common
+		clr.b	(v_bgscroll_buffer+4).w
+		bsr.w	RefreshWholeBackground
+		bra.s	@common
+
+	@below:
+		move.w	#$100,(v_bgscreenposy).w
+		tst.b	(v_bgscroll_buffer+4).w	; was bg already top?
+		bne.s	@common
+		move.b	#1,(v_bgscroll_buffer+4).w
+		bsr.w	RefreshWholeBackground
+
+	@common:
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$01,d0					; divide by 2
+		move.w	d0,(v_bgscroll_buffer).w			; set speed 1
+
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$02,d0					; divide by 4
+		move.w	d0,(v_bgscroll_buffer+2).w			; set speed 2
+
+		lea	DSBZ_Act1(pc),a0			; load scroll data to use
+		bra.w	DeformScroll				; continue
+
+; ---------------------------------------------------------------------------
+; Scroll data
+; ---------------------------------------------------------------------------
+
+DSBZ_Act1:	dc.w	$A800,  $70				; top 70 scroll
+			dc.w	$0000
+
+; ===========================================================================
 ; End of function Deform_SBZ
 
 ; ---------------------------------------------------------------------------
