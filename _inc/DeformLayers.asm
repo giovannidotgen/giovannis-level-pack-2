@@ -307,25 +307,29 @@ loc_653C:
 
 Deform_SBZ:
 		moveq	#$00,d4					; set no X movement redraw
-
-		cmpi.w	#$F00,(v_screenposy).w	; check if screen is at Y $F00
-		bgt.s	@below					; if so, branch
-		
-		clr.w	(v_bgscreenposy).w
-		tst.b	(v_bgscroll_buffer+4).w	; was bg already top?
-		beq.s	@common
-		clr.b	(v_bgscroll_buffer+4).w
-		bsr.w	RefreshWholeBackground
+		move.w	(v_scrshifty).w,d5			; load Y movement
+		ext.l	d5					; extend to long-word
+		swap	d5					; multiply by $100
+		bsr.w	ScrollBlock2				; perform redraw for Y
+		moveq	#0,d0
+		move.w	(v_screenposy).w,d0
+		sub.w	#$E00,d0
+		ble.s	@forcezero
+		cmp.w	#$100,d0
+		bge.s	@forcehundred
+		move.w	d0,(v_bgscreenposy).w
 		bra.s	@common
-
-	@below:
+		
+	@forcezero:
+		move.w	#0,(v_bgscreenposy).w
+		bra.s	@common
+		
+	@forcehundred:
 		move.w	#$100,(v_bgscreenposy).w
-		tst.b	(v_bgscroll_buffer+4).w	; was bg already top?
-		bne.s	@common
-		move.b	#1,(v_bgscroll_buffer+4).w
-		bsr.w	RefreshWholeBackground
 
 	@common:
+		move.w	(v_bgscreenposy),(v_bgscrposy_dup).w		; save as VSRAM BG scroll position
+
 		move.w	(v_screenposx).w,d0			; load X position
 		neg.w	d0					; reverse direction
 		asr.w	#$01,d0					; divide by 2
