@@ -322,10 +322,22 @@ Deform_SBZ:
 		
 	@forcezero:
 		move.w	#0,(v_bgscreenposy).w
+		tst.b	(f_altpalette).w		; check for alternate palette
+		beq.s	@common					; branch if clear
+		moveq	#0,d0
+		move.b	#palid_SBZ1,d0
+		bsr.w	PalLoad2
+		clr.b	(f_altpalette).w
 		bra.s	@common
 		
 	@forcehundred:
 		move.w	#$100,(v_bgscreenposy).w
+		tst.b	(f_altpalette).w		; check for alternate palette
+		bne.s	@common					; branch if clear
+		moveq	#0,d0
+		move.b	#palid_SBZ2,d0
+		bsr.w	PalLoad2
+	    move.b	#1,(f_altpalette).w
 
 	@common:
 		move.w	(v_bgscreenposy),(v_bgscrposy_dup).w		; save as VSRAM BG scroll position

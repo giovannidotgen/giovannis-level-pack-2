@@ -169,6 +169,7 @@ v_limittop2:	equ $FFFFF72C	; top level boundary (2 bytes)
 v_limitbtm2:	equ $FFFFF72E	; bottom level boundary (2 bytes)
 
 v_limitleft3:	equ $FFFFF732	; left level boundary, at the end of an act (2 bytes)
+f_altpalette:	equ $FFFFF734	; flag to test whether a level has one palette or the other loaded
 
 v_scrshiftx:	equ $FFFFF73A	; x-screen shift (new - last) * $100
 v_scrshifty:	equ $FFFFF73C	; y-screen shift (new - last) * $100
