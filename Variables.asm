@@ -186,7 +186,7 @@ v_bg2_xblock:	equ	$FFFFF74E	; secondary background x-block parity (for redraw)
 v_bg2_yblock:	equ	$FFFFF74F	; secondary background y-block parity (unused)
 v_bg3_xblock:	equ	$FFFFF750	; teritary background x-block parity (for redraw)
 v_bg3_yblock:	equ	$FFFFF751	; teritary background y-block parity (unused)
-
+v_bgscreenposy_before:	equ	$FFFFF752	; copy of v_bgscreenposy before it was manipulated
 v_fg_scroll_flags:	equ $FFFFF754	; screen redraw flags for foreground
 v_bg1_scroll_flags:	equ $FFFFF756	; screen redraw flags for background 1
 v_bg2_scroll_flags:	equ $FFFFF758	; screen redraw flags for background 2
@@ -205,6 +205,10 @@ v_opl_data:	equ $FFFFF770	; ObjPosLoad - data buffer ($10 bytes)
 
 v_ssangle:	equ $FFFFF780	; Special Stage angle (2 bytes)
 v_ssrotate:	equ $FFFFF782	; Special Stage rotation speed (2 bytes)
+
+v_bgscrposy_2ndctrl:	equ $FFFFF784
+v_bgscrposy_3rdctrl:	equ	$FFFFF788
+
 v_btnpushtime1:	equ $FFFFF790	; button push duration - in level (2 bytes)
 v_btnpushtime2:	equ $FFFFF792	; button push duration - in demo (2 bytes)
 v_palchgspeed:	equ $FFFFF794	; palette fade/transition speed (0 is fastest) (2 bytes)

@@ -306,40 +306,76 @@ loc_653C:
 
 
 Deform_SBZ:
-		moveq	#$00,d4					; set no X movement redraw
+		move.w	(v_bgscreenposy).w,(v_bgscreenposy_before).w
+		
+		moveq	#0,d1					
+		moveq	#$00,d4						; set no X movement redraw
 		move.w	(v_scrshifty).w,d5			; load Y movement
-		ext.l	d5					; extend to long-word
-		swap	d5					; multiply by $100
-		bsr.w	ScrollBlock2				; perform redraw for Y
-		moveq	#0,d0
-		move.w	(v_screenposy).w,d0
-		sub.w	#$E00,d0
-		ble.s	@forcezero
-		cmp.w	#$100,d0
-		bge.s	@forcehundred
-		move.w	d0,(v_bgscreenposy).w
-		bra.s	@common
+		ext.l	d5							; extend to long-word
+		asl.l	#5,d5						; multiply by $100, and divide by $8
+	
+	DSBZ_DoThirdYController:
+		move.l	(v_bg3screenposy).w,d3				
+		move.l	d3,d0
+		add.l	d5,d0
+		move.l	d0,(v_bg3screenposy).w		; apply changes to coordinates accordingly
 		
-	@forcezero:
-		move.w	#0,(v_bgscreenposy).w
-		tst.b	(f_altpalette).w		; check for alternate palette
-		beq.s	@common					; branch if clear
-		moveq	#0,d0
-		move.b	#palid_SBZ1,d0
-		bsr.w	PalLoad2
-		clr.b	(f_altpalette).w
-		bra.s	@common
+		cmpi.l	#$1000000,d0				; test against this value
+		ble.s	@skip  						; if not higher, keep as is
+		move.l	#$1000000,d0				; cap to this value		
+	@skip:
 		
-	@forcehundred:
-		move.w	#$100,(v_bgscreenposy).w
+		move.l	d0,(v_bgscreenposy).w		
+		move.w	(v_scrshifty).w,d5			; load Y movement
+		ext.l	d5							; extend to long-word
+		asl.l	#8,d5						; multiply by $100
+	
+	DSBZ_DoSecondYController:
+		move.l	(v_bg2screenposy).w,d3		; get secondary Y coordinates		
+		move.l	d3,d0					
+		add.l	d5,d0
+		move.l	d0,(v_bg2screenposy).w		; apply changes
+		
+		sub.l	#$E000000,d0				; subtract this much
+		tst.l	d0
+		bmi.s	@setzero					; if negative, branch
+		cmpi.l	#$1000000,d0				; test against this value
+		ble.s	@common						; if not higher, keep as is
+
+		move.l	#$1000000,d0				; cap to this value
 		tst.b	(f_altpalette).w		; check for alternate palette
 		bne.s	@common					; branch if clear
 		moveq	#0,d0
 		move.b	#palid_SBZ2,d0
 		bsr.w	PalLoad2
-	    move.b	#1,(f_altpalette).w
-
+	    move.b	#1,(f_altpalette).w		
+		bra.s	@common
+		
+	@setzero:
+		moveq	#0,d0
+		tst.b	(f_altpalette).w		; check for alternate palette
+		beq.s	@common					; branch if clear
+		moveq	#0,d0
+		move.b	#palid_SBZ1,d0
+		bsr.w	PalLoad2
+		clr.b	(f_altpalette).w		
+		
+		
 	@common:
+		add.l	d0,(v_bgscreenposy).w		; apply changes to coordinates accordingly
+
+		moveq	#0,d1
+		moveq	#0,d2
+		moveq	#0,d3
+		move.w	(v_bgscreenposy_before).w,d3
+		ext.l	d3
+		swap	d3
+		move.w	(v_bgscreenposy).w,d0
+		move.w	d0,d1
+		ext.l	d0
+		swap	d0
+		bsr.w	SB2_TestForVerticalRedraw	; Test for vertical redraw
+		
 		move.w	(v_bgscreenposy),(v_bgscrposy_dup).w		; save as VSRAM BG scroll position
 
 		move.w	(v_screenposx).w,d0			; load X position
@@ -661,25 +697,40 @@ locret_67D0:
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+; 
+; Input:
+; d4: amount of X you want it to scroll
+; d5: amount of Y you want it to scroll
+;
+; What ends up in what:
+; d2: original X
+; d3: original Y
+
+; when you call SB2_TestForVerticalRedraw:
+; d0: bgscreenposy in high word
+; d1: bgscreenposy in low word
+; d2: screen redraw flag
+; d3: old bgscreenposy
 
 
 ScrollBlock2:
-		move.l	(v_bgscreenposx).w,d2
-		move.l	d2,d0
-		add.l	d4,d0
-		move.l	d0,(v_bgscreenposx).w
-		move.l	(v_bgscreenposy).w,d3
-		move.l	d3,d0
-		add.l	d5,d0
-		move.l	d0,(v_bgscreenposy).w
+		move.l	(v_bgscreenposx).w,d2	; original screen position
+		move.l	d2,d0					; copy to d0
+		add.l	d4,d0					; add new scrolling
+		move.l	d0,(v_bgscreenposx).w	; update
+		move.l	(v_bgscreenposy).w,d3	; original screen position
+		move.l	d3,d0					; copy to d0
+		add.l	d5,d0					; update
+		move.l	d0,(v_bgscreenposy).w	; 
 		move.l	d0,d1
-		swap	d1
-		andi.w	#$10,d1
+		swap	d1						; downgrade to word
+	SB2_TestForVerticalRedraw:	
+		andi.w	#$10,d1					; limit to $10s
 		move.b	($FFFFF74D).w,d2
 		eor.b	d2,d1
 		bne.s	locret_6812
 		eori.b	#$10,($FFFFF74D).w
-		sub.l	d3,d0
+		sub.l	d3,d0						; subtract previous screen position from current screen position
 		bpl.s	loc_680C
 		bset	#0,(v_bg1_scroll_flags).w
 		rts	

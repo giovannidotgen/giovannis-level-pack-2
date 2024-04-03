@@ -279,7 +279,17 @@ BgScroll_SYZ:
 
 BgScroll_SBZ:
 		move.w	#$0100,(v_bgscreenposx).w	; force X position to 3rd chunk's position (So redraw always occurs at beginning correctly...)
-		move.w	#0,(v_bgscreenposy).w			; make BG Y position null
+		moveq	#0,d2
+		move.l	d0,d2						; copy undivided number
+		asr.l	#$3,d0						; divide Y position by 8
+		move.l	d0,d1
+		cmpi.l	#$100,d0					; check if > $100
+		bls.s	@skip
+		move.l	#$100,d0
+	@skip:
+		move.w	d0,(v_bgscreenposy).w
+		move.w	d1,(v_bg3screenposy).w
+		move.w	d2,(v_bg2screenposy).w
 		rts
 ; ===========================================================================
 
