@@ -6845,6 +6845,28 @@ Sonic_MdNormal:
 		bsr.w	Sonic_Move
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_LevelBound
+
+        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        ble.s   @skipline1       ; if yes, branch
+        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline1:				
+
+        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        ble.s   @skipline2       ; if yes, branch
+        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline2:				
+
+        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        bge.s   @skipline3       ; if yes, branch
+        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline3:				
+
+        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        bge.s   @skipline4       ; if yes, branch
+        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline4:				
+
+		
 		jsr	(SpeedToPos).l
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
@@ -6856,10 +6878,27 @@ Sonic_MdJump:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
+        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        ble.s   @skipline1       ; if yes, branch
+        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline1:				
+
         cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
-        ble.s   @skipline       ; if yes, branch
+        ble.s   @skipline2       ; if yes, branch
         move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
-    @skipline:		
+    @skipline2:				
+
+        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        bge.s   @skipline3       ; if yes, branch
+        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline3:				
+
+        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        bge.s   @skipline4       ; if yes, branch
+        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline4:				
+
+
 		jsr	(ObjectFall).l
 		btst	#6,obStatus(a0)
 		beq.s	loc_12E5C
@@ -6876,6 +6915,26 @@ Sonic_MdRoll:
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound
+        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        ble.s   @skipline1       ; if yes, branch
+        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline1:				
+
+        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        ble.s   @skipline2       ; if yes, branch
+        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline2:				
+	
+        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        bge.s   @skipline3       ; if yes, branch
+        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline3:				
+
+        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        bge.s   @skipline4       ; if yes, branch
+        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline4:				
+
 		jsr	(SpeedToPos).l
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
@@ -6887,10 +6946,26 @@ Sonic_MdJump2:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
+        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        ble.s   @skipline1       ; if yes, branch
+        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline1:				
+
         cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
-        ble.s   @skipline       ; if yes, branch
+        ble.s   @skipline2       ; if yes, branch
         move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
-    @skipline:				
+    @skipline2:				
+
+        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        bge.s   @skipline3       ; if yes, branch
+        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+    @skipline3:				
+
+        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        bge.s   @skipline4       ; if yes, branch
+        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+    @skipline4:				
+
 		jsr	(ObjectFall).l
 		btst	#6,obStatus(a0)
 		beq.s	loc_12EA6

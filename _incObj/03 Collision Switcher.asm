@@ -22,7 +22,7 @@ PathSwapper:
 		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 
 	@delete:
-		bra.w	DeleteObject
+		jmp		DeleteObject
 ; ===========================================================================
 ; off_1FCF0:
 PSwapper_Index:

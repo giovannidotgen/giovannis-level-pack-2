@@ -138,9 +138,29 @@ loc_16800:
 		andi.w	#$1FFF,obY(a1)
 		clr.b	obRoutine(a0)
 		clr.b	(f_lockmulti).w
-		move.w	#0,obVelX(a1)
-		move.w	#$200,obVelY(a1)
+		
+		moveq	#0,d0
+		move.b	obSubtype(a0),d0	; get subtype
+		andi.b	#$F0,d0				; ignore first 4 LSB		
+		lsr.b	#2,d0				; 4x right shift + multiply by 4
+		lea		(Teleporter_SpeedValues).l,a3
+		adda.l	d0,a3
+		move.w	(a3),obVelX(a1)
+		move.w	2(a3),obVelY(a1)
+		tst.b	d0					; check if d0 is not a default value
+		beq.s	@nosfx				; if so, don't play the sfx
+		move.w	#sfx_PeeloutRelease,d0
+		jmp	(PlaySound_Special).l	; play teleport sound		
+		
+	@nosfx:	
 		rts	
+		
+Teleporter_SpeedValues:		
+		;		X,	Y
+		dc.w	0,	$200
+		dc.w	0,	$FC8
+		
+
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -221,10 +241,12 @@ Tele_Data:	dc.w @type00-Tele_Data, @type01-Tele_Data, @type02-Tele_Data
 		dc.w @type06-Tele_Data, @type07-Tele_Data
 @type00:	dc.w $14,	$14A4, $68C
 			dc.w	$14A4, $A8C
-			dc.w	$18A4, $A8C
-			dc.w	$18A4, $E8C
-			dc.w	$18A4, $128C
-@type01:	dc.w 4,	$94, $38C
+			dc.w	$1824, $A8C
+			dc.w	$1824, $E8C
+			dc.w	$1824, $128C
+@type01:	dc.w $C,$1CA4, $E0C
+			dc.w	$1C90, $E20
+			dc.w	$1C90, $128C
 @type02:	dc.w $1C, $794,	$2E8
 		dc.w $7A4, $2C0, $7D0
 		dc.w $2AC, $858, $2AC
