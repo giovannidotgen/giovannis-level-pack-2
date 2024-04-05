@@ -343,22 +343,22 @@ Deform_SBZ:
 		ble.s	@common						; if not higher, keep as is
 
 		move.l	#$1000000,d0				; cap to this value
-		tst.b	(f_altpalette).w		; check for alternate palette
+		tst.b	(v_paltracker).w		; check for alternate palette
 		bne.s	@common					; branch if clear
 		moveq	#0,d0
 		move.b	#palid_SBZ2,d0
 		bsr.w	PalLoad2
-	    move.b	#1,(f_altpalette).w		
+	    move.b	#1,(v_paltracker).w		
 		bra.s	@common
 		
 	@setzero:
 		moveq	#0,d0
-		tst.b	(f_altpalette).w		; check for alternate palette
+		tst.b	(v_paltracker).w		; check for alternate palette
 		beq.s	@common					; branch if clear
 		moveq	#0,d0
 		move.b	#palid_SBZ1,d0
 		bsr.w	PalLoad2
-		clr.b	(f_altpalette).w		
+		clr.b	(v_paltracker).w		
 		
 		
 	@common:

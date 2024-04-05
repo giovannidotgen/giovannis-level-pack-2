@@ -190,7 +190,7 @@ locret_1AC6:
 
 PalCycle_SBZ:
 		lea	(Pal_SBZCycList1).l,a2
-		tst.b	(f_altpalette).w
+		tst.b	(v_paltracker).w
 		beq.s	loc_1ADA
 		lea	(Pal_SBZCycList2).l,a2
 

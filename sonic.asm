@@ -334,7 +334,7 @@ GameInit:
 
 MainGameLoop:
 		move.b	(v_gamemode).w,d0 ; load Game Mode
-		andi.w	#$1C,d0	; limit Game Mode value to $1C max (change to a maximum of 7C to add more game modes)
+		andi.w	#$3C,d0	; limit Game Mode value to $3C max (change to a maximum of 7C to add more game modes)
 		jsr	GameModeArray(pc,d0.w) ; jump to apt location in ROM
 		bra.s	MainGameLoop	; loop indefinitely
 ; ===========================================================================
@@ -359,6 +359,8 @@ ptr_GM_Cont:	bra.w	GM_Continue	; Continue Screen ($14)
 ptr_GM_Ending:	bra.w	GM_Ending	; End of game sequence ($18)
 
 ptr_GM_Credits:	bra.w	GM_Credits	; Credits ($1C)
+
+ptr_GM_Giovanni: bra.w	GiovanniSplash	; "GIOVANNI" Splash Screen
 
 		rts	
 ; ===========================================================================
@@ -1348,6 +1350,10 @@ QuickPLC:
 		include	"_inc\Kosinski Decompression.asm"
 
 		include	"_inc\PaletteCycle.asm"
+		
+		include "_inc\Text rendering routines.asm"
+
+		include "_inc\Giovanni Splash Screen.asm"		
 
 Pal_TitleCyc:	incbin	"palette\Cycle - Title Screen Water.bin"
 Pal_GHZCyc:	incbin	"palette\Cycle - GHZ.bin"
@@ -2063,7 +2069,7 @@ Sega_WaitEnd:
 		beq.s	Sega_WaitEnd	; if not, branch
 
 Sega_GotoTitle:
-		move.b	#id_Title,(v_gamemode).w ; go to title screen
+		move.b	#id_Giovanni,(v_gamemode).w ; go to title screen
 		rts	
 ; ===========================================================================
 

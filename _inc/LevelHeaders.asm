@@ -22,7 +22,7 @@ lhead:	macro plc1,lvlgfx,plc2,sixteen,twofivesix,palwater1,palwater2,pal,pal2
 	lhead	plcid_MZ,	Nem_MZ,		plcid_MZ2,	Blk16_MZ,	Blk128_MZ,	palid_MZ,	   palid_MZ,		palid_MZ,	   palid_MZ; Marble
 	lhead	plcid_SLZ,	Nem_SLZ,	plcid_SLZ2,	Blk16_SLZ,	Blk128_SLZ,	palid_SLZ,	   palid_SLZ,	palid_SLZ,	   palid_SLZ	; Star Light
 	lhead	plcid_SYZ,	Nem_SYZ,	plcid_SYZ2,	Blk16_SYZ,	Blk128_SYZ,	palid_SYZ,	   palid_SYZ,	palid_SYZ,	   palid_SYZ; Spring Yard
-	lhead	plcid_SBZ,	Nem_SBZ,	plcid_SBZ2,	Blk16_SBZ,	Blk128_SBZ,	palid_SBZ1,	   palid_SBZ1,	palid_SBZ1,	   palid_SBZ1; Scrap Brain
+	lhead	plcid_SBZ,	Nem_SBZ,	plcid_SBZ2,	Blk16_SBZ,	Blk128_SBZ,	palid_SBZ1,	   palid_SBZ2,	palid_SBZ1,	   palid_SBZ2; Scrap Brain
 	zonewarning LevelHeaders,$10
 	lhead	0,		Nem_GHZ_2nd,	0,		Blk16_GHZ,	Blk128_GHZ,	palid_Ending,	   palid_Ending,	palid_Ending,	   palid_Ending	; Ending
 	even
