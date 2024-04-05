@@ -9,7 +9,7 @@ GiovanniSplash:
     jsr     PlaySound_Special		; play ID
     jsr     PaletteFadeOut			; fade palettes out
     jsr     ClearScreen.w			; clear the plane mappings
-	lea		($C00004).l,a6
+	lea		(vdp_control_port).l,a6
 	
 	; setup VDP
 	
@@ -35,7 +35,7 @@ GiovanniSplash:
     lea     (Nem_Giovanni).l,a0			; load background art
     jsr     NemDec              		; run NemDec to decompress art for display
     lea 	Pal_Giovanni.l,a0        	; load this palette
-    lea ($FFFFFB00).l,a1        		; get beginning of palette line
+    lea (v_pal_dry).l,a1        		; get beginning of palette line
     move.w  #$3,d0						; number of entries / 4
  
 Giovanni_PalLoop:
@@ -44,7 +44,7 @@ Giovanni_PalLoop:
     dbf d0,Giovanni_PalLoop				; repeat until done
 
 ; optimized version
-	lea		($FFFFCD84).w,a0
+	lea		(v_hscrolltablebuffer+$184).w,a0
 	move.w	#240,d0						; get distance
 	move.w	#29,d1						; lines to affect - 1
 	
@@ -59,16 +59,16 @@ Giovanni_SetDistance:
 	move	#28,d4
 	
 Giovanni_DeformLoop:
-    move.b  #6,($FFFFF62A).w			; set V-blank routine to run
+    move.b  #6,(v_vbla_routine).w		; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (does not decrease "Demo_Time_left")
-    tst.b   ($FFFFF605).w           	; has player 1 pressed start button?
+    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.w   Giovanni_GotoTitle         	; if so, branch	
 	move	d4,d3
 	bsr.w	Giovanni_Reform				; perform deformation
-	tst.w	($FFFFCD84).w				; test the first line
+	tst.w	(v_hscrolltablebuffer+$184).w	; test the first line
 	bne.s	Giovanni_DeformLoop			; if not 0, perform deformation again
 
-	lea		($C00000).l,a6
+	lea		(vdp_data_port).l,a6
 	move.l	#$50000003,4(a6)			; set VRAM write address
 	lea	(Art_S2Text).l,a5				; fetch the text graphics
 	move.w	#$39F,d1					; amount of data to be loaded
@@ -77,14 +77,14 @@ Giovanni_LoadText:
 	move.w	(a5)+,(a6)					; load the text
 	dbf	d1,Giovanni_LoadText 			; repeat until done
 
-    move.w  #1*60,($FFFFF614).w     	; set delay time (1 second on a 60hz system)
+    move.w  #1*60,(v_demolength).w     	; set delay time (1 second on a 60hz system)
 
 Giovanni_Delay1:
-    move.b  #2,($FFFFF62A).w			; set V-blank routine to run
+    move.b  #2,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
-    tst.b   ($FFFFF605).w           	; has player 1 pressed start button?
+    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.w   Giovanni_GotoTitle         	; if so, branch	
-    tst.w   ($FFFFF614).w           	; has the delay time finished?
+    tst.w   (v_demolength).w           	; has the delay time finished?
     bne.s   Giovanni_Delay1				; if not, branch
 
 Credits_Render:
@@ -105,26 +105,26 @@ Credits_Render:
 	move.l	#$FFFFFB20,(p_awreplace).w
 	
 Giovanni_TextFadeIn:
-    move.b  #6,($FFFFF62A).w			; set V-blank routine to run
+    move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
-    tst.b   ($FFFFF605).w           	; has player 1 pressed start button?
+    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.w   Giovanni_GotoTitle         	; if so, branch	
 	bsr.w	DynPaletteTransition
 	tst.b	(v_palflags).w				; check if the palette is fully loaded
 	bne.s	Giovanni_TextFadeIn
 	
-    move.w  #3*60,($FFFFF614).w     	; set delay time (3 seconds on a 60hz system)
+    move.w  #3*60,(v_demolength).w     	; set delay time (3 seconds on a 60hz system)
 
 Giovanni_MainLoop:
-    move.b  #2,($FFFFF62A).w			; set V-blank routine to run
+    move.b  #2,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
-    tst.b   ($FFFFF605).w           	; has player 1 pressed start button?
+    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   Giovanni_GotoTitle         	; if so, branch
-    tst.w   ($FFFFF614).w           	; has the delay time finished?
+    tst.w   (v_demolength).w           	; has the delay time finished?
     bne.s   Giovanni_MainLoop			; if not, branch
  
 Giovanni_GotoTitle:
-    move.b  #$4,($FFFFF600).w      		; set the screen mode to Title Screen
+    move.b  #id_Title,(v_gamemode).w      	; set the screen mode to Title Screen
     rts									; return
 
 ; ===============================================================
@@ -133,7 +133,7 @@ Giovanni_GotoTitle:
 
 Giovanni_Reform:
 
-	lea		($FFFFCD84).w,a0
+	lea		(v_hscrolltablebuffer+$184).w,a0
 	move	#29,d1						; lines to affect - 1
 
 Giovanni_ReformLoop:
