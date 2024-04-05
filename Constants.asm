@@ -165,7 +165,7 @@ shoetime:	equ $34	; time left for speed shoes
 standonobject:	equ $3D	; object Sonic stands on
 f_spindash:		equ	$39 ; flag for the Spin Dash
 spindashcharge: equ $3A ; (2 bytes) charge power for the Spin Dash
-
+jumping:	equ	$3C
 
 ; Object variables (Sonic 2 disassembly nomenclature)
 render_flags:	equ 1	; bitfield for x/y flip, display mode
