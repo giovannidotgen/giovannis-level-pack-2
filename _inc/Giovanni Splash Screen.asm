@@ -4,6 +4,9 @@
 ; Code based on Static Splash Screen for Sonic 1 by Hixatas and ProjectFM
 ; ================================================================
 
+Giovanni_FG_Offset: equ $28
+Giovanni_BG_Offset: equ -$28
+
 GiovanniSplash:
     move.b  #$E4,d0					; set music ID to "stop music"
     jsr     PlaySound_Special		; play ID
@@ -27,10 +30,21 @@ GiovanniSplash:
     move.w  #320,d0             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
     jsr     EniDec						; decompress and dump
     lea     ($FF0000).l,a1				; load dump location
-    move.l  #$460A0003,d0				; VRAM location
+    move.l  #$46140003,d0				; VRAM location
     moveq   #29,d1						; width - 1
     moveq   #3,d2						; height - 1
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM
+	
+    lea     ($FF0000).l,a1				; load dump location	
+    lea     (Map_GiovanniB).l,a0			; load compressed mappings address
+    move.w  #320,d0             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
+    jsr     EniDec						; decompress and dump
+    lea     ($FF0000).l,a1				; load dump location
+    move.l  #$66000003,d0				; VRAM location
+    moveq   #29,d1						; width - 1
+    moveq   #3,d2						; height - 1
+    bsr.w   TilemapToVRAM	         	; flush mappings to VRAM
+	
     move.l  #$68000000,($C00004).l		; VRAM location
     lea     (Nem_Giovanni).l,a0			; load background art
     jsr     NemDec              		; run NemDec to decompress art for display
@@ -45,12 +59,12 @@ Giovanni_PalLoop:
 
 ; optimized version
 	lea		(v_hscrolltablebuffer+$184).w,a0
-	move.w	#256,d0						; get distance
+	move.w	#240,d0						; get distance
 	move.w	#29,d1						; lines to affect - 1
 	
 Giovanni_SetDistance:
-	move.w	d0,(a0)
-	adda.l	#4,a0
+	move.w	d0,(a0)+
+	move.w	d0,(a0)+
 	neg.w	d0
 	dbf		d1,Giovanni_SetDistance
 	
@@ -65,7 +79,10 @@ Giovanni_DeformLoop:
     bmi.w   Giovanni_GotoTitle         	; if so, branch	
 	move	d4,d3
 	bsr.w	Giovanni_Reform				; perform deformation
-	tst.w	(v_hscrolltablebuffer+$184).w	; test the first line
+	moveq	#0,d5
+	move.w	(v_hscrolltablebuffer+$184).w,d5	; get first line's coordinates
+	add.w	#Giovanni_FG_Offset,d5							; get offset
+	tst.w	d5								; test the first line
 	bne.s	Giovanni_DeformLoop			; if not 0, perform deformation again
 
 	lea		(vdp_data_port).l,a6
@@ -140,7 +157,10 @@ Giovanni_ReformLoop:
 	tst.w	d3							; check timer
 	bpl.s	@common						; if positive, skip the line
 
-	tst.w	(a0)						; check for scanline's position
+	moveq	#0,d5
+	move.w	(a0),d5						; get scanline position
+	add.w	#Giovanni_FG_Offset,d5		; get global offset
+	tst.w	d5							; check for scanline's position
 	bmi.s	@negative					; if negative, branch
 	beq.s	@common						; if zero, skip the line
 	
@@ -151,8 +171,29 @@ Giovanni_ReformLoop:
 	addq.w	#8,(a0)
 
 @common:
+
+	adda.l	#2,a0
+
+	tst.w	d3							; check timer
+	bpl.s	@commonBG					; if positive, skip the line
+
+	moveq	#0,d5
+	move.w	(a0),d5						; get scanline position
+	add.w	#Giovanni_BG_Offset,d5		; get global offset
+	tst.w	d5							; check for scanline's position
+	bmi.s	@negativeBG					; if negative, branch
+	beq.s	@commonBG					; if zero, skip the line
+	
+	subq.w	#8,(a0)
+	bra.s	@commonBG
+	
+@negativeBG:
+	addq.w	#8,(a0)
+
+@commonBG:
 	subq	#1,d3
-	adda.l	#4,a0
+	adda.l	#2,a0	
+	
 	dbf		d1,Giovanni_ReformLoop
 	
 	tst		d4
@@ -168,8 +209,11 @@ Giovanni_ReformLoop:
 
 Nem_Giovanni: incbin "artnem\Giovanni Splash.bin"
 	even
-Map_Giovanni: incbin "tilemaps\Giovanni Splash.bin"
+Map_Giovanni:
+Map_GiovanniA: incbin "tilemaps\Giovanni Splash A.bin"
 	even
+Map_GiovanniB: incbin "tilemaps\Giovanni Splash B.bin"
+	even	
 Pal_Giovanni: incbin "palette\Giovanni Splash.bin"
 	even
 Pal_SplashText:	incbin "palette\Sonic 2 Text used in Splash Screen.bin"
