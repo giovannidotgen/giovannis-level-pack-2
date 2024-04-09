@@ -27,8 +27,8 @@ GiovanniSplash:
     move.w  #320,d0             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
     jsr     EniDec						; decompress and dump
     lea     ($FF0000).l,a1				; load dump location
-    move.l  #$46140003,d0				; VRAM location
-    moveq   #19,d1						; width - 1
+    move.l  #$460A0003,d0				; VRAM location
+    moveq   #29,d1						; width - 1
     moveq   #3,d2						; height - 1
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM
     move.l  #$68000000,($C00004).l		; VRAM location
@@ -45,7 +45,7 @@ Giovanni_PalLoop:
 
 ; optimized version
 	lea		(v_hscrolltablebuffer+$184).w,a0
-	move.w	#240,d0						; get distance
+	move.w	#256,d0						; get distance
 	move.w	#29,d1						; lines to affect - 1
 	
 Giovanni_SetDistance:
