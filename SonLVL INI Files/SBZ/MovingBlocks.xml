@@ -70,11 +70,6 @@
   </Enums>
   <Display>
     <DisplayOption>
-      <Condition property="Sprite" value="Short Platform" />
-        <Condition property="Behaviour" value="Move up and down" />
-          <ImageRef image="frame2special" />
-    </DisplayOption>
-    <DisplayOption>
       <Condition property="Sprite" value="Invalid 1" />
       <ImageRef image="frame0" />
     </DisplayOption>
@@ -84,7 +79,7 @@
     </DisplayOption>
     <DisplayOption>
       <Condition property="Sprite" value="Short Platform" />
-      <ImageRef image="frame2" />
+      <ImageRef image="frame2special" />
     </DisplayOption>
     <DisplayOption>
       <Condition property="Sprite" value="Long Platform" />

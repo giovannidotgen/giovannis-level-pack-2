@@ -32,9 +32,16 @@ Plat_Main:	; Routine 0
 		move.l	#Map_Plat_SLZ,obMap(a0) ; SLZ specific code
 		move.b	#$20,obActWid(a0)
 		move.w	#$4000,obGfx(a0)
-		move.b	#3,obSubtype(a0)
+;		move.b	#3,obSubtype(a0)		; GIO: this is a lame restriction and i hate it
 
 	@notSLZ:
+		cmpi.b	#id_SBZ,(v_zone).w ; check if level is SBZ
+		bne.s	@notSBZ
+		move.l	#Map_MBlock,obMap(a0) ; SBZ specific code
+		move.b	#$20,obActWid(a0)
+		move.w	#$22C0,obGfx(a0)	
+		
+	@notSBZ:
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.w	obY(a0),$2C(a0)
@@ -42,6 +49,11 @@ Plat_Main:	; Routine 0
 		move.w	obX(a0),$32(a0)
 		move.w	#$80,obAngle(a0)
 		moveq	#0,d1
+		cmpi.b	#id_SBZ,(v_zone).w ; check if level is SBZ
+		bne.s	@notSBZ2
+		move.b	#2,d1
+		bra.s	@setframe
+	@notSBZ2:
 		move.b	obSubtype(a0),d0
 		cmpi.b	#$A,d0		; is object type $A (large platform)?
 		bne.s	@setframe	; if not, branch
@@ -95,13 +107,16 @@ Plat_Action2:	; Routine 4
 
 
 Plat_Nudge:
-		move.b	$38(a0),d0
+		move.b	$38(a0),d0			; get original Y position
+		btst	#7,obSubtype(a0)	; test for bit 7
+		bne.s	@dontnudge			; if set, don't do nudging math
 		bsr.w	CalcSine
 		move.w	#$400,d1
 		muls.w	d1,d0
+	@dontnudge:		
 		swap	d0
-		add.w	$2C(a0),d0
-		move.w	d0,obY(a0)
+		add.w	$2C(a0),d0			; get Y movement
+		move.w	d0,obY(a0)			; transfer all to Y position
 		rts	
 ; End of function Plat_Nudge
 

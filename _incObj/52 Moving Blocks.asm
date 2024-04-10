@@ -36,7 +36,10 @@ loc_FE44:
 		cmpi.b	#id_SBZ,(v_zone).w ; check if level is SBZ
 		bne.s	loc_FE60
 		move.w	#$22C0,obGfx(a0) ; SBZ specific code (object 5228)
-		cmpi.b	#$28,obSubtype(a0) ; is object 5228 ?
+		moveq	#0,d0	
+		move.b	obSubtype(a0),d0	; get subtype
+		asr.b	#4,d0				; get MSB
+		cmpi.b	#$2,d0 ; is object 522x ?
 		beq.s	loc_FE60	; if yes, branch
 		move.w	#$4460,obGfx(a0) ; SBZ specific code (object 523x)
 
@@ -89,7 +92,8 @@ MBlock_TypeIndex:dc.w MBlock_Type00-MBlock_TypeIndex, MBlock_Type01-MBlock_TypeI
 		dc.w MBlock_Type02-MBlock_TypeIndex, MBlock_Type05-MBlock_TypeIndex
 		dc.w MBlock_Type06-MBlock_TypeIndex, MBlock_Type07-MBlock_TypeIndex
 		dc.w MBlock_Type08-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
-		dc.w MBlock_Type0A-MBlock_TypeIndex
+		dc.w MBlock_Type0A-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
+		dc.w MBlock_Type0C-MBlock_TypeIndex
 ; ===========================================================================
 
 MBlock_Type00:
@@ -235,3 +239,21 @@ MBlock_0A_Reset:
 		clr.w	$36(a0)
 		subq.b	#1,obSubtype(a0)
 		rts	
+
+; ===========================================================================
+
+MBlock_Type0C:
+		moveq	#0,d3
+		move.b	obActWid(a0),d3
+		bsr.w	ObjHitWallRight
+		tst.w	d1		; has the platform hit a wall?
+		bmi.s	MBlock_0C_End	; if yes, branch
+		addq.w	#2,obX(a0)	; move platform	to the right
+		move.w	obX(a0),mblock_origX(a0)
+		rts	
+; ===========================================================================
+
+MBlock_0C_End:
+		clr.b	obSubtype(a0)	; change to type 00 (non-moving	type)
+		rts	
+; ===========================================================================
