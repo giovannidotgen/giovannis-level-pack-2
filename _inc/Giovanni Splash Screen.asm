@@ -106,10 +106,10 @@ Giovanni_Delay1:
 
 Credits_Render:
 	lea	($C00000).l,a6
-	lea	(Text_Giovanni).l,a1 ; where to fetch the lines from
-	move.l	#$488A0003,4(a6)	; starting screen position 
+	lea	(Text_Giovanni).l,a1 ; where to fetch the lines from	
+	move.l	#$48840003,4(a6)	; starting screen position 
 	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	moveq	#29,d2		; number of characters to be rendered in a line -1
+	moveq	#35,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
 
     move.b  #sfx_Ring,d0			; set sound ID
@@ -218,5 +218,5 @@ Pal_Giovanni: incbin "palette\Giovanni Splash.bin"
 	even
 Pal_SplashText:	incbin "palette\Sonic 2 Text used in Splash Screen.bin"
 	even
-Text_Giovanni: dc.b "IT'S JOE-VANNI, NOT GEO-VANNI."
+Text_Giovanni: dc.b "IT'S STILL JOE-VANNI, NOT GEO-VANNI."
 	even
