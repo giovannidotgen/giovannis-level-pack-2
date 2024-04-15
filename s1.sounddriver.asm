@@ -1959,14 +1959,15 @@ PSGSilenceAll:
 ; ===========================================================================
 ; word_729CE:
 PSGFrequencies:
-        ; This is the expanded PSG frequency table from Sonic 3 & Knuckles' driver
-        dc.w $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3F7, $3BE, $388
-        dc.w $356, $326, $2F9, $2CE, $2A5, $280, $25C, $23A, $21A, $1FB, $1DF, $1C4
-        dc.w $1AB, $193, $17D, $167, $153, $140, $12E, $11D, $10D,  $FE,  $EF,  $E2
-        dc.w  $D6,  $C9,  $BE,  $B4,  $A9,  $A0,  $97,  $8F,  $87,  $7F,  $78,  $71
-        dc.w  $6B,  $65,  $5F,  $5A,  $55,  $50,  $4B,  $47,  $43,  $40,  $3C,  $39
-        dc.w  $36,  $33,  $30,  $2D,  $2B,  $28,  $26,  $24,  $22,  $20,  $1F,  $1D
-        dc.w  $1B,  $1A,  $18,  $17,  $16,  $15,  $13,  $12,  $11,  $10,    0,    0
+		dc.w $356, $326, $2F9, $2CE, $2A5, $280, $25C, $23A
+		dc.w $21A, $1FB, $1DF, $1C4, $1AB, $193, $17D, $167
+		dc.w $153, $140, $12E, $11D, $10D,  $FE,  $EF,  $E2
+		dc.w  $D6,  $C9,  $BE,  $B4,  $A9,  $A0,  $97,  $8F
+		dc.w  $87,  $7F,  $78,  $71,  $6B,  $65,  $5F,  $5A
+		dc.w  $55,  $50,  $4B,  $47,  $43,  $40,  $3C,  $39
+		dc.w  $36,  $33,  $30,  $2D,  $2B,  $28,  $26,  $24
+		dc.w  $22,  $20,  $1F,  $1D,  $1B,  $1A,  $18,  $17
+		dc.w  $16,  $15,  $13,  $12,  $11,    0
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -2528,43 +2529,43 @@ Kos_Z80:
 		incbin	"sound\z80.bin", $B5, $16AB
 		even
 
-Music81:	include	"sound/music/Mus81 - GHZ.asm"
+Music81:	incbin	"sound/music/Mus81 - GHZ.bin"
 		even
-Music82:	include	"sound/music/Mus82 - LZ.asm"
+Music82:	incbin	"sound/music/Mus82 - LZ.bin"
 		even
-Music83:	include	"sound/music/Mus83 - MZ.asm"
+Music83:	incbin	"sound/music/Mus83 - MZ.bin"
 		even
-Music84:	include	"sound/music/Mus84 - SLZ.asm"
+Music84:	incbin	"sound/music/Mus84 - SLZ.bin"
 		even
-Music85:	include	"sound/music/Mus85 - SYZ.asm"
+Music85:	incbin	"sound/music/Mus85 - SYZ.bin"
 		even
-Music86:	include	"sound/music/Mus86 - SBZ.asm"
+Music86:	incbin	"sound/music/Mus86 - SBZ.bin"
 		even
-Music87:	include	"sound/music/Mus87 - Invincibility.asm"
+Music87:	incbin	"sound/music/Mus87 - Invincibility.bin"
 		even
-Music88:	include	"sound/music/Mus88 - Extra Life.asm"
+Music88:	incbin	"sound/music/Mus88 - Extra Life.bin"
 		even
-Music89:	include	"sound/music/Mus89 - Special Stage.asm"
+Music89:	incbin	"sound/music/Mus89 - Special Stage.bin"
 		even
-Music8A:	include	"sound/music/Mus8A - Title Screen.asm"
+Music8A:	incbin	"sound/music/Mus8A - Title Screen.bin"
 		even
-Music8B:	include	"sound/music/Mus8B - Ending.asm"
+Music8B:	incbin	"sound/music/Mus8B - Ending.bin"
 		even
-Music8C:	include	"sound/music/Mus8C - Boss.asm"
+Music8C:	incbin	"sound/music/Mus8C - Boss.bin"
 		even
-Music8D:	include	"sound/music/Mus8D - FZ.asm"
+Music8D:	incbin	"sound/music/Mus8D - FZ.bin"
 		even
-Music8E:	include	"sound/music/Mus8E - Sonic Got Through.asm"
+Music8E:	incbin	"sound/music/Mus8E - Sonic Got Through.bin"
 		even
-Music8F:	include	"sound/music/Mus8F - Game Over.asm"
+Music8F:	incbin	"sound/music/Mus8F - Game Over.bin"
 		even
-Music90:	include	"sound/music/Mus90 - Continue Screen.asm"
+Music90:	incbin	"sound/music/Mus90 - Continue Screen.bin"
 		even
-Music91:	include	"sound/music/Mus91 - Credits.asm"
+Music91:	incbin	"sound/music/Mus91 - Credits.bin"
 		even
-Music92:	include	"sound/music/Mus92 - Drowning.asm"
+Music92:	incbin	"sound/music/Mus92 - Drowning.bin"
 		even
-Music93:	include	"sound/music/Mus93 - Get Emerald.asm"
+Music93:	incbin	"sound/music/Mus93 - Get Emerald.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Sound	effect pointers
@@ -2631,103 +2632,103 @@ ptr_sndSpindash:  dc.l SoundSpindash
 SpecSoundIndex:
 ptr_sndD0:	dc.l SoundD0
 ptr_specend
-SoundA0:	include	"sound/sfx/SndA0 - Jump.asm"
+SoundA0:	incbin	"sound/sfx/SndA0 - Jump.bin"
 		even
-SoundA1:	include	"sound/sfx/SndA1 - Lamppost.asm"
+SoundA1:	incbin	"sound/sfx/SndA1 - Lamppost.bin"
 		even
-SoundA2:	include	"sound/sfx/SndA2.asm"
+SoundA2:	incbin	"sound/sfx/SndA2.bin"
 		even
-SoundA3:	include	"sound/sfx/SndA3 - Death.asm"
+SoundA3:	incbin	"sound/sfx/SndA3 - Death.bin"
 		even
-SoundA4:	include	"sound/sfx/SndA4 - Skid.asm"
+SoundA4:	incbin	"sound/sfx/SndA4 - Skid.bin"
 		even
-SoundA5:	include	"sound/sfx/SndA5.asm"
+SoundA5:	incbin	"sound/sfx/SndA5.bin"
 		even
-SoundA6:	include	"sound/sfx/SndA6 - Hit Spikes.asm"
+SoundA6:	incbin	"sound/sfx/SndA6 - Hit Spikes.bin"
 		even
-SoundA7:	include	"sound/sfx/SndA7 - Push Block.asm"
+SoundA7:	incbin	"sound/sfx/SndA7 - Push Block.bin"
 		even
-SoundA8:	include	"sound/sfx/SndA8 - SS Goal.asm"
+SoundA8:	incbin	"sound/sfx/SndA8 - SS Goal.bin"
 		even
-SoundA9:	include	"sound/sfx/SndA9 - SS Item.asm"
+SoundA9:	incbin	"sound/sfx/SndA9 - SS Item.bin"
 		even
-SoundAA:	include	"sound/sfx/SndAA - Splash.asm"
+SoundAA:	incbin	"sound/sfx/SndAA - Splash.bin"
 		even
-SoundAB:	include	"sound/sfx/SndAB.asm"
+SoundAB:	incbin	"sound/sfx/SndAB.bin"
 		even
-SoundAC:	include	"sound/sfx/SndAC - Hit Boss.asm"
+SoundAC:	incbin	"sound/sfx/SndAC - Hit Boss.bin"
 		even
-SoundAD:	include	"sound/sfx/SndAD - Get Bubble.asm"
+SoundAD:	incbin	"sound/sfx/SndAD - Get Bubble.bin"
 		even
-SoundAE:	include	"sound/sfx/SndAE - Fireball.asm"
+SoundAE:	incbin	"sound/sfx/SndAE - Fireball.bin"
 		even
-SoundAF:	include	"sound/sfx/SndAF - Shield.asm"
+SoundAF:	incbin	"sound/sfx/SndAF - Shield.bin"
 		even
-SoundB0:	include	"sound/sfx/SndB0 - Saw.asm"
+SoundB0:	incbin	"sound/sfx/SndB0 - Saw.bin"
 		even
-SoundB1:	include	"sound/sfx/SndB1 - Electric.asm"
+SoundB1:	incbin	"sound/sfx/SndB1 - Electric.bin"
 		even
-SoundB2:	include	"sound/sfx/SndB2 - Drown Death.asm"
+SoundB2:	incbin	"sound/sfx/SndB2 - Drown Death.bin"
 		even
-SoundB3:	include	"sound/sfx/SndB3 - Flamethrower.asm"
+SoundB3:	incbin	"sound/sfx/SndB3 - Flamethrower.bin"
 		even
-SoundB4:	include	"sound/sfx/SndB4 - Bumper.asm"
+SoundB4:	incbin	"sound/sfx/SndB4 - Bumper.bin"
 		even
-SoundB5:	include	"sound/sfx/SndB5 - Ring.asm"
+SoundB5:	incbin	"sound/sfx/SndB5 - Ring.bin"
 		even
-SoundB6:	include	"sound/sfx/SndB6 - Spikes Move.asm"
+SoundB6:	incbin	"sound/sfx/SndB6 - Spikes Move.bin"
 		even
-SoundB7:	include	"sound/sfx/SndB7 - Rumbling.asm"
+SoundB7:	incbin	"sound/sfx/SndB7 - Rumbling.bin"
 		even
-SoundB8:	include	"sound/sfx/SndB8.asm"
+SoundB8:	incbin	"sound/sfx/SndB8.bin"
 		even
-SoundB9:	include	"sound/sfx/SndB9 - Collapse.asm"
+SoundB9:	incbin	"sound/sfx/SndB9 - Collapse.bin"
 		even
-SoundBA:	include	"sound/sfx/SndBA - SS Glass.asm"
+SoundBA:	incbin	"sound/sfx/SndBA - SS Glass.bin"
 		even
-SoundBB:	include	"sound/sfx/SndBB - Door.asm"
+SoundBB:	incbin	"sound/sfx/SndBB - Door.bin"
 		even
-SoundBC:	include	"sound/sfx/SndBC - Teleport.asm"
+SoundBC:	incbin	"sound/sfx/SndBC - Teleport.bin"
 		even
-SoundBD:	include	"sound/sfx/SndBD - ChainStomp.asm"
+SoundBD:	incbin	"sound/sfx/SndBD - ChainStomp.bin"
 		even
-SoundBE:	include	"sound/sfx/SndBE - Roll.asm"
+SoundBE:	incbin	"sound/sfx/SndBE - Roll.bin"
 		even
-SoundBF:	include	"sound/sfx/SndBF - Get Continue.asm"
+SoundBF:	incbin	"sound/sfx/SndBF - Get Continue.bin"
 		even
-SoundC0:	include	"sound/sfx/SndC0 - Basaran Flap.asm"
+SoundC0:	incbin	"sound/sfx/SndC0 - Basaran Flap.bin"
 		even
-SoundC1:	include	"sound/sfx/SndC1 - Break Item.asm"
+SoundC1:	incbin	"sound/sfx/SndC1 - Break Item.bin"
 		even
-SoundC2:	include	"sound/sfx/SndC2 - Drown Warning.asm"
+SoundC2:	incbin	"sound/sfx/SndC2 - Drown Warning.bin"
 		even
-SoundC3:	include	"sound/sfx/SndC3 - Giant Ring.asm"
+SoundC3:	incbin	"sound/sfx/SndC3 - Giant Ring.bin"
 		even
-SoundC4:	include	"sound/sfx/SndC4 - Bomb.asm"
+SoundC4:	incbin	"sound/sfx/SndC4 - Bomb.bin"
 		even
-SoundC5:	include	"sound/sfx/SndC5 - Cash Register.asm"
+SoundC5:	incbin	"sound/sfx/SndC5 - Cash Register.bin"
 		even
-SoundC6:	include	"sound/sfx/SndC6 - Ring Loss.asm"
+SoundC6:	incbin	"sound/sfx/SndC6 - Ring Loss.bin"
 		even
-SoundC7:	include	"sound/sfx/SndC7 - Chain Rising.asm"
+SoundC7:	incbin	"sound/sfx/SndC7 - Chain Rising.bin"
 		even
-SoundC8:	include	"sound/sfx/SndC8 - Burning.asm"
+SoundC8:	incbin	"sound/sfx/SndC8 - Burning.bin"
 		even
-SoundC9:	include	"sound/sfx/SndC9 - Hidden Bonus.asm"
+SoundC9:	incbin	"sound/sfx/SndC9 - Hidden Bonus.bin"
 		even
-SoundCA:	include	"sound/sfx/SndCA - Enter SS.asm"
+SoundCA:	incbin	"sound/sfx/SndCA - Enter SS.bin"
 		even
-SoundCB:	include	"sound/sfx/SndCB - Wall Smash.asm"
+SoundCB:	incbin	"sound/sfx/SndCB - Wall Smash.bin"
 		even
-SoundCC:	include	"sound/sfx/SndCC - Spring.asm"
+SoundCC:	incbin	"sound/sfx/SndCC - Spring.bin"
 		even
-SoundCD:	include	"sound/sfx/SndCD - Switch.asm"
+SoundCD:	incbin	"sound/sfx/SndCD - Switch.bin"
 		even
-SoundCE:	include	"sound/sfx/SndCE - Ring Left Speaker.asm"
+SoundCE:	incbin	"sound/sfx/SndCE - Ring Left Speaker.bin"
 		even
-SoundCF:	include	"sound/sfx/SndCF - Signpost.asm"
+SoundCF:	incbin	"sound/sfx/SndCF - Signpost.bin"
 		even
-SoundD0:	include	"sound/sfx/SndD0 - Waterfall.asm"
+SoundD0:	incbin	"sound/sfx/SndD0 - Waterfall.bin"
 		even
 SoundSpindash:	incbin	"sound/sfx/SndD1 - Spin Dash Rev.bin"
 		even						

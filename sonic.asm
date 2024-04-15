@@ -12,7 +12,6 @@
 	include	"Constants.asm"
 	include	"Variables.asm"
 	include	"Macros.asm"
-	include "sound/smps2asm_flamewing.asm"
 
 
 EnableSRAM:	equ 0	; change to 1 to enable SRAM
