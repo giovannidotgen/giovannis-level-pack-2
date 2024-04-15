@@ -29,7 +29,7 @@ Lamp_Main:	; Routine 0
 		move.w	respawn_index(a0),d0	; get address in respawn table
 		movea.w	d0,a2	; load address into a2
 		btst	#0,(a2)
-		bne.s	@red
+		bne.s	.red
 		move.b	(v_lastlamp).w,d1
 		andi.b	#$7F,d1
 		move.b	obSubtype(a0),d2 ; get lamppost number
@@ -37,7 +37,7 @@ Lamp_Main:	; Routine 0
 		cmp.b	d2,d1		; is this a "new" lamppost?
 		bcs.s	Lamp_Blue	; if yes, branch
 
-@red:
+.red:
 		bset	#0,(a2)
 		move.b	#4,obRoutine(a0) ; goto Lamp_Finish next
 		move.b	#3,obFrame(a0)	; use red lamppost frame
@@ -46,40 +46,40 @@ Lamp_Main:	; Routine 0
 
 Lamp_Blue:	; Routine 2
 		tst.w	(v_debuguse).w	; is debug mode	being used?
-		bne.w	@donothing	; if yes, branch
+		bne.w	.donothing	; if yes, branch
 		tst.b	(f_lockmulti).w
-		bmi.w	@donothing
+		bmi.w	.donothing
 		move.b	(v_lastlamp).w,d1
 		andi.b	#$7F,d1
 		move.b	obSubtype(a0),d2
 		andi.b	#$7F,d2
 		cmp.b	d2,d1		; is this a "new" lamppost?
-		bcs.s	@chkhit		; if yes, branch
+		bcs.s	.chkhit		; if yes, branch
 		move.w	respawn_index(a0),d0	; get address in respawn table
 		movea.w	d0,a2	; load address into a2
 		bset	#0,(a2)
 		move.b	#4,obRoutine(a0)
 		move.b	#3,obFrame(a0)
-		bra.w	@donothing
+		bra.w	.donothing
 ; ===========================================================================
 
-@chkhit:
+.chkhit:
 		move.w	(v_player+obX).w,d0
 		sub.w	obX(a0),d0
 		addq.w	#8,d0
 		cmpi.w	#$10,d0
-		bcc.w	@donothing
+		bcc.w	.donothing
 		move.w	(v_player+obY).w,d0
 		sub.w	obY(a0),d0
 		addi.w	#$40,d0
 		cmpi.w	#$68,d0
-		bcc.s	@donothing
+		bcc.s	.donothing
 
 		move.w	#sfx_Lamppost,d0
 		jsr	(PlaySound_Special).l	; play lamppost sound
 		addq.b	#2,obRoutine(a0)
 		jsr	(FindFreeObj).l
-		bne.s	@fail
+		bne.s	.fail
 		move.b	#id_Lamppost,0(a1)	; load twirling	lamp object
 		move.b	#6,obRoutine(a1) ; goto Lamp_Twirl next
 		move.w	obX(a0),lamp_origX(a1)
@@ -93,14 +93,14 @@ Lamp_Blue:	; Routine 2
 		move.b	#2,obFrame(a1)	; use "ball only" frame
 		move.w	#$20,lamp_time(a1)
 
-	@fail:
+	.fail:
 		move.b	#1,obFrame(a0)	; use "post only" frame
 		bsr.w	Lamp_StoreInfo
 		move.w	respawn_index(a0),d0	; get address in respawn table
 		movea.w	d0,a2	; load address into a2
 		bset	#0,(a2)
 
-	@donothing:
+	.donothing:
 		rts	
 ; ===========================================================================
 
@@ -110,10 +110,10 @@ Lamp_Finish:	; Routine 4
 
 Lamp_Twirl:	; Routine 6
 		subq.w	#1,lamp_time(a0) ; decrement timer
-		bpl.s	@continue	; if time remains, keep twirling
+		bpl.s	.continue	; if time remains, keep twirling
 		move.b	#4,obRoutine(a0) ; goto Lamp_Finish next
 
-	@continue:
+	.continue:
 		move.b	obAngle(a0),d0
 		subi.b	#$10,obAngle(a0)
 		subi.b	#$40,d0
@@ -188,13 +188,13 @@ Lamp_LoadInfo:
 		move.w	($FFFFFE4C).w,(v_bg3screenposx).w
 		move.w	($FFFFFE4E).w,(v_bg3screenposy).w
 		cmpi.b	#1,(v_zone).w	; is this Labyrinth Zone?
-		bne.s	@notlabyrinth	; if not, branch
+		bne.s	.notlabyrinth	; if not, branch
 
 		move.w	($FFFFFE50).w,(v_waterpos2).w
 		move.b	($FFFFFE52).w,(v_wtr_routine).w
 		move.b	($FFFFFE53).w,(f_wtr_state).w
 
-	@notlabyrinth:
+	.notlabyrinth:
 		tst.b	(v_lastlamp).w
 		bpl.s	locret_170F6
 		move.w	($FFFFFE32).w,d0

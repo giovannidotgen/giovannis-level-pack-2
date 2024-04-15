@@ -155,52 +155,52 @@ Giovanni_Reform:
 
 Giovanni_ReformLoop:
 	tst.w	d3							; check timer
-	bpl.s	@common						; if positive, skip the line
+	bpl.s	.common						; if positive, skip the line
 
 	moveq	#0,d5
 	move.w	(a0),d5						; get scanline position
 	add.w	#Giovanni_FG_Offset,d5		; get global offset
 	tst.w	d5							; check for scanline's position
-	bmi.s	@negative					; if negative, branch
-	beq.s	@common						; if zero, skip the line
+	bmi.s	.negative					; if negative, branch
+	beq.s	.common						; if zero, skip the line
 	
 	subq.w	#8,(a0)
-	bra.s	@common
+	bra.s	.common
 	
-@negative:
+.negative:
 	addq.w	#8,(a0)
 
-@common:
+.common:
 
 	adda.l	#2,a0
 
 	tst.w	d3							; check timer
-	bpl.s	@commonBG					; if positive, skip the line
+	bpl.s	.commonBG					; if positive, skip the line
 
 	moveq	#0,d5
 	move.w	(a0),d5						; get scanline position
 	add.w	#Giovanni_BG_Offset,d5		; get global offset
 	tst.w	d5							; check for scanline's position
-	bmi.s	@negativeBG					; if negative, branch
-	beq.s	@commonBG					; if zero, skip the line
+	bmi.s	.negativeBG					; if negative, branch
+	beq.s	.commonBG					; if zero, skip the line
 	
 	subq.w	#8,(a0)
-	bra.s	@commonBG
+	bra.s	.commonBG
 	
-@negativeBG:
+.negativeBG:
 	addq.w	#8,(a0)
 
-@commonBG:
+.commonBG:
 	subq	#1,d3
 	adda.l	#2,a0	
 	
 	dbf		d1,Giovanni_ReformLoop
 	
 	tst		d4
-	bmi.s	@return
+	bmi.s	.return
 	subq	#1,d4
 	
-@return:	
+.return:	
 	rts
 
 ; ===============================================================

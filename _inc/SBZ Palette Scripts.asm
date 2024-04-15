@@ -2,35 +2,58 @@
 ; Scrap Brain Zone palette cycling script
 ; ---------------------------------------------------------------------------
 
-mSBZp:	macro duration,colours,paladdress,ramaddress
-	dc.b duration, colours
-	dc.w paladdress, ramaddress
-	endm
-
-; duration in frames, number of colours, palette address, RAM address
-
 Pal_SBZCycList1:
-	dc.w ((end_SBZCycList1-Pal_SBZCycList1-2)/6)-1
-	mSBZp	7,8,Pal_SBZCyc1,v_pal_dry+$50
-	mSBZp	$D,8,Pal_SBZCyc2,v_pal_dry+$52
-	mSBZp	$E,8,Pal_SBZCyc3,v_pal_dry+$6E
-	mSBZp	$B,8,Pal_SBZCyc5,v_pal_dry+$70
-	mSBZp	7,8,Pal_SBZCyc6,v_pal_dry+$72
-	mSBZp	$1C,$10,Pal_SBZCyc7,v_pal_dry+$7E
-	mSBZp	3,3,Pal_SBZCyc8,v_pal_dry+$78
-	mSBZp	3,3,Pal_SBZCyc8+2,v_pal_dry+$7A
-	mSBZp	3,3,Pal_SBZCyc8+4,v_pal_dry+$7C
-end_SBZCycList1:
+	dc.w 8			; number of entries - 1
+	dc.b 7,	8		; duration in frames, number of	colours
+	dc.w Pal_SBZCyc1	; pallet pointer
+	dc.w $FB50		; RAM address
+	dc.b $D, 8
+	dc.w Pal_SBZCyc2
+	dc.w $FB52
+	dc.b $E, 8
+	dc.w Pal_SBZCyc3
+	dc.w $FB6E
+	dc.b $B, 8
+	dc.w Pal_SBZCyc5
+	dc.w $FB70
+	dc.b 7,	8
+	dc.w Pal_SBZCyc6
+	dc.w $FB72
+	dc.b $1C, $10
+	dc.w Pal_SBZCyc7
+	dc.w $FB7E
+	dc.b 3,	3
+	dc.w Pal_SBZCyc8
+	dc.w $FB78
+	dc.b 3,	3
+	dc.w Pal_SBZCyc8+2
+	dc.w $FB7A
+	dc.b 3,	3
+	dc.w Pal_SBZCyc8+4
+	dc.w $FB7C
 	even
 
 Pal_SBZCycList2:
-	dc.w ((end_SBZCycList2-Pal_SBZCycList2-2)/6)-1
-	mSBZp	7,8,Pal_SBZCyc1,v_pal_dry+$50
-	mSBZp	$D,8,Pal_SBZCyc2,v_pal_dry+$52
-	mSBZp	9,8,Pal_SBZCyc9,v_pal_dry+$70
-	mSBZp	7,8,Pal_SBZCyc6,v_pal_dry+$72
-	mSBZp	3,3,Pal_SBZCyc8,v_pal_dry+$78
-	mSBZp	3,3,Pal_SBZCyc8+2,v_pal_dry+$7A
-	mSBZp	3,3,Pal_SBZCyc8+4,v_pal_dry+$7C
-end_SBZCycList2:
+	dc.w 6
+	dc.b 7,	8
+	dc.w Pal_SBZCyc1
+	dc.w $FB50
+	dc.b $D, 8
+	dc.w Pal_SBZCyc2
+	dc.w $FB52
+	dc.b 9,	8
+	dc.w Pal_SBZCyc9
+	dc.w $FB70
+	dc.b 7,	8
+	dc.w Pal_SBZCyc6
+	dc.w $FB72
+	dc.b 3,	3
+	dc.w Pal_SBZCyc8
+	dc.w $FB78
+	dc.b 3,	3
+	dc.w Pal_SBZCyc8+2
+	dc.w $FB7A
+	dc.b 3,	3
+	dc.w Pal_SBZCyc8+4
+	dc.w $FB7C
 	even

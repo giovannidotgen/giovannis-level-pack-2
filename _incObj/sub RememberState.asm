@@ -3,10 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 RememberState:
-		out_of_range_S3.w	@offscreen
+		out_of_range_S3.w	.offscreen
 		bra.w	DisplaySprite
 
-	@offscreen:
+	.offscreen:
 		move.w	respawn_index(a0),d0	; get address in respawn table
 		beq.w	DeleteObject	; if it's zero, don't remember object
 		movea.w	d0,a2	; load address into a2

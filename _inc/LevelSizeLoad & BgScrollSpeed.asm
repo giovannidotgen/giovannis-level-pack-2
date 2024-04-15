@@ -284,9 +284,9 @@ BgScroll_SBZ:
 		asr.l	#$3,d0						; divide Y position by 8
 		move.l	d0,d1
 		cmpi.l	#$100,d0					; check if > $100
-		bls.s	@skip
+		bls.s	.skip
 		move.l	#$100,d0
-	@skip:
+	.skip:
 		move.w	d0,(v_bgscreenposy).w
 		move.w	d1,(v_bg3screenposy).w
 		move.w	d2,(v_bg2screenposy).w

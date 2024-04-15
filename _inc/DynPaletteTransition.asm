@@ -11,25 +11,25 @@ DynPaletteTransition:
 		tst.b	(v_palflags).w			; check	if any of the flags are set
 		beq.s	DynPalette_Return		; if not, return
 		tst.b	(v_paltimecur).w		; check if it is time to transition the palette
-		bne.s	@subtimer				; if it isn't, branch
+		bne.s	.subtimer				; if it isn't, branch
 
 		btst	#0,(v_palflags).w		; check the flag for above water palette changes
-		beq.s	@skipabove				; if clear, skip
+		beq.s	.skipabove				; if clear, skip
 		bsr.s   DynPalette_AboveWater	; else, branch
 
-	@skipabove:
+	.skipabove:
 		btst	#1,(v_palflags).w		; check the flag for below water palette changes
-		beq.s	@skipbelow				; if clear, skip
+		beq.s	.skipbelow				; if clear, skip
 		bsr.w   DynPalette_BelowWater	; else, branch
 
-	@skipbelow:
+	.skipbelow:
 		btst	#2,(v_palflags).w		; check the flag for palette cycle changes
-		beq.s	@settimer				; if clear, skip
+		beq.s	.settimer				; if clear, skip
 		bsr.w	DynPalette_Cycle		; else, branch
 
-	@settimer:
+	.settimer:
 		move.b	(v_paltime),(v_paltimecur).w
-	@subtimer:
+	.subtimer:
 		subq.b	#1,(v_paltimecur).w
 	DynPalette_Return:
 		rts
@@ -131,11 +131,11 @@ DynPalette_Cycle:
 
 DynPalette_ColorCheck:
 		cmp.l	(a2),a0					; check if the palette entry currently selected is to be ignored
-		beq.s	@entryignore			; if yes, branch
+		beq.s	.entryignore			; if yes, branch
 		move.w	(a0),d2					; move the palette entry from the current palette in d2
 		move.w	(a1),d3					; move the palette entry from the target palette in d3
 		cmp.w	d2,d3					; compare the two values
-		beq.w	@nextpalette			; if they are not equal, branch
+		beq.w	.nextpalette			; if they are not equal, branch
 
 		moveq	#1,d0					; set the flag that marks that a change has occured.
 
@@ -145,54 +145,54 @@ DynPalette_ColorCheck:
 		andi.w  #$E00,d4				; get only blue
 		andi.w	#$E00,d5				; get only blue
 		cmp.w	d5,d4					; compare the two colors
-		beq.s	@chkgreen					; if blue is equal, skip
-		bhi.s	@decblue				; if blue is higher, branch
+		beq.s	.chkgreen					; if blue is equal, skip
+		bhi.s	.decblue				; if blue is higher, branch
 
 	; blue is lower
 		addi.w	#$200,(a0)				; add some blue to the current color entry
-		bra.s   @chkgreen					; go to the next color
+		bra.s   .chkgreen					; go to the next color
 
 	; blue is higher
-	@decblue:
+	.decblue:
 		subi.w	#$200,(a0)				; subtract some blue from the current color entry
 
-	@chkgreen:
+	.chkgreen:
 		move.w	d2,d4					; move the palette entry from the current palette in d4
 		move.w  d3,d5					; move the palette entry from the target palette in d5
 		andi.w  #$E0,d4					; get only green
 		andi.w	#$E0,d5					; get only green
 		cmp.w	d5,d4					; compare the two colors
-		beq.s	@chkred					; if green is equal, skip
-		bhi.s	@decgreen				; if green is higher, branch
+		beq.s	.chkred					; if green is equal, skip
+		bhi.s	.decgreen				; if green is higher, branch
 
 	; green is lower
 		addi.w	#$20,(a0)				; add some green to the current color entry
-		bra.s   @chkred					; go to the next color
+		bra.s   .chkred					; go to the next color
 
-	@decgreen:
+	.decgreen:
 		subi.w	#$20,(a0)				; subtract some green from the current color entry
 
-	@chkred:
+	.chkred:
 		move.w	d2,d4					; move the palette entry from the current palette in d4
 		move.w  d3,d5					; move the palette entry from the target palette in d5
 		andi.w  #$E,d4					; get only red
 		andi.w	#$E,d5					; get only red
 		cmp.w	d5,d4					; compare the two colors
-		beq.s	@nextpalette			; if red is equal, skip
-		bhi.s	@decred					; if red is higher, branch
+		beq.s	.nextpalette			; if red is equal, skip
+		bhi.s	.decred					; if red is higher, branch
 
 	; red is lower
 		addq.w	#$2,(a0)				; add some red to the current color entry
-		bra.s   @nextpalette			; go to the next color
+		bra.s   .nextpalette			; go to the next color
 		
-	@decred:
+	.decred:
 		subq.w	#$2,(a0)				; subtract some red from the current color entry
-		bra.s	@nextpalette
+		bra.s	.nextpalette
 		
-	@entryignore:
+	.entryignore:
 		adda.l	#4,a2					; next ignored entry
 		
-	@nextpalette:
+	.nextpalette:
 		adda.l	#2,a0					; next palette entry
 		adda.l	#2,a1					; next palette entry
 		dbf		d1,DynPalette_ColorCheck; repeat

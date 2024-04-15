@@ -23,10 +23,10 @@ PushB_Main:	; Routine 0
 		move.l	#Map_Push,obMap(a0)
 		move.w	#$42B8,obGfx(a0) ; MZ specific code
 		cmpi.b	#1,(v_zone).w
-		bne.s	@notLZ
+		bne.s	.notLZ
 		move.w	#$43DE,obGfx(a0) ; LZ specific code
 
-	@notLZ:
+	.notLZ:
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
 		move.w	obX(a0),$34(a0)
@@ -39,10 +39,10 @@ PushB_Main:	; Routine 0
 		move.b	(a2)+,obActWid(a0)
 		move.b	(a2)+,obFrame(a0)
 		tst.b	obSubtype(a0)
-		beq.s	@chkgone
+		beq.s	.chkgone
 		move.w	#$C2B8,obGfx(a0)
 
-	@chkgone:
+	.chkgone:
 		move.w	respawn_index(a0),d0	; get address in respawn table
 		beq.s	loc_BF6E		; if it's zero, don't remember object
 		movea.w	d0,a2	; load address into a2

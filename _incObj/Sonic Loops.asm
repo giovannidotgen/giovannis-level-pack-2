@@ -8,11 +8,11 @@
 Sonic_Loops:
 	; The name's a misnomer: loops are no longer handled here, only the windtunnels. Loops are dealt with by pathswappers
 	;	cmpi.b	#id_SLZ,(v_zone).w ; is level SLZ ?	; MJ: Commented out, we don't want SLZ having any rolling chunks =P
-	;	beq.s	@isstarlight	; if yes, branch
+	;	beq.s	.isstarlight	; if yes, branch
 		tst.b	(v_zone).w	; is level GHZ ?
-		bne.w	@noloops	; if not, branch
+		bne.w	.noloops	; if not, branch
 
-	;@isstarlight:
+	;.isstarlight:
 		move.w	obY(a0),d0		; MJ: Load Y position
 		move.w	obX(a0),d1		; MJ: Load X position
 		andi.w	#$1F80,d0		; MJ/GIO: keep Y position within $2000 pixels (in multiples of 80)
@@ -27,60 +27,60 @@ Sonic_Loops:
 		lea	STunnel_Chunks_End(pc),a2			; MJ: lead list of S-Tunnel chunks
 		moveq	#(STunnel_Chunks_End-STunnel_Chunks)-1,d2	; MJ: get size of list
 
-@loop:
+.loop:
 		cmp.b	-(a2),d1	; MJ: is the chunk an S-Tunnel chunk?
-		dbeq	d2,@loop	; MJ: check for each listed S-Tunnel chunk
+		dbeq	d2,.loop	; MJ: check for each listed S-Tunnel chunk
 		beq.w	Sonic_ChkRoll	; MJ: if so, branch
 
 		bclr	#6,obRender(a0) ; return Sonic to high plane
 		rts	
 ; ===========================================================================
 
-@chkifinair:
+.chkifinair:
 		btst	#1,obStatus(a0)	; is Sonic in the air?
-		beq.s	@chkifleft	; if not, branch
+		beq.s	.chkifleft	; if not, branch
 
 		bclr	#6,obRender(a0)	; return Sonic to high plane
 		rts	
 ; ===========================================================================
 
-@chkifleft:
+.chkifleft:
 		move.w	obX(a0),d2
 		cmpi.b	#$2C,d2
-		bcc.s	@chkifright
+		bcc.s	.chkifright
 
 		bclr	#6,obRender(a0)	; return Sonic to high plane
 		rts	
 ; ===========================================================================
 
-@chkifright:
+.chkifright:
 		cmpi.b	#$E0,d2
-		bcs.s	@chkangle1
+		bcs.s	.chkangle1
 
 		bset	#6,obRender(a0)	; send Sonic to	low plane
 		rts	
 ; ===========================================================================
 
-@chkangle1:
+.chkangle1:
 		btst	#6,obRender(a0) ; is Sonic on low plane?
-		bne.s	@chkangle2	; if yes, branch
+		bne.s	.chkangle2	; if yes, branch
 
 		move.b	obAngle(a0),d1
-		beq.s	@done
+		beq.s	.done
 		cmpi.b	#$80,d1		; is Sonic upside-down?
-		bhi.s	@done		; if yes, branch
+		bhi.s	.done		; if yes, branch
 		bset	#6,obRender(a0)	; send Sonic to	low plane
 		rts	
 ; ===========================================================================
 
-@chkangle2:
+.chkangle2:
 		move.b	obAngle(a0),d1
 		cmpi.b	#$80,d1		; is Sonic upright?
-		bls.s	@done		; if yes, branch
+		bls.s	.done		; if yes, branch
 		bclr	#6,obRender(a0)	; send Sonic to	high plane
 
-@noloops:
-@done:
+.noloops:
+.done:
 		rts	
 ; End of function Sonic_Loops
 

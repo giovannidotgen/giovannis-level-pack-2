@@ -29,9 +29,9 @@ Anim_Run:
 Anim_Next:
 		move.b	d0,d1
 		cmpi.b	#id_Dust,(a0)			; GIO: hardcoded check for the Spin Dash dust (with the Drop dash, it sports more than $20 frames)
-		beq.s	@skip
+		beq.s	.skip
 		andi.b	#$1F,d0
-	@skip:			
+	.skip:			
 		move.b	d0,obFrame(a0)	; load sprite number
 		move.b	obStatus(a0),d0
 		rol.b	#3,d1

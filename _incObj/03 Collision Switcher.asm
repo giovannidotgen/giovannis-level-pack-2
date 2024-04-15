@@ -12,16 +12,16 @@ PathSwapper:
 		bne.w	RememberState
 	endc
 		; like RememberState, but doesn't display (Sonic 2's MarkObjGone3)
-		out_of_range_S3.w	@offscreen
+		out_of_range_S3.w	.offscreen
 		rts
 
-	@offscreen:
+	.offscreen:
 		move.w	respawn_index(a0),d0	; get address in respawn table
-		beq.s	@delete		; if it's zero, don't remember object
+		beq.s	.delete		; if it's zero, don't remember object
 		movea.w	d0,a2	; load address into a2
 		bclr	#7,(a2)	; clear respawn table entry, so object can be loaded again
 
-	@delete:
+	.delete:
 		jmp		DeleteObject
 ; ===========================================================================
 ; off_1FCF0:
@@ -70,21 +70,21 @@ PSwapper_Init_CheckX:
 		move.w	obX(a0),d1
 		lea	(v_player).w,a1 ; a1=character
 		cmp.w	obX(a1),d1
-		bhs.s	@jump
+		bhs.s	.jump
 		move.b	#1,$34(a0)
-@jump:
+.jump:
 
 ; loc_1FDA4:
 PSwapper_MainX:
 		tst.w	(v_debuguse).w
-		bne.w	@locret
+		bne.w	.locret
 		move.w	obX(a0),d1
 		lea	$34(a0),a2
 		lea	(v_player).w,a1 ; a1=character
 		tst.b	(a2)+
 		bne.w	PSwapper_MainX_Alt
 		cmp.w	obX(a1),d1
-		bhi.s	@locret
+		bhi.s	.locret
 		move.b	#1,-1(a2)
 		move.w	obY(a0),d2
 		move.w	d2,d3
@@ -93,41 +93,41 @@ PSwapper_MainX:
 		add.w	d4,d3
 		move.w	obY(a1),d4
 		cmp.w	d2,d4
-		blt.s	@locret
+		blt.s	.locret
 		cmp.w	d3,d4
-		bge.s	@locret
+		bge.s	.locret
 		move.b	obSubtype(a0),d0
-		bpl.s	@jump
+		bpl.s	.jump
 		btst	#1,obStatus(a1)
-		bne.s	@locret
-@jump:
+		bne.s	.locret
+.jump:
 		btst	#0,obRender(a0)
-		bne.s	@jump2
+		bne.s	.jump2
 		move.b	#$C,(v_top_solid_bit).w	; MJ: set collision to 1st
 		move.b	#$D,(v_lrb_solid_bit).w	; MJ: set collision to 1st
 		btst	#3,d0
-		beq.s	@jump2
+		beq.s	.jump2
 		move.b	#$E,(v_top_solid_bit).w	; MJ: set collision to 2nd
 		move.b	#$F,(v_lrb_solid_bit).w	; MJ: set collision to 2nd
-@jump2:
+.jump2:
 		andi.w	#$7FFF,obGfx(a1)
 		btst	#5,d0
-		beq.s	@jump3
+		beq.s	.jump3
 		ori.w	#(1<<15),obGfx(a1)
-@jump3:
+.jump3:
 	if DebugPathSwappers
 		tst.b	(f_debugcheat).w
-		beq.s	@locret
+		beq.s	.locret
 		move.b	#sfx_Lamppost,d0
 		jmp	(PlaySound_Special).l
 	endc
-@locret:
+.locret:
 		rts
 ; ===========================================================================
 ; loc_1FE38:
 PSwapper_MainX_Alt:
 		cmp.w	obX(a1),d1
-		bls.s	@locret
+		bls.s	.locret
 		move.b	#0,-1(a2)
 		move.w	obY(a0),d2
 		move.w	d2,d3
@@ -136,48 +136,48 @@ PSwapper_MainX_Alt:
 		add.w	d4,d3
 		move.w	obY(a1),d4
 		cmp.w	d2,d4
-		blt.s	@locret
+		blt.s	.locret
 		cmp.w	d3,d4
-		bge.s	@locret
+		bge.s	.locret
 		move.b	obSubtype(a0),d0
-		bpl.s	@jump
+		bpl.s	.jump
 		btst	#1,obStatus(a1)
-		bne.s	@locret
-@jump:
+		bne.s	.locret
+.jump:
 		btst	#0,obRender(a0)
-		bne.s	@jump2
+		bne.s	.jump2
 		move.b	#$C,(v_top_solid_bit).w	; MJ: set collision to 1st
 		move.b	#$D,(v_lrb_solid_bit).w	; MJ: set collision to 1st
 		btst	#4,d0
-		beq.s	@jump2
+		beq.s	.jump2
 		move.b	#$E,(v_top_solid_bit).w	; MJ: set collision to 2nd
 		move.b	#$F,(v_lrb_solid_bit).w	; MJ: set collision to 2nd
-@jump2:
+.jump2:
 		andi.w	#$7FFF,obGfx(a1)
 		btst	#6,d0
-		beq.s	@jump3
+		beq.s	.jump3
 		ori.w	#(1<<15),obGfx(a1)
-@jump3:
+.jump3:
 	if DebugPathSwappers
 		tst.b	(f_debugcheat).w
-		beq.s	@locret
+		beq.s	.locret
 		move.b	#sfx_Lamppost,d0
 		jmp	(PlaySound_Special).l
 	endc
-@locret:
+.locret:
 		rts
 ; ===========================================================================
 
 PSwapper_MainY:
 		tst.w	(v_debuguse).w
-		bne.w	@locret
+		bne.w	.locret
 		move.w	obY(a0),d1
 		lea	$34(a0),a2
 		lea	(v_player).w,a1 ; a1=character
 		tst.b	(a2)+
 		bne.s	PSwapper_MainY_Alt
 		cmp.w	obY(a1),d1
-		bhi.s	@locret
+		bhi.s	.locret
 		move.b	#1,-1(a2)
 		move.w	obX(a0),d2
 		move.w	d2,d3
@@ -186,41 +186,41 @@ PSwapper_MainY:
 		add.w	d4,d3
 		move.w	obX(a1),d4
 		cmp.w	d2,d4
-		blt.s	@locret
+		blt.s	.locret
 		cmp.w	d3,d4
-		bge.s	@locret
+		bge.s	.locret
 		move.b	obSubtype(a0),d0
-		bpl.s	@jump
+		bpl.s	.jump
 		btst	#1,obStatus(a1)
-		bne.s	@locret
-@jump:
+		bne.s	.locret
+.jump:
 		btst	#0,obRender(a0)
-		bne.s	@jump2
+		bne.s	.jump2
 		move.b	#$C,(v_top_solid_bit).w	; MJ: set collision to 1st
 		move.b	#$D,(v_lrb_solid_bit).w	; MJ: set collision to 1st
 		btst	#3,d0
-		beq.s	@jump2
+		beq.s	.jump2
 		move.b	#$E,(v_top_solid_bit).w	; MJ: set collision to 2nd
 		move.b	#$F,(v_lrb_solid_bit).w	; MJ: set collision to 2nd
-@jump2:
+.jump2:
 		andi.w	#$7FFF,obGfx(a1)
 		btst	#5,d0
-		beq.s	@jump3
+		beq.s	.jump3
 		ori.w	#(1<<15),obGfx(a1)
-@jump3:
+.jump3:
 	if DebugPathSwappers
 		tst.b	(f_debugcheat).w
-		beq.s	@locret
+		beq.s	.locret
 		move.b	#sfx_Lamppost,d0
 		jmp	(PlaySound_Special).l
 	endc
-@locret:
+.locret:
 		rts
 ; ===========================================================================
 ; loc_1FF42:
 PSwapper_MainY_Alt:
 		cmp.w	obY(a1),d1
-		bls.s	@locret
+		bls.s	.locret
 		move.b	#0,-1(a2)
 		move.w	obX(a0),d2
 		move.w	d2,d3
@@ -229,35 +229,35 @@ PSwapper_MainY_Alt:
 		add.w	d4,d3
 		move.w	obX(a1),d4
 		cmp.w	d2,d4
-		blt.s	@locret
+		blt.s	.locret
 		cmp.w	d3,d4
-		bge.s	@locret
+		bge.s	.locret
 		move.b	obSubtype(a0),d0
-		bpl.s	@jump
+		bpl.s	.jump
 		btst	#1,obStatus(a1)
-		bne.s	@locret
-@jump:
+		bne.s	.locret
+.jump:
 		btst	#0,obRender(a0)
-		bne.s	@jump2
+		bne.s	.jump2
 		move.b	#$C,(v_top_solid_bit).w	; MJ: set collision to 1st
 		move.b	#$D,(v_lrb_solid_bit).w	; MJ: set collision to 1st
 		btst	#4,d0
-		beq.s	@jump2
+		beq.s	.jump2
 		move.b	#$E,(v_top_solid_bit).w	; MJ: set collision to 2nd
 		move.b	#$F,(v_lrb_solid_bit).w	; MJ: set collision to 2nd
-@jump2:
+.jump2:
 		andi.w	#$7FFF,obGfx(a1)
 		btst	#6,d0
-		beq.s	@jump3
+		beq.s	.jump3
 		ori.w	#(1<<15),obGfx(a1)
-@jump3:
+.jump3:
 	if DebugPathSwappers
 		tst.b	(f_debugcheat).w
-		beq.s	@locret
+		beq.s	.locret
 		move.b	#sfx_Lamppost,d0
 		jmp	(PlaySound_Special).l
 	endc
-@locret:
+.locret:
 		rts
 ; ===========================================================================
 ; -------------------------------------------------------------------------------

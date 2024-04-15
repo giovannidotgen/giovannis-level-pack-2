@@ -1,0 +1,232 @@
+> > > sonic.asm(165):3: warning #50: privileged instruction
+> > > MOVE
+> > >   move.l a6,usp ; set usp to $0
+> > >   ~~~~
+> > > sonic.asm(215) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(431) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(445) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(454) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(455):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(587):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(835) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(881):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(890):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(1986) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(2018) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2086) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2134) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2171) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2321) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2763) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2767) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(2815) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2847) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3274) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3284) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3418) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3430) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3775) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3833) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3838) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3908) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3940) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(165):3: warning #50: privileged instruction
+> > > MOVE
+> > >   move.l a6,usp ; set usp to $0
+> > >   ~~~~
+> > > sonic.asm(215) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(431) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(445) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(454) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(455):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(587):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(835) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(881):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(890):3: warning #50: privileged instruction
+> > > RTE
+> > >   rte 
+> > >   ~~~
+> > > sonic.asm(1986) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(2018) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2086) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2134) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2171) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2321) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2763) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2767) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(2815) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(2847) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3274) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3284) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3418) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3430) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3775) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3833) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3838) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~
+> > > sonic.asm(3908) disable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2700,sr
+> > >                 ~~~~
+> > > sonic.asm(3940) enable_ints(1):17: warning #50: privileged instruction
+> > > MOVE
+> > >                 move    #$2300,sr
+> > >                 ~~~~

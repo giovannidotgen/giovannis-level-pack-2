@@ -20,10 +20,10 @@ loc_137AE:
 		bclr	#5,obStatus(a0)
 		bclr	#1,obStatus(a0)
 	;	btst	#4,obStatus(a0)	; GIO: is bit 4 of Sonic's status set?
-	;	bne.s	@resetanim		; GIO: if yes, reset his animation
+	;	bne.s	.resetanim		; GIO: if yes, reset his animation
 	;	btst	#2,obStatus(a0)
 	;	beq.s	loc_137E4
-;	@resetanim:	
+;	.resetanim:	
 		bclr	#2,obStatus(a0)
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
@@ -34,9 +34,9 @@ loc_137AE:
 		cmp.b   #4,obRoutine(a0)
 		beq.s   loc_137E4	
 		move.w	obInertia(a0),d0
-		bpl.s	@rollspeedcheck
+		bpl.s	.rollspeedcheck
 		neg.w	d0		
-	@rollspeedcheck:
+	.rollspeedcheck:
 		cmpi.w	#$100,d0	; is Sonic moving at $100 speed or faster?
 		bcs.s	loc_137E4	; if not, branch		
 	Sonic_CheckRollSpeedCommon:

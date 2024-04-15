@@ -7,10 +7,10 @@ Teleport:
 		move.b	obRoutine(a0),d0
 		move.w	Tele_Index(pc,d0.w),d1
 		jsr	Tele_Index(pc,d1.w)
-		out_of_range_S3.s	@delete
+		out_of_range_S3.s	.delete
 		rts	
 
-	@delete:
+	.delete:
 		jmp	(DeleteObject).l
 ; ===========================================================================
 Tele_Index:	dc.w Tele_Main-Tele_Index
@@ -148,11 +148,11 @@ loc_16800:
 		move.w	(a3),obVelX(a1)
 		move.w	2(a3),obVelY(a1)
 		tst.b	d0					; check if d0 is not a default value
-		beq.s	@nosfx				; if so, don't play the sfx
+		beq.s	.nosfx				; if so, don't play the sfx
 		move.w	#sfx_PeeloutRelease,d0
 		jmp	(PlaySound_Special).l	; play teleport sound		
 		
-	@nosfx:	
+	.nosfx:	
 		rts	
 		
 Teleporter_SpeedValues:		
@@ -236,32 +236,32 @@ loc_168A6:
 ; End of function sub_1681C
 
 ; ===========================================================================
-Tele_Data:	dc.w @type00-Tele_Data, @type01-Tele_Data, @type02-Tele_Data
-		dc.w @type03-Tele_Data, @type04-Tele_Data, @type05-Tele_Data
-		dc.w @type06-Tele_Data, @type07-Tele_Data
-@type00:	dc.w $14,	$14A4, $68C
+Tele_Data:	dc.w .type00-Tele_Data, .type01-Tele_Data, .type02-Tele_Data
+		dc.w .type03-Tele_Data, .type04-Tele_Data, .type05-Tele_Data
+		dc.w .type06-Tele_Data, .type07-Tele_Data
+.type00:	dc.w $14,	$14A4, $68C
 			dc.w	$14A4, $A8C
 			dc.w	$1824, $A8C
 			dc.w	$1824, $E8C
 			dc.w	$1824, $128C
-@type01:	dc.w $C,$1CA4, $E0C
+.type01:	dc.w $C,$1CA4, $E0C
 			dc.w	$1C90, $E20
 			dc.w	$1C90, $128C
-@type02:	dc.w $1C, $794,	$2E8
+.type02:	dc.w $1C, $794,	$2E8
 		dc.w $7A4, $2C0, $7D0
 		dc.w $2AC, $858, $2AC
 		dc.w $884, $298, $894
 		dc.w $270, $894, $190
-@type03:	dc.w 4,	$894, $690
-@type04:	dc.w $1C, $1194, $470
+.type03:	dc.w 4,	$894, $690
+.type04:	dc.w $1C, $1194, $470
 		dc.w $1184, $498, $1158
 		dc.w $4AC, $FD0, $4AC
 		dc.w $FA4, $4C0, $F94
 		dc.w $4E8, $F94, $590
-@type05:	dc.w 4,	$1294, $490
-@type06:	dc.w $1C, $1594, $FFE8
+.type05:	dc.w 4,	$1294, $490
+.type06:	dc.w $1C, $1594, $FFE8
 		dc.w $1584, $FFC0, $1560
 		dc.w $FFAC, $14D0, $FFAC
 		dc.w $14A4, $FF98, $1494
 		dc.w $FF70, $1494, $FD90
-@type07:	dc.w 4,	$894, $90
+.type07:	dc.w 4,	$894, $90

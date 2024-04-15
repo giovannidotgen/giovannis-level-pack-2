@@ -3,6 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 Size_of_SegaPCM:		equ $6978
+Size_of_DAC_driver_guess:	equ $1760
 
 ; VDP addressses
 vdp_data_port:		equ $C00000
@@ -13,9 +14,9 @@ psg_input:		equ $C00011
 
 ; Z80 addresses
 z80_ram:		equ $A00000	; start of Z80 RAM
-z80_dac3_pitch:		equ $A000EA
-z80_dac_status:		equ $A01FFD
-z80_dac_sample:		equ $A01FFF
+z80_dac_timpani_pitch:	equ z80_ram+zTimpani_Pitch
+z80_dac_status:		equ z80_ram+zDAC_Status
+z80_dac_sample:		equ z80_ram+zDAC_Sample
 z80_ram_end:		equ $A02000	; end of non-reserved Z80 RAM
 z80_version:		equ $A10001
 z80_port_1_data:	equ $A10002
@@ -28,6 +29,8 @@ ym2612_a0:		equ $A04000
 ym2612_d0:		equ $A04001
 ym2612_a1:		equ $A04002
 ym2612_d1:		equ $A04003
+
+sram_port:		equ $A130F1
 
 security_addr:		equ $A14000
 
@@ -273,7 +276,7 @@ sfx_Spring:	equ ((ptr_sndCC-SoundIndex)/4)+sfx__First
 sfx_Switch:	equ ((ptr_sndCD-SoundIndex)/4)+sfx__First
 sfx_RingLeft:	equ ((ptr_sndCE-SoundIndex)/4)+sfx__First
 sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
-sfx_SpinDash:   equ ((ptr_sndSpindash-SoundIndex)/4)+sfx__First+1
+sfx_SpinDash:   equ ((ptr_sndSpindash-SoundIndex)/4)+sfx__First
 sfx_PeeloutCharge:	equ ((ptr_sndPeeloutCharge-SoundIndex)/4)+sfx__First
 sfx_PeeloutRelease:	equ ((ptr_sndPeeloutRelease-SoundIndex)/4)+sfx__First
 sfx_PeeloutStop:	equ ((ptr_sndPeeloutStop-SoundIndex)/4)+sfx__First

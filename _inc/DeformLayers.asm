@@ -7,11 +7,11 @@
 
 DeformLayers:
 		tst.b	(f_nobgscroll).w
-		beq.s	@bgscroll
+		beq.s	.bgscroll
 		rts	
 ; ===========================================================================
 
-	@bgscroll:
+	.bgscroll:
 		clr.w	(v_fg_scroll_flags).w
 		clr.w	(v_bg1_scroll_flags).w
 		clr.w	(v_bg2_scroll_flags).w
@@ -321,9 +321,9 @@ Deform_SBZ:
 		move.l	d0,(v_bg3screenposy).w		; apply changes to coordinates accordingly
 		
 		cmpi.l	#$1000000,d0				; test against this value
-		ble.s	@skip  						; if not higher, keep as is
+		ble.s	.skip  						; if not higher, keep as is
 		move.l	#$1000000,d0				; cap to this value		
-	@skip:
+	.skip:
 		
 		move.l	d0,(v_bgscreenposy).w		
 		move.w	(v_scrshifty).w,d5			; load Y movement
@@ -338,30 +338,30 @@ Deform_SBZ:
 		
 		sub.l	#$E000000,d0				; subtract this much
 		tst.l	d0
-		bmi.s	@setzero					; if negative, branch
+		bmi.s	.setzero					; if negative, branch
 		cmpi.l	#$1000000,d0				; test against this value
-		ble.s	@common						; if not higher, keep as is
+		ble.s	.common						; if not higher, keep as is
 
 		move.l	#$1000000,d0				; cap to this value
 		tst.b	(v_paltracker).w		; check for alternate palette
-		bne.s	@common					; branch if clear
+		bne.s	.common					; branch if clear
 		moveq	#0,d0
 		move.b	#palid_SBZ2,d0
 		bsr.w	PalLoad2
 	    move.b	#1,(v_paltracker).w		
-		bra.s	@common
+		bra.s	.common
 		
-	@setzero:
+	.setzero:
 		moveq	#0,d0
 		tst.b	(v_paltracker).w		; check for alternate palette
-		beq.s	@common					; branch if clear
+		beq.s	.common					; branch if clear
 		moveq	#0,d0
 		move.b	#palid_SBZ1,d0
 		bsr.w	PalLoad2
 		clr.b	(v_paltracker).w		
 		
 		
-	@common:
+	.common:
 		add.l	d0,(v_bgscreenposy).w		; apply changes to coordinates accordingly
 
 		moveq	#0,d1

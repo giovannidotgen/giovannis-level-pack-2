@@ -15,17 +15,17 @@ Sonic_RollSpeed:
 		tst.b	(f_jumponly).w
 		bne.w	loc_131CC
 		tst.w	$3E(a0)
-		bne.s	@notright
+		bne.s	.notright
 		btst	#bitL,(v_jpadhold2).w ; is left being pressed?
-		beq.s	@notleft	; if not, branch
+		beq.s	.notleft	; if not, branch
 		bsr.w	Sonic_RollLeft
 
-	@notleft:
+	.notleft:
 		btst	#bitR,(v_jpadhold2).w ; is right being pressed?
-		beq.s	@notright	; if not, branch
+		beq.s	.notright	; if not, branch
 		bsr.w	Sonic_RollRight
 
-	@notright:
+	.notright:
 		move.w	obInertia(a0),d0
 		beq.s	loc_131AA
 		bmi.s	loc_1319E
@@ -57,14 +57,14 @@ loc_131AA:
 
 loc_131CC:
 		cmp.w	#$60,(v_lookshift).w
-		beq.s	@cont2
-		bcc.s	@cont1
+		beq.s	.cont2
+		bcc.s	.cont1
 		addq.w	#4,(v_lookshift).w
 		
-@cont1:
+.cont1:
 		subq.w	#2,(v_lookshift).w
 		
-@cont2:
+.cont2:
 		move.b	obAngle(a0),d0
 		jsr	(CalcSine).l
 		muls.w	obInertia(a0),d0
