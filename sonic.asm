@@ -7,8 +7,6 @@
 
 ; ===========================================================================
 
-	include "Macros - More CPUs.asm"
-	cpu 68000	
 	include	"Constants.asm"
 	include	"Variables.asm"
 	include	"Macros.asm"
