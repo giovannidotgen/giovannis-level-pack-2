@@ -7,10 +7,13 @@
 
 ; ===========================================================================
 
+	include "Macros - More CPUs.asm"
+	cpu 68000	
 	include	"Constants.asm"
 	include	"Variables.asm"
 	include	"Macros.asm"
 	include "sound/smps2asm_flamewing.asm"
+
 
 EnableSRAM:	equ 0	; change to 1 to enable SRAM
 BackupSRAM:	equ 1
