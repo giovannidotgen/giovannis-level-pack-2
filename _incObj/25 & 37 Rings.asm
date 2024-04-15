@@ -99,14 +99,14 @@ RLoss_Count:	; Routine 0
 		movea.l	a0,a1
 		moveq	#0,d5
 		move.w	(v_rings).w,d5	; check number of rings you have
-		moveq	#32,d0
-		cmp.w	d0,d5		; do you have 32 or more?
+		moveq	#16,d0
+		cmp.w	d0,d5		; do you have 16 or more?
 		bcs.s	@belowmax	; if not, branch
-		move.w	d0,d5		; if yes, set d5 to 32
+		move.w	d0,d5		; if yes, set d5 to 16
 
 	@belowmax:
 		subq.w	#1,d5
-		move.w	#$288,d4
+		move.w	#$290,d4
 		bra.s	@makerings
 ; ===========================================================================
 
@@ -138,11 +138,11 @@ RLoss_Count:	; Routine 0
 		asl.w	d2,d1
 		move.w	d0,d2
 		move.w	d1,d3
-		addi.b	#$10,d4
+		addi.b	#$20,d4
 		bcc.s	@loc_9D62
-		subi.w	#$80,d4
+		subi.w	#$100,d4
 		bcc.s	@loc_9D62
-		move.w	#$288,d4
+		move.w	#$290,d4
 
 	@loc_9D62:
 		move.w	d2,obVelX(a1)
