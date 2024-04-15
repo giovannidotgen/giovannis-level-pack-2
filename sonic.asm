@@ -13,7 +13,6 @@
 	include	"Variables.asm"
 	include	"Macros.asm"
 
-
 EnableSRAM:	equ 0	; change to 1 to enable SRAM
 BackupSRAM:	equ 1
 AddressSRAM:	equ 3	; 0 = odd+even; 2 = even only; 3 = odd only
