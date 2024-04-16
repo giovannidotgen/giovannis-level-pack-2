@@ -53,7 +53,7 @@ loc_137AE:
 		bset    #2,obStatus(a0)  ; set Sonic to rolling
 		cmpi.b  #1,dropdash(a0)          ; check if Sonic is performing a Drop Dash	
 		beq.s   loc_137E4
-		move.w	#$BE,d0
+		move.w	#sfx_Roll,d0
 		jsr	(PlaySound_Special).l			
 		
 

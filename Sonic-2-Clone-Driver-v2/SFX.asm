@@ -63,6 +63,8 @@ ptr_sndCE:	SMPS_SFX_METADATA	SoundCE, $70, 0
 ptr_sndCF:	SMPS_SFX_METADATA	SoundCF, $70, 0
 ptr_spindash:	SMPS_SFX_METADATA	SoundSpindash, $80, 0
 ptr_dropdash:	SMPS_SFX_METADATA	SoundDropdash, $80, 0
+ptr_peelcharge:	SMPS_SFX_METADATA	SoundCharge, $80, 0
+ptr_peelrelease:	SMPS_SFX_METADATA	SoundRelease, $80, 0	
 ptr_launch:	SMPS_SFX_METADATA	SoundLaunch, $80, 0
 ptr_sndend
 
@@ -171,3 +173,8 @@ SoundDropdash: include	"Sonic-2-Clone-Driver-v2/SFX/Drop Dash (S2 Score Rush).as
 		even
 SoundLaunch:	include "Sonic-2-Clone-Driver-v2/SFX/Launch.asm"
 		even
+SoundCharge: include	"Sonic-2-Clone-Driver-v2/SFX/CD_Charge.asm"
+		even
+SoundRelease:	include "Sonic-2-Clone-Driver-v2/SFX/CD_Release.asm"
+		even
+		

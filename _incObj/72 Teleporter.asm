@@ -149,7 +149,7 @@ loc_16800:
 		move.w	2(a3),obVelY(a1)
 		tst.b	d0					; check if d0 is not a default value
 		beq.s	.nosfx				; if so, don't play the sfx
-		move.w	#sfx_Launch,d0
+		move.w	#sfx_PeeloutRelease,d0
 		jmp	(PlaySound_Special).l	; play teleport sound		
 		
 	.nosfx:	

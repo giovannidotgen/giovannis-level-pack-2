@@ -90,9 +90,8 @@ sfx_Signpost =		SMPS_id(ptr_sndCF)
 sfx_SpinDash =		SMPS_id(ptr_spindash)
 sfx_DropDash = 		SMPS_id(ptr_dropdash)
 sfx_Launch	=		SMPS_id(ptr_launch)
-sfx_PeeloutCharge = sfx_SpinDash
-sfx_PeeloutRelease = sfx_Teleport
-sfx_PeeloutStop = sfx_Ring
+sfx_PeeloutCharge = SMPS_id(ptr_peelcharge)
+sfx_PeeloutRelease = SMPS_id(ptr_peelrelease)
 sfx__Last =		SMPS_id(ptr_sndend)-1
 
 
