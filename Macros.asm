@@ -303,15 +303,10 @@ dpcmLoopCounter function sampleRate, pcmLoopCounter(sampleRate,301/2) ; 301 is t
 ; yes i'm actually using this LMFAOOOOO
 ; ---------------------------------------------------------------------------
 
-
 incbin macro
     binclude    ALLARGS
     endm
-	
-even macro
-    align 2
-    endm	
-	
+
 ; ---------------------------------------------------------------------------
 ; check if object moves out of range
 ; input: location to jump to if out of range, x-axis pos (obX(a0) by default)
@@ -338,3 +333,5 @@ out_of_range_S3:	macro exit,pos
 		
 .nodel:
 		endm			
+		
+	include "Sonic-2-Clone-Driver-v2/Definitions.asm"		

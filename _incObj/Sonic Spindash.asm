@@ -57,7 +57,7 @@ loc2_1AC8E:
 loc2_1ACF4:
 		bset	#2,$22(a0)		; set unused (in s1) flag
 		move.b	#0,(v_dust+obAnim).w	; clear $D11C (smoke)
-		move.w	#$BC,d0			; spin release sound
+		move.w	#sfx_Teleport,d0			; spin release sound
 		jsr	(PlaySound_Special).l	; play it!
 		bra.s	loc2_1AD78
 ; ===========================================================================

@@ -14,7 +14,7 @@ Sonic_Peelout:
 		beq.w	.return
 		move.b	#id_Run,obAnim(a0)
 		move.w	#0,spindashcharge(a0)
-		move.w #sfx_PeeloutCharge,d0 
+		move.w #sfx_SpinDash,d0 
         jsr (PlaySound_Special).l	; play peelout sound
 		addq.l	#4,sp
 		bset	#1,f_spindash(a0)
