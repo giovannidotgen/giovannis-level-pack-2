@@ -4,7 +4,7 @@ Sound_81_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $02
 
-	smpsHeaderSFXChannel cFM5, Sound_81_FM5,	$CC, $00
+	smpsHeaderSFXChannel cFM5, Sound_81_FM5,	$0C, $00
 	smpsHeaderSFXChannel cPSG3, Sound_81_PSG3,	$00, $02
 
 ; FM5 Data
