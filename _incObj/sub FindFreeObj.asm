@@ -17,6 +17,11 @@ FindFreeObj:
 		beq.s	FFree_Found	; if yes, branch
 		lea	$40(a1),a1	; goto next object RAM slot
 		dbf	d0,FFree_Loop	; repeat $5F times
+		if ObjectOverloadCrash=1
+	CrashOnObjectOverload:
+		move.b	#$16,(v_errortype).w	
+		illegal
+		endc
 
 	FFree_Found:
 		rts	
@@ -47,6 +52,11 @@ FindNextFreeObj:
 		beq.s	NFree_Found
 		lea	$40(a1),a1
 		dbf	d0,NFree_Loop
+		if ObjectOverloadCrash=1
+	CrashOnObjectOverload2:
+		move.b	#$16,(v_errortype).w	
+		illegal
+		endc		
 
 	NFree_Found:
 		rts	

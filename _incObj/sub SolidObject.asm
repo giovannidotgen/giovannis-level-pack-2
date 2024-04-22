@@ -300,10 +300,9 @@ Solid_ResetFloor:
 		move.b	d0,standonobject(a1)	; set object being stood on
 		move.b	#0,obAngle(a1)	; clear Sonic's angle
 		move.w	#0,obVelY(a1)	; stop Sonic
-		move.w	obVelX(a1),obInertia(a1)
 		btst	#1,obStatus(a1)	; is Sonic in the air?
 		beq.s	.notinair	; if not, branch
-		cmp.b   #$41,(a0)	; GIO: hardcoded check to make the Drop Dash fail if Sonic bounces on a spring
+		cmp.b   #id_Spring,(a0)	; GIO: hardcoded check to make the Drop Dash fail if Sonic bounces on a spring
 		bne.s   .skip
 		clr.b   jumpability(a1)
 		clr.w   dropcharge(a1)
@@ -317,5 +316,10 @@ Solid_ResetFloor:
 	.notinair:
 		bset	#3,obStatus(a1)	; set object standing flag
 		bset	#3,obStatus(a0)	; set Sonic standing on object flag
+		
+	    tst.b   hasdropdashed(a1)
+		bne.s   .skipxvelset
+		move.w	obVelX(a1),obInertia(a1)
+	.skipxvelset:		
 		rts	
 ; End of function Solid_ResetFloor

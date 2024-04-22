@@ -348,7 +348,8 @@ Deform_SBZ:
 		moveq	#0,d0
 		move.b	#palid_SBZ2,d0
 		bsr.w	PalLoad2
-	    move.b	#1,(v_paltracker).w		
+	    move.b	#1,(v_paltracker).w
+		clr.b	(v_pcyc_time).w
 		bra.s	.common
 		
 	.setzero:
@@ -359,7 +360,7 @@ Deform_SBZ:
 		move.b	#palid_SBZ1,d0
 		bsr.w	PalLoad2
 		clr.b	(v_paltracker).w		
-		
+		clr.b	(v_pcyc_time).w
 		
 	.common:
 		add.l	d0,(v_bgscreenposy).w		; apply changes to coordinates accordingly

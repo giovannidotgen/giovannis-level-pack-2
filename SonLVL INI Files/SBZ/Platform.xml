@@ -16,7 +16,7 @@
     <Subtype id="06" name="Up -> Down" image="frame"/>
     <Subtype id="07" name="Moves up when switch is pressed" image="frame"/>
     <Subtype id="08" name="Moves up" image="frame"/>
-    <Subtype id="0A" name="Large" image="img2"/>
+    <Subtype id="0A" name="Large" image="frame"/>
     <Subtype id="0B" name="Down -> Up slow" image="frame"/>
     <Subtype id="0C" name="Up -> Down slow" image="frame"/>
   </Subtypes>

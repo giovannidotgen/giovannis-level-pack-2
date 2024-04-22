@@ -26,6 +26,8 @@ DebugPathSwappers: = 1
 
 zeroOffsetOptimization = 0	; unsupported
 
+ObjectOverloadCrash = 1 	; set to 1 to crash the game in case of object overload
+
 	include "MacroSetup.asm"
 	include	"Constants.asm"
 	include	"Variables.asm"
@@ -393,7 +395,10 @@ AddressError:
 		bra.s	loc_43A
 
 IllegalInstr:
+		tst.b	(v_errortype).w		; GIO: was the error message already set?
+		bne.s	.skip
 		move.b	#6,(v_errortype).w
+	.skip:	
 		addq.l	#2,2(sp)
 		bra.s	loc_462
 
@@ -455,6 +460,7 @@ loc_462:
 
 loc_478:
 		bsr.w	ErrorWaitForC
+		clr.b	(v_errortype).w
 		movem.l	(v_regbuffer).w,d0-a7
 		enable_ints
 		rte	
@@ -493,7 +499,7 @@ ErrorText:	dc.w .exception-ErrorText, .bus-ErrorText
 		dc.w .zerodivide-ErrorText, .chkinstruct-ErrorText
 		dc.w .trapv-ErrorText, .privilege-ErrorText
 		dc.w .trace-ErrorText, .line1010-ErrorText
-		dc.w .line1111-ErrorText
+		dc.w .line1111-ErrorText, .objover-ErrorText
 .exception:	dc.b "ERROR EXCEPTION    "
 .bus:		dc.b "BUS ERROR          "
 .address:	dc.b "ADDRESS ERROR      "
@@ -505,6 +511,7 @@ ErrorText:	dc.w .exception-ErrorText, .bus-ErrorText
 .trace:		dc.b "TRACE              "
 .line1010:	dc.b "LINE 1010 EMULATOR "
 .line1111:	dc.b "LINE 1111 EMULATOR "
+.objover:	dc.b "OBJECT OVERLOAD    "
 		even
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -5468,13 +5475,11 @@ loc_74DC:
 		move.b	d0,standonobject(a1)
 		move.b	#0,obAngle(a1)
 		move.w	#0,obVelY(a1)
-		move.w	obVelX(a1),obInertia(a1)
 		btst	#1,obStatus(a1)
 		beq.s	loc_7512
 		move.l	a0,-(sp)
 		movea.l	a1,a0
 		jsr	(Sonic_ResetOnFloor).l
-		movea.l a0,a1				
 		movea.l	(sp)+,a0
 
 loc_7512:
@@ -6762,6 +6767,7 @@ Map_WFall	include	"_maps\Waterfalls.asm"
 ; ---------------------------------------------------------------------------
 
 SonicPlayer:
+		clr.b	hasdropdashed(a0)
 		tst.w	(v_debuguse).w	; is debug mode	being used?
 		beq.s	Sonic_Normal	; if not, branch
 		jmp	(DebugMode).l

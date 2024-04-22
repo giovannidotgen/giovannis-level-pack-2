@@ -45,7 +45,6 @@ loc_137AE:
 		bne.s	loc_137E4		; if yes, branch
 		btst	#bitDn,(v_jpadhold2).w ; is down being pressed?
 		beq.s	loc_137E4	; if not, branch
-		move.b  #1,$2E(a0)  ; store 1 in this spot of Sonic's RAM
 		move.b  #2,obAnim(a0)  ; set Sonic's animation		
 		addq.w  #5,obY(a0)   ; correct Sonic's Y coordinate
 		move.b	#$E,obHeight(a0) ; correct Sonic's height
@@ -64,7 +63,6 @@ loc_137E4:
 		bne.s   Sonic_DropFail
 		bsr.s   Sonic_DropRelease   ; branch to a subroutine that releases the Drop Dash
 	Sonic_DropFail:	
-		clr.b   $2E(a0)	
         clr.w   spindashcharge(a0)	
 		clr.w   dropcharge(a0)             ; clear Sonic's Drop Dash related variables		
 		bclr	#4,obStatus(a0)
@@ -130,6 +128,5 @@ Sonic_DropRelease:
 	    move.b	#id_Roll,obAnim(a0) ; use "rolling" animation
 		move.w  #$400,($FFFFD1DC).w    ; set the spin dash dust animation to drop dash		
 		move.b	#sfx_Teleport,d0
-		jsr		PlaySound_Special
-		rts						
+		jmp		PlaySound_Special						
 ; End of function Sonic_ResetOnFloor
