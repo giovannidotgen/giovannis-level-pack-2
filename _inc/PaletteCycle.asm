@@ -228,7 +228,7 @@ loc_1B06:
 		bpl.s	locret_1B64
 		lea	(Pal_SBZCyc4).l,a0
 		move.w	#1,(v_pcyc_time).w
-		tst.b	(v_act).w
+		tst.b	(v_paltracker).w
 		beq.s	loc_1B2E
 		lea	(Pal_SBZCyc10).l,a0
 		move.w	#0,(v_pcyc_time).w

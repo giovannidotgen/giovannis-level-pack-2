@@ -23,6 +23,7 @@
   <Properties>
     <BitsProperty name="Movement" type="PlatformMovement" startbit="0" length="4"/>
     <BitsProperty name="SwitchID" displayname="Switch ID" type="byte" startbit="4" length="3"/>
+    <BitsProperty name="DontNudge" displayname="Don't Nudge" type="bool" startbit="7" length="1"/>		
   </Properties>
   <Enums>
     <Enum name="PlatformMovement">

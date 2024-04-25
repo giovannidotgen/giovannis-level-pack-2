@@ -4316,6 +4316,7 @@ Demo_EndGHZ2:	incbin	"demodata\Ending - GHZ2.bin"
 	;	if Revision=0
 		include	"_inc\LevelSizeLoad & BgScrollSpeed.asm"
 		include	"_inc\DeformLayers.asm"
+		include "_inc\Clear Palette Buffer.asm"
 		include "_inc\Deform_Scroll (MarkeyJester).asm"
 	;	else
 	;	include	"_inc\LevelSizeLoad & BgScrollSpeed (JP1).asm"
