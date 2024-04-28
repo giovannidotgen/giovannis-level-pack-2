@@ -250,11 +250,14 @@ Tele_Data:	dc.w .type00-Tele_Data, .type01-Tele_Data, .type02-Tele_Data
 			dc.w	$1C90, $C0C
 			dc.w	$1C90, $E20
 			dc.w	$1C90, $128C
-.type02:	dc.w $1C, $794,	$2E8
-		dc.w $7A4, $2C0, $7D0
-		dc.w $2AC, $858, $2AC
-		dc.w $884, $298, $894
-		dc.w $270, $894, $190
+
+.type02:	dc.w 	$18
+			dc.w	$29A6, $58C
+			dc.w	$29A6, $98C
+			dc.w	$29A6, $D8C
+			dc.w	$2EA6, $D8C
+			dc.w	$3390, $D8C
+			dc.w	$3390, $120C
 .type03:	dc.w 4,	$894, $690
 .type04:	dc.w $1C, $1194, $470
 		dc.w $1184, $498, $1158
