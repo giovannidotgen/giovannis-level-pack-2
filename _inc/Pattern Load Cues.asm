@@ -204,7 +204,7 @@ PLC_SYZ2:	dc.w ((PLC_SYZ2end-PLC_SYZ2-2)/6)-1
 ; Pattern load cues - Scrap Brain
 ; ---------------------------------------------------------------------------
 PLC_SBZ:	dc.w ((PLC_SBZ2-PLC_SBZ-2)/6)-1
-		plcm	Nem_SBZ,0		; SBZ main patterns
+		plcm	Nem_SBZ,0		; SBZ main patterns	(needed)
 		plcm	Nem_Stomper, $5800	; moving platform and stomper
 		plcm	Nem_SbzDoor1, $5D00	; door
 		plcm	Nem_Girder, $5E00	; girder
@@ -224,7 +224,8 @@ PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
 		plcm	Nem_SlideFloor, $8C00	; floor	that slides away
 		plcm	Nem_SbzDoor2, $8DE0	; horizontal door
 		plcm	Nem_Electric, $8FC0	; electric orb
-		plcm	Nem_TrapDoor, $9240	; trapdoor
+		plcm	Nem_Crabmeat, $4C20	; crabmeat enemy		
+;		plcm	Nem_TrapDoor, $9240	; trapdoor
 		plcm	Nem_SbzFloor, $7F20	; collapsing floor
 		plcm	Nem_SpinPform, $9BE0	; small	spinning platform
 		plcm	Nem_LzSwitch, $A1E0	; switch
