@@ -32,7 +32,7 @@ Crab_Main:	; Routine 0
 		move.w	#$400,obGfx(a0)
 		cmpi.b	#id_SBZ,(v_zone).w
 		bne.s	.notSBZ
-		move.w	#($4C20/$20),obGfx(a0)
+		move.w	#($49C0/$20),obGfx(a0)
 		
 	.notSBZ:	
 		move.b	#4,obRender(a0)
@@ -203,7 +203,7 @@ Crab_BallMain:	; Routine 6
 		move.w	#$400,obGfx(a0)
 		cmpi.b	#id_SBZ,(v_zone).w
 		bne.s	.notSBZ
-		move.w	#($4C20/$20),obGfx(a0)
+		move.w	#($49C0/$20),obGfx(a0)
 		
 	.notSBZ:	
 		move.b	#4,obRender(a0)

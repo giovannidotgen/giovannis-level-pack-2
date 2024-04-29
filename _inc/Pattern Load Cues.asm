@@ -224,7 +224,7 @@ PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
 		plcm	Nem_SlideFloor, $8C00	; floor	that slides away
 		plcm	Nem_SbzDoor2, $8DE0	; horizontal door
 		plcm	Nem_Electric, $8FC0	; electric orb
-		plcm	Nem_Crabmeat, $4C20	; crabmeat enemy		
+		plcm	Nem_Crabmeat, $49C0	; crabmeat enemy		
 ;		plcm	Nem_TrapDoor, $9240	; trapdoor
 		plcm	Nem_SbzFloor, $7F20	; collapsing floor
 		plcm	Nem_SpinPform, $9BE0	; small	spinning platform
