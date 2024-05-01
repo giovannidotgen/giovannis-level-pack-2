@@ -150,7 +150,7 @@ loc_16800:
 		tst.b	d0					; check if d0 is not a default value
 		beq.s	.nosfx				; if so, don't play the sfx
 		move.w	#sfx_Launch,d0
-		jmp	(PlaySound_Special).l	; play teleport sound		
+		jmp	(PlaySound_Special).l	; play launch sound		
 		
 	.nosfx:	
 		rts	
@@ -256,8 +256,8 @@ Tele_Data:	dc.w .type00-Tele_Data, .type01-Tele_Data, .type02-Tele_Data
 			dc.w	$29A6, $98C
 			dc.w	$29A6, $D8C
 			dc.w	$2EA6, $D8C
-			dc.w	$3390, $D8C
-			dc.w	$3390, $120C
+			dc.w	$33B0, $D8C
+			dc.w	$33B0, $120C
 .type03:	dc.w 4,	$894, $690
 .type04:	dc.w $1C, $1194, $470
 		dc.w $1184, $498, $1158

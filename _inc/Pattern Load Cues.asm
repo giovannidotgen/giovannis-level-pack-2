@@ -218,14 +218,14 @@ PLC_SBZ:	dc.w ((PLC_SBZ2-PLC_SBZ-2)/6)-1
 		plcm	Nem_SbzBlock, $9860	; vanishing block
 
 PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
-		plcm	Nem_Cater, $5600	; caterkiller enemy
+		plcm	Nem_Cater, $9240	; caterkiller enemy
 		plcm	Nem_Bomb, $8000		; bomb enemy
 		plcm	Nem_Orbinaut, $8520	; orbinaut enemy
 		plcm	Nem_SlideFloor, $8C00	; floor	that slides away
 		plcm	Nem_SbzDoor2, $8DE0	; horizontal door
 		plcm	Nem_Electric, $8FC0	; electric orb
-		plcm	Nem_Crabmeat, $49C0	; crabmeat enemy		
-;		plcm	Nem_TrapDoor, $9240	; trapdoor
+		plcm	Nem_Crabmeat, $49E0	; crabmeat enemy
+		plcm	Nem_DiagSpring,	$5260 ; diagonal spring
 		plcm	Nem_SbzFloor, $7F20	; collapsing floor
 		plcm	Nem_SpinPform, $9BE0	; small	spinning platform
 		plcm	Nem_LzSwitch, $A1E0	; switch
