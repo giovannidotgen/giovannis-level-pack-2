@@ -612,6 +612,14 @@ DLE_SBZx:	dc.w DLE_SBZ1-DLE_SBZx
 ; ===========================================================================
 
 DLE_SBZ1:
+		move.w 	#$1620,(v_limitbtm1).w
+		move.w 	#$1620,(v_limitbtm2).w
+		cmpi.w	#$2A00,(v_screenposx).w
+		bcs.s   .return
+		move.w	#$1C20,(v_limitbtm1).w
+		move.w	#$1C20,(v_limitbtm2).w		
+
+	.return:	
 		rts	
 ; ===========================================================================
 

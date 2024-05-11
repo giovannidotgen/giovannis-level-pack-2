@@ -257,8 +257,8 @@ Tele_Data:	dc.w .type00-Tele_Data, .type01-Tele_Data, .type02-Tele_Data
 			dc.w	$29A6, $98C
 			dc.w	$29A6, $D8C
 			dc.w	$2EA6, $D8C
-			dc.w	$33B0, $D8C
-			dc.w	$33B0, $120C
+			dc.w	$3570, $D8C
+			dc.w	$3570, $120C
 .type03:	dc.w 	$14
 			dc.w	$38A4, $F8C
 			dc.w	$3480, $F8C
