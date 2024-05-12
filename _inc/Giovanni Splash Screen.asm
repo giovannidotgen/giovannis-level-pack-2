@@ -104,13 +104,37 @@ Giovanni_Delay1:
     tst.w   (v_demolength).w           	; has the delay time finished?
     bne.s   Giovanni_Delay1				; if not, branch
 
+Lines_AdjustInt:
+
+	lea		(v_hscrolltablebuffer+$220).w,a0
+	lea		(Lines_AdjustData).w,a1
+
+.loop:
+	move.w	(a1)+,d0
+	bmi.s	Credits_Render
+	
+	moveq	#7,d1
+
+.loop2:	
+	move.w	d0,(a0)
+	adda.l	#4,a0
+	dbf		d1,.loop2
+	
+	bra.s	.loop
+
 Credits_Render:
 	lea	($C00000).l,a6
 	lea	(Text_Giovanni).l,a1 ; where to fetch the lines from	
-	move.l	#$48840003,4(a6)	; starting screen position 
+	move.l	#$48840003,d4	; starting screen position 
 	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
+	moveq	#1,d1		; number of lines of text to be displayed -1
+
+.looptext
+	move.l	d4,4(a6)
 	moveq	#35,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
+	addi.l	#(1*$800000),d4  ; replace number to the left with desired distance between each line
+	dbf	d1,.looptext
 
     move.b  #sfx_Ring,d0			; set sound ID
     jsr     PlaySound_Special		; play ID	
@@ -143,6 +167,10 @@ Giovanni_MainLoop:
 Giovanni_GotoTitle:
     move.b  #id_Title,(v_gamemode).w      	; set the screen mode to Title Screen
     rts									; return
+
+
+Lines_AdjustData:
+	dc.w	$0, $4, -1
 
 ; ===============================================================
 ; Subroutine that deforms the screen until all of its lines are properly centered
@@ -218,5 +246,8 @@ Pal_Giovanni: incbin "palette\Giovanni Splash.bin"
 	even
 Pal_SplashText:	incbin "palette\Sonic 2 Text used in Splash Screen.bin"
 	even
-Text_Giovanni: dc.b "IT'S STILL JOE-VANNI, NOT GEO-VANNI."
+Text_Giovanni: 
+
+				dc.b	"IT'S STILL JOE-VANNI, NOT GEO-VANNI."
+				dc.b	"        AND SONIC 2 REMAKES         "
 	even
