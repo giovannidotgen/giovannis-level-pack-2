@@ -249,5 +249,5 @@ Pal_SplashText:	incbin "palette\Sonic 2 Text used in Splash Screen.bin"
 Text_Giovanni: 
 
 				dc.b	"IT'S STILL JOE-VANNI, NOT GEO-VANNI."
-				dc.b	"        AND SONIC 2 REMAKES         "
+				dc.b	"                                    "
 	even
