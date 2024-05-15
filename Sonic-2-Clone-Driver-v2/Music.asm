@@ -25,6 +25,8 @@ ptr_mus93:	SMPS_MUSIC_METADATA	Music93, s1TempotoS3($06), 0	; Emerald
 ptr_mus94:	SMPS_MUSIC_METADATA Music94, s2TempotoS3($BE), 0	; EHZ Test port
 ptr_mus95:	SMPS_MUSIC_METADATA Music95, $80, 0					; AIZ1 Test port
 ptr_mus96:	SMPS_MUSIC_METADATA Music96, $80, 0					; Big Arms Test port
+ptr_mus97:  SMPS_MUSIC_METADATA Music97, $80, 0
+ptr_mus98:  SMPS_MUSIC_METADATA Music98, $80, 0
 ptr_musend
 
 ; ---------------------------------------------------------------------------
@@ -74,4 +76,7 @@ Music95:	include		"Sonic-2-Clone-Driver-v2/music/Mus95 - AIZ1.asm"
 		even
 Music96:	include		"Sonic-2-Clone-Driver-v2/music/Mus96 - Big Arms.asm"
 		even
-		
+Music97:	include		"Sonic-2-Clone-Driver-v2/music/Mus97 - Competition Mode.asm"
+		even
+Music98:	include		"Sonic-2-Clone-Driver-v2/music/Mus98 - Level Clear (S3K).asm"
+		even		

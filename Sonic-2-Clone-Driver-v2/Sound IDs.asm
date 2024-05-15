@@ -30,6 +30,8 @@ bgm_Emerald =		SMPS_id(ptr_mus93)
 bgm_EHZ	=			SMPS_id(ptr_mus94)
 bgm_AIZ1 =			SMPS_id(ptr_mus95)
 bgm_BigArms =		SMPS_id(ptr_mus96)
+bgm_Menu =			SMPS_id(ptr_mus97)
+bgm_ClearS3K =		SMPS_id(ptr_mus98)
 bgm__Last =		SMPS_id(ptr_musend)-1
 
 
