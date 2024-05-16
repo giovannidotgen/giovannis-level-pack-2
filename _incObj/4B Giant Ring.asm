@@ -3,6 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GiantRing:
+		jmp		DeleteObject	; temporary
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	GRing_Index(pc,d0.w),d1

@@ -1,106 +1,104 @@
-Mus87_Invincibility_Header:
-	smpsHeaderStartSong 1
-	smpsHeaderVoice     Mus87_Invincibility_Voices
+Invincible_Header:
+	smpsHeaderStartSong 2
+	smpsHeaderVoice     Invincible_Voices
 	smpsHeaderChan      $06, $03
-	smpsHeaderTempo     $01, $08
+	smpsHeaderTempo     $01, $E8
 
-	smpsHeaderDAC       Mus87_Invincibility_DAC
-	smpsHeaderFM        Mus87_Invincibility_FM1,	$F4, $11
-	smpsHeaderFM        Mus87_Invincibility_FM2,	$F4, $07
-	smpsHeaderFM        Mus87_Invincibility_FM3,	$E8, $0F
-	smpsHeaderFM        Mus87_Invincibility_FM4,	$E8, $0F
-	smpsHeaderFM        Mus87_Invincibility_FM5,	$F4, $11
-	smpsHeaderPSG       Mus87_Invincibility_PSG1,	$D0, $05, $00, fTone_05
-	smpsHeaderPSG       Mus87_Invincibility_PSG2,	$DC, $05, $00, fTone_05
-	smpsHeaderPSG       Mus87_Invincibility_PSG3,	$00, $03, $00, fTone_04
+	smpsHeaderDAC       Invincible_DAC
+	smpsHeaderFM        Invincible_FM1,	$F4, $11
+	smpsHeaderFM        Invincible_FM2,	$F4, $09
+	smpsHeaderFM        Invincible_FM3,	$E8, $0F
+	smpsHeaderFM        Invincible_FM4,	$E8, $0F
+	smpsHeaderFM        Invincible_FM5,	$F4, $11
+	smpsHeaderPSG       Invincible_PSG1,	$F4, $02, $00, fTone_08
+	smpsHeaderPSG       Invincible_PSG2,	$DC, $05, $00, fTone_05
+	smpsHeaderPSG       Invincible_PSG3,	$00, $03, $00, fTone_04
 
 ; FM5 Data
-Mus87_Invincibility_FM5:
+Invincible_FM5:
 	smpsDetune       $03
 
 ; FM1 Data
-Mus87_Invincibility_FM1:
-	smpsSetvoice        $00
+Invincible_FM1:
 	dc.b	nRst, $30
+	smpsSetvoice        $00
 
-Mus87_Invincibility_Jump00:
+Invincible_Loop07:
 	dc.b	nRst, $0C, nCs6, $15, nRst, $03, nCs6, $06, nRst, nD6, $0F, nRst
 	dc.b	$03, nB5, $18, nRst, $06, nCs6, $06, nRst, nCs6, nRst, nCs6, nRst
-	dc.b	nA5, nRst, nG5, $0F, nRst, $03, nB5, $18, nRst, $06, nRst, $0C
-	dc.b	nCs6, $15, nRst, $03, nCs6, $06, nRst, nD6, $0F, nRst, $03, nB5
-	dc.b	$18, nRst, $06, nCs6, $06, nRst, nCs6, nRst, nCs6, nRst, nA5, nRst
-	dc.b	nG5, $0F, nRst, $03, nB5, $18, nRst, $06
+	dc.b	nA5, nRst, nG5, $0F, nRst, $03, nB5, $18, nRst, $06
+	smpsLoop            $00, $02, Invincible_Loop07
 	smpsAlterVol        $FD
 	dc.b	nRst, $30, nRst, nA5, $04, nB5, nCs6, nD6, nE6, nFs6, nB5, nCs6
 	dc.b	nEb6, nE6, nFs6, nAb6, nCs6, nEb6, nF6, nFs6, nAb6, nBb6, nF6, nFs6
 	dc.b	nAb6, nBb6, nC7, nCs7
 	smpsAlterVol        $03
-	smpsJump            Mus87_Invincibility_Jump00
+	smpsJump            Invincible_Loop07
 
 ; FM2 Data
-Mus87_Invincibility_FM2:
+Invincible_FM2:
 	smpsNop             $01
 	smpsSetvoice        $01
 	dc.b	nRst, $30
 
-Mus87_Invincibility_Loop05:
+Invincible_Loop05:
 	dc.b	nA3, $06, nRst, nA3, nRst, nE3, nRst, nE3, nRst, nG3, $12, nFs3
 	dc.b	$0C, nG3, $06, nFs3, $0C, nA3, $06, nRst, nA3, nRst, nE3, nRst
 	dc.b	nE3, nRst, nD4, $12, nCs4, $0C, nD4, $06, nCs4, $0C
-	smpsLoop            $00, $02, Mus87_Invincibility_Loop05
+	smpsLoop            $00, $02, Invincible_Loop05
 
-Mus87_Invincibility_Loop06:
+Invincible_Loop06:
 	dc.b	nB2, $06, nG2, $12, nA2, $06, nRst, nB2, nRst
-	smpsLoop            $00, $02, Mus87_Invincibility_Loop06
+	smpsLoop            $00, $02, Invincible_Loop06
 	dc.b	nA2, $0C, nB2, nCs3, nEb3, nB2, $06, nCs3, nEb3, nF3, nCs3, nEb3
 	dc.b	nF3, nFs3
 	smpsNop             $01
-	smpsJump            Mus87_Invincibility_Loop05
+	smpsJump            Invincible_Loop05
 
 ; FM3 Data
-Mus87_Invincibility_FM3:
+Invincible_FM3:
 	smpsSetvoice        $00
 	dc.b	nRst, $30
 
-Mus87_Invincibility_Loop03:
-	dc.b	nE6, $06, nRst, nE6, nRst, nCs6, nRst, nCs6, nRst, nD6, $12, nD6
-	dc.b	$1E, nE6, $06, nRst, nE6, nRst, nCs6, nRst, nCs6, nRst, nG6, $12
-	dc.b	nG6, $1E
-	smpsLoop            $00, $02, Mus87_Invincibility_Loop03
+Invincible_Loop03:
+	dc.b	nE6, $06, nRst, nE6, nRst, nCs6, nRst, nCs6, nRst, nD6, $12, nFs6
+	dc.b	nA6, $0C, nE6, $06, nRst, nE6, nRst, nCs6, nRst, nCs6, nRst, nG6
+	dc.b	$12, nG6, $1E
+	smpsLoop            $00, $02, Invincible_Loop03
 
-Mus87_Invincibility_Loop04:
+Invincible_Loop04:
 	dc.b	nRst, $06, nG5, $12, nA5, $06, nRst, $12
-	smpsLoop            $00, $04, Mus87_Invincibility_Loop04
-	smpsJump            Mus87_Invincibility_Loop03
+	smpsLoop            $00, $04, Invincible_Loop04
+	smpsJump            Invincible_Loop03
 
 ; FM4 Data
-Mus87_Invincibility_FM4:
+Invincible_FM4:
 	smpsSetvoice        $00
 	dc.b	nRst, $30
 
-Mus87_Invincibility_Loop01:
-	dc.b	nCs6, $06, nRst, nCs6, nRst, nA5, nRst, nA5, nRst, nB5, $12, nB5
-	dc.b	$1E, nCs6, $06, nRst, nCs6, nRst, nA5, nRst, nA5, nRst, nD6, $12
-	dc.b	nD6, $1E
-	smpsLoop            $00, $02, Mus87_Invincibility_Loop01
+Invincible_Loop01:
+	dc.b	nCs6, $06, nRst, nCs6, nRst, nA5, nRst, nA5, nRst, nB5, $12, nD6
+	dc.b	nFs6, $0C, nCs6, $06, nRst, nCs6, nRst, nA5, nRst, nA5, nRst, nD6
+	dc.b	$12, nD6, $1E
+	smpsLoop            $00, $02, Invincible_Loop01
 
-Mus87_Invincibility_Loop02:
+Invincible_Loop02:
 	dc.b	nRst, $06, nB5, $12, nCs6, $06, nRst, $12
-	smpsLoop            $00, $04, Mus87_Invincibility_Loop02
-	smpsJump            Mus87_Invincibility_Loop01
+	smpsLoop            $00, $04, Invincible_Loop02
+	smpsJump            Invincible_Loop01
 
 ; PSG1 Data
-Mus87_Invincibility_PSG1:
+Invincible_PSG1:
 ; PSG2 Data
-Mus87_Invincibility_PSG2:
+Invincible_PSG2:
 	smpsStop
 
 ; PSG3 Data
-Mus87_Invincibility_PSG3:
+Invincible_PSG3:
 	smpsPSGform         $E7
 	dc.b	nRst, $30
 
-Mus87_Invincibility_Jump01:
+Invincible_Jump00:
 	smpsNoteFill        $03
 	dc.b	nMaxPSG, $0C
 	smpsNoteFill        $0C
@@ -109,22 +107,22 @@ Mus87_Invincibility_Jump01:
 	dc.b	$0C
 	smpsNoteFill        $0C
 	dc.b	$0C
-	smpsJump            Mus87_Invincibility_Jump01
+	smpsJump            Invincible_Jump00
 
 ; DAC Data
-Mus87_Invincibility_DAC:
-	dc.b	dSnare, $06, dSnare, dSnare, dSnare, dSnare, $02, dSnare, $04, dKick, $12
+Invincible_DAC:
+	dc.b	dSnare, $06, dSnare, dKick, dKick, dSnare, dSnare, dSnare, dSnare
 
-Mus87_Invincibility_Loop00:
+Invincible_Loop00:
 	dc.b	dKick, $0C, dSnare, dKick, dSnare, dKick, $0C, dSnare, dKick, dSnare, dKick, $0C
 	dc.b	dSnare, dKick, dSnare, dKick, $0C, dSnare, dKick, $04, nRst, dSnare, dSnare, $0C
-	smpsLoop            $00, $02, Mus87_Invincibility_Loop00
+	smpsLoop            $00, $02, Invincible_Loop00
 	dc.b	dKick, $06, dSnare, $12, dKick, $0C, dSnare, dSnare, $06, dKick, $12, dKick
-	dc.b	$0C, dSnare, dSnare, $06, dKick, $12, dKick, $0C, dSnare, dSnare, $04, dSnare
-	dc.b	dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare
-	smpsJump            Mus87_Invincibility_Loop00
+	dc.b	$0C, dSnare, dSnare, $06, dKick, $0C, dSnare, $06, dKick, $0C, dSnare, dSnare
+	dc.b	$04, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare
+	smpsJump            Invincible_Loop00
 
-Mus87_Invincibility_Voices:
+Invincible_Voices:
 ;	Voice $00
 ;	$3A
 ;	$01, $07, $01, $01, 	$8E, $8E, $8D, $53, 	$0E, $0E, $0E, $03
@@ -144,20 +142,20 @@ Mus87_Invincibility_Voices:
 	smpsVcTotalLevel    $00, $27, $28, $18
 
 ;	Voice $01
-;	$3A
-;	$61, $3C, $14, $31, 	$9C, $DB, $9C, $DA, 	$04, $09, $04, $03
-;	$03, $01, $03, $00, 	$1F, $0F, $0F, $AF, 	$21, $47, $31, $80
-	smpsVcAlgorithm     $02
-	smpsVcFeedback      $07
+;	$20
+;	$7A, $31, $00, $00, 	$9F, $D8, $DC, $DF, 	$10, $0A, $04, $04
+;	$0F, $08, $08, $08, 	$5F, $5F, $BF, $BF, 	$14, $2B, $17, $80
+	smpsVcAlgorithm     $00
+	smpsVcFeedback      $04
 	smpsVcUnusedBits    $00
-	smpsVcDetune        $03, $01, $03, $06
-	smpsVcCoarseFreq    $01, $04, $0C, $01
-	smpsVcRateScale     $03, $02, $03, $02
-	smpsVcAttackRate    $1A, $1C, $1B, $1C
+	smpsVcDetune        $00, $00, $03, $07
+	smpsVcCoarseFreq    $00, $00, $01, $0A
+	smpsVcRateScale     $03, $03, $03, $02
+	smpsVcAttackRate    $1F, $1C, $18, $1F
 	smpsVcAmpMod        $00, $00, $00, $00
-	smpsVcDecayRate1    $03, $04, $09, $04
-	smpsVcDecayRate2    $00, $03, $01, $03
-	smpsVcDecayLevel    $0A, $00, $00, $01
+	smpsVcDecayRate1    $04, $04, $0A, $10
+	smpsVcDecayRate2    $08, $08, $08, $0F
+	smpsVcDecayLevel    $0B, $0B, $05, $05
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $31, $47, $21
+	smpsVcTotalLevel    $00, $17, $2B, $14
 
