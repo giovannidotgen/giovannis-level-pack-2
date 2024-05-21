@@ -160,6 +160,7 @@ Teleporter_SpeedValues:
 		dc.w	0,	$200
 		dc.w	0,	$FC8
 		dc.w	0,	-$FC8
+		dc.w	$FC8, $0
 		
 
 
@@ -265,11 +266,12 @@ Tele_Data:	dc.w .type00-Tele_Data, .type01-Tele_Data, .type02-Tele_Data
 			dc.w	$3480, $A8C
 			dc.w	$3480, $68C
 			dc.w	$3480, $38C
-.type04:	dc.w $1C, $1194, $470
-		dc.w $1184, $498, $1158
-		dc.w $4AC, $FD0, $4AC
-		dc.w $FA4, $4C0, $F94
-		dc.w $4E8, $F94, $590
+.type04:	dc.w 	$14
+			dc.w	$3EA4, $28C
+			dc.w	$3EA4, $1DC
+			dc.w	$3F24, $1DC
+			dc.w	$3F24, $28C
+			dc.w	$4314, $28C
 .type05:	dc.w 4,	$1294, $490
 .type06:	dc.w $1C, $1594, $FFE8
 		dc.w $1584, $FFC0, $1560
