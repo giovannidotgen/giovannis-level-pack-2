@@ -2377,7 +2377,6 @@ LevSel_Level_SS:
 		bne.s	LevSel_Level	; if not, branch
 		move.b	#id_Special,(v_gamemode).w ; set screen mode to $10 (Special Stage)
 		clr.w	(v_zone).w	; clear	level
-		move.b	#3,(v_lives).w	; set lives to 3
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
@@ -2395,7 +2394,6 @@ LevSel_Level:
 
 PlayLevel:
 		move.b	#id_Level,(v_gamemode).w ; set screen mode to $0C (level)
-		move.b	#3,(v_lives).w	; set lives to 3
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
@@ -2525,7 +2523,6 @@ loc_3422:
 		clr.b	(v_lastspecial).w ; clear special stage number
 
 Demo_Level:
-		move.b	#3,(v_lives).w	; set lives to 3
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
@@ -3834,7 +3831,6 @@ loc_4DF2:
 
 Cont_GotoLevel:
 		move.b	#id_Level,(v_gamemode).w ; set screen mode to $0C (level)
-		move.b	#3,(v_lives).w	; set lives to 3
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
@@ -4181,7 +4177,6 @@ EndingDemoLoad:
 		bhs.s	EndDemo_Exit	; if yes, branch
 		move.w	#$8001,(f_demo).w ; set demo+ending mode
 		move.b	#id_Demo,(v_gamemode).w ; set game mode to 8 (demo)
-		move.b	#3,(v_lives).w	; set lives to 3
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
@@ -8379,48 +8374,6 @@ Map_HUD:	include	"_maps\HUD.asm"
 
 
 AddPoints:
-		move.b	#1,(f_scorecount).w ; set score counter to update
-
-		if Revision=0
-		lea	(v_scorecopy).w,a2
-		lea	(v_score).w,a3
-		add.l	d0,(a3)		; add d0*10 to the score
-		move.l	#999999,d1
-		cmp.l	(a3),d1		; is score below 999999?
-		bhi.w	.belowmax	; if yes, branch
-		move.l	d1,(a3)		; reset	score to 999999
-		move.l	d1,(a2)
-
-	.belowmax:
-		move.l	(a3),d0
-		cmp.l	(a2),d0
-		blo.w	.locret_1C6B6
-		move.l	d0,(a2)
-
-		else
-
-			lea     (v_score).w,a3
-			add.l   d0,(a3)
-			move.l  #999999,d1
-			cmp.l   (a3),d1 ; is score below 999999?
-			bhi.s   .belowmax ; if yes, branch
-			move.l  d1,(a3) ; reset score to 999999
-		.belowmax:
-			move.l  (a3),d0
-			cmp.l   (v_scorelife).w,d0 ; has Sonic got 50000+ points?
-			blo.s   .noextralife ; if not, branch
-
-			addi.l  #5000,(v_scorelife).w ; increase requirement by 50000
-			tst.b   (v_megadrive).w
-			bmi.s   .noextralife ; branch if Mega Drive is Japanese
-			addq.b  #1,(v_lives).w ; give extra life
-			addq.b  #1,(f_lifecount).w
-			move.w	#bgm_ExtraLife,d0
-			jmp	(PlaySound).l
-		endc
-
-.locret_1C6B6:
-.noextralife:
 		rts	
 ; End of function AddPoints
 

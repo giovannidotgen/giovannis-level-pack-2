@@ -108,8 +108,6 @@ SSR_RingBonus:	; Routine 6
 		tst.w	(v_ringbonus).w	; is ring bonus	= zero?
 		beq.s	loc_C8C4	; if yes, branch
 		subi.w	#10,(v_ringbonus).w ; subtract 10 from ring bonus
-		moveq	#10,d0		; add 10 to score
-		jsr	(AddPoints).l
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#3,d0
 		bne.s	locret_C8EA

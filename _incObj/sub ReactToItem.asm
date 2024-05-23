@@ -213,7 +213,6 @@ React_Enemy:
 		move.w	#$A,$3E(a1)
 
 	.lessthan16:
-		bsr.w	AddPoints
 		move.b	#id_ExplosionItem,0(a1) ; change object to explosion
 		move.b	#0,obRoutine(a1)
 		tst.w	obVelY(a0)

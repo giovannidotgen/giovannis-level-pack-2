@@ -492,8 +492,6 @@ Obj09_Chk1Up:
 		move.l	a1,4(a2)
 
 Obj09_Get1Up:
-		addq.b	#1,(v_lives).w	; add 1 to number of lives
-		addq.b	#1,(f_lifecount).w ; update the lives counter
 		move.w	#bgm_ExtraLife,d0
 		jsr	(PlaySound).l	; play extra life music
 		moveq	#0,d4

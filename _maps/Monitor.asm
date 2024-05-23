@@ -1,51 +1,69 @@
-; ---------------------------------------------------------------------------
-; Sprite mappings - monitors
-; ---------------------------------------------------------------------------
-Map_Monitor_internal:
-		dc.w .static0-Map_Monitor_internal
-		dc.w .static1-Map_Monitor_internal
-		dc.w .static2-Map_Monitor_internal
-		dc.w .eggman-Map_Monitor_internal
-		dc.w .sonic-Map_Monitor_internal
-		dc.w .shoes-Map_Monitor_internal
-		dc.w .shield-Map_Monitor_internal
-		dc.w .invincible-Map_Monitor_internal
-		dc.w .rings-Map_Monitor_internal
-		dc.w .s-Map_Monitor_internal
-		dc.w .goggles-Map_Monitor_internal
-		dc.w .broken-Map_Monitor_internal
-.static0:	dc.b 1			; static monitor
-		dc.b $EF, $F, 0, 0, $F0
-.static1:	dc.b 2			; static monitor
-		dc.b $F5, 5, 0,	$10, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.static2:	dc.b 2			; static monitor
-		dc.b $F5, 5, 0,	$14, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.eggman:	dc.b 2			; Eggman monitor
-		dc.b $F5, 5, 0,	$18, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.sonic:		dc.b 2			; Sonic	monitor
-		dc.b $F5, 5, 0,	$1C, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.shoes:		dc.b 2			; speed	shoes monitor
-		dc.b $F5, 5, 0,	$24, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.shield:	dc.b 2			; shield monitor
-		dc.b $F5, 5, 0,	$28, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.invincible:	dc.b 2			; invincibility	monitor
-		dc.b $F5, 5, 0,	$2C, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.rings:		dc.b 2			; 10 rings monitor
-		dc.b $F5, 5, 0,	$30, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.s:		dc.b 2			; 'S' monitor
-		dc.b $F5, 5, 0,	$34, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.goggles:	dc.b 2			; goggles monitor
-		dc.b $F5, 5, 0,	$20, $F8
-		dc.b $EF, $F, 0, 0, $F0
-.broken:	dc.b 1			; broken monitor
-		dc.b $FF, $D, 0, $38, $F0
-		even
+Map_01b4: mappingsTable
+	mappingsTableEntry.w	Map_01b4_0
+	mappingsTableEntry.w	Map_01b4_1
+	mappingsTableEntry.w	Map_01b4_2
+	mappingsTableEntry.w	Map_01b4_3
+	mappingsTableEntry.w	Map_01b4_4
+	mappingsTableEntry.w	Map_01b4_5
+	mappingsTableEntry.w	Map_01b4_6
+	mappingsTableEntry.w	Map_01b4_7
+	mappingsTableEntry.w	Map_01b4_8
+	mappingsTableEntry.w	Map_01b4_9
+	mappingsTableEntry.w	Map_01b4_10
+	mappingsTableEntry.w	Map_01b4_11
+
+Map_01b4_0:	spriteHeader
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_0_End
+
+Map_01b4_1:	spriteHeader
+ spritePiece -8, -$B, 2, 2, $10, 0, 0, 0, 0
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_1_End
+
+Map_01b4_2:	spriteHeader
+ spritePiece -8, -$B, 2, 2, $14, 0, 0, 0, 0
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_2_End
+
+Map_01b4_3:	spriteHeader
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_3_End
+
+Map_01b4_4:	spriteHeader
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_4_End
+
+Map_01b4_5:	spriteHeader
+ spritePiece -8, -$B, 2, 2, $18, 0, 0, 0, 0
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_5_End
+
+Map_01b4_6:	spriteHeader
+ spritePiece -8, -$B, 2, 2, $1C, 0, 0, 0, 0
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_6_End
+
+Map_01b4_7:	spriteHeader
+ spritePiece -8, -$B, 2, 2, $20, 0, 0, 0, 0
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_7_End
+
+Map_01b4_8:	spriteHeader
+ spritePiece -8, -$B, 2, 2, $24, 0, 0, 0, 0
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_8_End
+
+Map_01b4_9:	spriteHeader
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_9_End
+
+Map_01b4_10:	spriteHeader
+ spritePiece -$10, -$11, 4, 4, 0, 0, 0, 0, 0
+Map_01b4_10_End
+
+Map_01b4_11:	spriteHeader
+ spritePiece -$10, -1, 4, 2, $28, 0, 0, 0, 0
+Map_01b4_11_End
+
+	even

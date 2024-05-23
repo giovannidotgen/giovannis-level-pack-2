@@ -7,8 +7,6 @@
 
 PauseGame:
 		nop	
-		tst.b	(v_lives).w	; do you have any lives	left?
-		beq.s	Unpause		; if not, branch
 		tst.w	(f_pause).w	; is game already paused?
 		bne.s	Pause_StopGame	; if yes, branch
 		btst	#bitStart,(v_jpadpress1).w ; is Start button pressed?

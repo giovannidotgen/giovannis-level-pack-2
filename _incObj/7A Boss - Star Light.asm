@@ -145,8 +145,6 @@ locret_18A44:
 ; ===========================================================================
 
 loc_18A46:
-		moveq	#100,d0
-		bsr.w	AddPoints
 		move.b	#6,ob2ndRout(a0)
 		move.b	#$78,$3C(a0)
 		clr.w	obVelX(a0)

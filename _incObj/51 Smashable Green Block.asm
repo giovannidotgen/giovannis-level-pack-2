@@ -81,7 +81,6 @@ sonicAniFrame:	equ $32		; Sonic's current animation number
 		moveq	#10,d2
 
 	.givepoints:
-		jsr	(AddPoints).l
 		lsr.w	#1,d2
 		move.b	d2,obFrame(a1)
 

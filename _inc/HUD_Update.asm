@@ -12,13 +12,13 @@ hudVRAM:	macro loc
 HUD_Update:
 		tst.w	(f_debugmode).w	; is debug mode	on?
 		bne.w	HudDebug	; if yes, branch
-		tst.b	(f_scorecount).w ; does the score need updating?
-		beq.s	.chkrings	; if not, branch
+	;	tst.b	(f_scorecount).w ; does the score need updating?
+	;	beq.s	.chkrings	; if not, branch
 
-		clr.b	(f_scorecount).w
-		hudVRAM	$DC80		; set VRAM address
-		move.l	(v_score).w,d1	; load score
-		bsr.w	Hud_Score
+	;	clr.b	(f_scorecount).w
+	;	hudVRAM	$DC80		; set VRAM address
+	;	move.l	(v_score).w,d1	; load score
+	;	bsr.w	Hud_Score
 
 	.chkrings:
 		tst.b	(f_ringcount).w	; does the ring	counter	need updating?
@@ -28,7 +28,7 @@ HUD_Update:
 
 	.notzero:
 		clr.b	(f_ringcount).w
-		hudVRAM	$DF40		; set VRAM address
+		hudVRAM	$DE80		; set VRAM address
 		moveq	#0,d1
 		move.w	(v_rings).w,d1	; load number of rings
 		bsr.w	Hud_Rings
@@ -56,32 +56,32 @@ HUD_Update:
 		move.b	#9,(a1)		; keep as 9
 
 	.updatetime:
-		hudVRAM	$DE40
+		hudVRAM	$DD80
 		moveq	#0,d1
 		move.b	(v_timemin).w,d1 ; load	minutes
 		bsr.w	Hud_Mins
-		hudVRAM	$DEC0
+		hudVRAM	$DE00
 		moveq	#0,d1
 		move.b	(v_timesec).w,d1 ; load	seconds
 		bsr.w	Hud_Secs
 
 	.chklives:
-		tst.b	(f_lifecount).w ; does the lives counter need updating?
-		beq.s	.chkbonus	; if not, branch
-		clr.b	(f_lifecount).w
-		bsr.w	Hud_Lives
+	;	tst.b	(f_lifecount).w ; does the lives counter need updating?
+	;	beq.s	.chkbonus	; if not, branch
+	;	clr.b	(f_lifecount).w
+	;	bsr.w	Hud_Lives
 
 	.chkbonus:
-		tst.b	(f_endactbonus).w ; do time/ring bonus counters need updating?
-		beq.s	.finish		; if not, branch
-		clr.b	(f_endactbonus).w
-		locVRAM	$AE00
-		moveq	#0,d1
-		move.w	(v_timebonus).w,d1 ; load time bonus
-		bsr.w	Hud_TimeRingBonus
-		moveq	#0,d1
-		move.w	(v_ringbonus).w,d1 ; load ring bonus
-		bsr.w	Hud_TimeRingBonus
+	;	tst.b	(f_endactbonus).w ; do time/ring bonus counters need updating?
+	;	beq.s	.finish		; if not, branch
+	;	clr.b	(f_endactbonus).w
+	;	locVRAM	$AE00
+	;	moveq	#0,d1
+	;	move.w	(v_timebonus).w,d1 ; load time bonus
+	;	bsr.w	Hud_TimeRingBonus
+	;	moveq	#0,d1
+	;	move.w	(v_ringbonus).w,d1 ; load ring bonus
+	;	bsr.w	Hud_TimeRingBonus
 
 	.finish:
 		rts	
@@ -144,7 +144,7 @@ HudDebug:
 
 
 Hud_LoadZero:
-		locVRAM	$DF40
+		locVRAM	$DE80
 		lea	Hud_TilesZero(pc),a2
 		move.w	#2,d2
 		bra.s	loc_1C83E
@@ -159,10 +159,10 @@ Hud_LoadZero:
 
 Hud_Base:
 		lea	($C00000).l,a6
-		bsr.w	Hud_Lives
-		locVRAM	$DC40
+	;	bsr.w	Hud_Lives
+		locVRAM	$DD80
 		lea	Hud_TilesBase(pc),a2
-		move.w	#$E,d2
+		move.w	#$6,d2
 
 loc_1C83E:
 		lea	Art_Hud(pc),a1
@@ -193,7 +193,7 @@ loc_1C85E:
 ; End of function Hud_Base
 
 ; ===========================================================================
-Hud_TilesBase:	dc.b $16, $FF, $FF, $FF, $FF, $FF, $FF,	0, 0, $14, 0, 0
+Hud_TilesBase:	dc.b 0, $14, 0, 0
 Hud_TilesZero:	dc.b $FF, $FF, 0, 0
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load debug mode	numbers	patterns
@@ -287,13 +287,13 @@ loc_1C8EC:
 
 loc_1C8F4:
 		add.l	d3,d1
-		tst.w	d2
-		beq.s	loc_1C8FE
-		move.w	#1,d4
+;		tst.w	d2
+;		beq.s	loc_1C8FE
+;		move.w	#1,d4
 
 loc_1C8FE:
-		tst.w	d4
-		beq.s	loc_1C92C
+;		tst.w	d4
+;		beq.s	loc_1C92C
 		lsl.w	#6,d2
 		move.l	d0,4(a6)
 		lea	(a1,d2.w),a3

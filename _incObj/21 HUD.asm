@@ -22,20 +22,23 @@ HUD_Main:	; Routine 0
 		move.b	#0,obPriority(a0)
 
 HUD_Flash:	; Routine 2
-		tst.w	(v_rings).w	; do you have any rings?
-		beq.s	.norings	; if not, branch
-		clr.b	obFrame(a0)	; make all counters yellow
-		jmp	(DisplaySprite).l
-; ===========================================================================
 
-.norings:
-		moveq	#0,d0
+		moveq	#0,d0		
+		
+		btst	#7,(v_gamemode).w	; is the level still loading?
+		bne.s	.display
+		
 		btst	#3,(v_framebyte).w
 		bne.s	.display
-		addq.w	#1,d0		; make ring counter flash red
+		
+		tst.w	(v_rings).w	; do you have any rings?
+		bne.s	.hasrings	; if not, branch		
+		addq.w	#1,d0		; make ring counter flash
+		
+	.hasrings:	
 		cmpi.b	#9,(v_timemin).w ; have	9 minutes elapsed?
 		bne.s	.display	; if not, branch
-		addq.w	#2,d0		; make time counter flash red
+		addq.w	#2,d0		; make time counter flash
 
 	.display:
 		move.b	d0,obFrame(a0)

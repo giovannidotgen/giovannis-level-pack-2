@@ -122,8 +122,6 @@ locret_18390:
 ; ===========================================================================
 
 loc_18392:
-		moveq	#100,d0
-		bsr.w	AddPoints
 		move.b	#4,ob2ndRout(a0)
 		move.w	#$B4,$3C(a0)
 		clr.w	obVelX(a0)
