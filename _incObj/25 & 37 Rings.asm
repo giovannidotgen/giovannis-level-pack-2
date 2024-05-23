@@ -112,7 +112,7 @@ RLoss_Count:	; Routine 0
 		move.b	#3,obPriority(a1)
 		move.b	#$47,obColType(a1)
 		move.b	#8,obActWid(a1)
-		move.b	#-1,(v_ani3_time).w
+		move.b	#-1,obDelayAni(a1)
 		tst.w	d4
 		bmi.s	.loc_9D62
 		move.w	d4,d0
@@ -140,6 +140,7 @@ RLoss_Count:	; Routine 0
 		move.w	#0,(v_rings).w	; reset number of rings to zero
 		move.b	#$80,(f_ringcount).w ; update ring counter
 		move.b	#0,(v_lifecount).w
+		move.b  #-1,(v_ani3_time).w      ; Move d0 to old timer (for animated purposes)		
 		move.w	#sfx_RingLoss,d0
 		jsr	(PlaySound_Special).l	; play ring loss sound
 
@@ -162,8 +163,8 @@ RLoss_Bounce:	; Routine 2
 		neg.w	obVelY(a0)
 
 	.chkdel:
-		tst.b	(v_ani3_time).w
-		beq.s	RLoss_Delete
+		subq.b  #1,obDelayAni(a0)       ; Subtract 1
+		beq.w   DeleteObject            ; If 0, delete
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
 		cmp.w	obY(a0),d0	; has object moved below level boundary?

@@ -56,11 +56,24 @@ ExItem_Animal:	; Routine 0
 		addq.b	#2,obRoutine(a0)
 		bsr.w	FindFreeObj
 		bne.s	ExItem_Main
-		move.b	#id_Animals,0(a1) ; load animal object
+
+		move.b	#id_RingLoss,0(a1) ; load bouncing ring object
+		move.b	#2,obRoutine(a1)
+		move.b	#8,obHeight(a1)
+		move.b	#8,obWidth(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.w	$3E(a0),$3E(a1)
-
+		move.l	#Map_Ring,obMap(a1)
+		move.w	#$27B2,obGfx(a1)
+		move.b	#4,obRender(a1)
+		move.b	#3,obPriority(a1)
+		move.b	#$47,obColType(a1)
+		move.b	#8,obActWid(a1)
+		move.b	#-1,obDelayAni(a1)
+		move.b  #-1,(v_ani3_time).w
+		move.w	#-$400,obVelY(a1)
+		
+		
 ExItem_Main:	; Routine 2
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_ExplodeItem,obMap(a0)
