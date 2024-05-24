@@ -8762,7 +8762,7 @@ Nem_SignPost:	incbin	"artnem\Signpost.bin"	; end of level signpost
 		even
 Nem_Lamp:	incbin	"artnem\Lamppost.bin"
 		even
-Nem_BigFlash:	incbin	"artnem\Giant Ring Flash.bin"
+Art_BigFlash:	incbin	"artunc\Giant Ring Flash.unc"
 		even
 Nem_Bonus:	incbin	"artnem\Hidden Bonuses.bin" ; hidden bonuses at end of a level
 		even

@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 
 GiantRing:
-		jmp		DeleteObject	; temporary
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	GRing_Index(pc,d0.w),d1
@@ -17,27 +16,20 @@ GRing_Index:	dc.w GRing_Main-GRing_Index
 
 GRing_Main:	; Routine 0
 		move.l	#Map_GRing,obMap(a0)
-		move.w	#$2400,obGfx(a0)
+		move.w	#$2000+($D740/$20),obGfx(a0)
 		ori.b	#4,obRender(a0)
 		move.b	#$40,obActWid(a0)
-		tst.b	obRender(a0)
-		bpl.s	GRing_Animate
-		cmpi.b	#6,(v_emeralds).w ; do you have 6 emeralds?
-		beq.w	GRing_Delete	; if yes, branch
-		cmpi.w	#50,(v_rings).w	; do you have at least 50 rings?
-		bcc.s	GRing_Okay	; if yes, branch
-		rts	
-; ===========================================================================
 
 GRing_Okay:
 		addq.b	#2,obRoutine(a0)
 		move.b	#2,obPriority(a0)
 		move.b	#$52,obColType(a0)
-		move.w	#$C40,(v_gfxbigring).w	; Signal that Art_BigRing should be loaded ($C40 is the size of Art_BigRing)
+;		move.w	#$C40,(v_gfxbigring).w	; Signal that Art_BigRing should be loaded ($C40 is the size of Art_BigRing)
 
 GRing_Animate:	; Routine 2
 		move.b	(v_ani1_frame).w,obFrame(a0)
 		out_of_range_S3.w	DeleteObject
+		bsr.w	GRing_LoadGFX
 		bra.w	DisplaySprite
 ; ===========================================================================
 
@@ -63,3 +55,46 @@ GRing_PlaySnd:
 
 GRing_Delete:	; Routine 6
 		bra.w	DeleteObject
+
+; ==========================================================================
+
+GRing_LoadGFX:
+		moveq	#0,d0
+		move.b	obFrame(a0),d0	; load frame number
+		cmp.b	(v_gfxbigring).w,d0 ; has frame changed?
+		beq.s	.nochange	; if not, branch
+
+		move.b	d0,(v_gfxbigring).w
+		lea	(GRing_DynPLC).l,a2 ; load PLC script
+		add.w	d0,d0
+		adda.w	(a2,d0.w),a2
+		moveq	#0,d5
+		move.b	(a2)+,d5	; read "number of entries" value
+		subq.b	#1,d5
+		bmi.s	.nochange	; if zero, branch
+		move.w	#$D740,d4
+		move.l	#Art_BigRing,d6
+		
+	.readentry:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	d6,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(QueueDMATransfer).l
+		dbf	d5,.readentry	; repeat for number of entries
+		
+	.nochange:
+		rts	
+		
+GRing_DynPLC:
+		include "_maps\Giant Ring DPLCs.asm"

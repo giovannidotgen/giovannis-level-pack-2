@@ -16,7 +16,7 @@ Flash_Index:	dc.w Flash_Main-Flash_Index
 Flash_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_Flash,obMap(a0)
-		move.w	#$2462,obGfx(a0)
+		move.w	#$253B,obGfx(a0)
 		ori.b	#4,obRender(a0)
 		move.b	#0,obPriority(a0)
 		move.b	#$20,obActWid(a0)
@@ -25,6 +25,7 @@ Flash_Main:	; Routine 0
 Flash_ChkDel:	; Routine 2
 		bsr.s	Flash_Collect
 		out_of_range_S3.w	DeleteObject
+		bsr.w	Flash_LoadGFX
 		bra.w	DisplaySprite
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -61,3 +62,44 @@ Flash_End:
 
 Flash_Delete:	; Routine 4
 		bra.w	DeleteObject
+
+Flash_LoadGFX:
+		moveq	#0,d0
+		move.b	obFrame(a0),d0	; load frame number
+		cmp.b	(v_gfxbigring+1).w,d0 ; has frame changed?
+		beq.s	.nochange	; if not, branch
+
+		move.b	d0,(v_gfxbigring+1).w
+		lea	(Flash_DynPLC).l,a2 ; load PLC script
+		add.w	d0,d0
+		adda.w	(a2,d0.w),a2
+		moveq	#0,d5
+		move.b	(a2)+,d5	; read "number of entries" value
+		subq.b	#1,d5
+		bmi.s	.nochange	; if zero, branch
+		move.w	#$A760,d4
+		move.l	#Art_BigFlash,d6
+		
+	.readentry:
+		moveq	#0,d1
+		move.b	(a2)+,d1
+		lsl.w	#8,d1
+		move.b	(a2)+,d1
+		move.w	d1,d3
+		lsr.w	#8,d3
+		andi.w	#$F0,d3
+		addi.w	#$10,d3
+		andi.w	#$FFF,d1
+		lsl.l	#5,d1
+		add.l	d6,d1
+		move.w	d4,d2
+		add.w	d3,d4
+		add.w	d3,d4
+		jsr	(QueueDMATransfer).l
+		dbf	d5,.readentry	; repeat for number of entries
+		
+	.nochange:
+		rts	
+		
+Flash_DynPLC:
+		include "_maps\Ring Flash DPLC.asm"

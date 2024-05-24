@@ -563,8 +563,8 @@ AniArt_GiantRing:
 
 .size:		equ 14
 
-		tst.w	(v_gfxbigring).w	; Is there any of the art left to load?
-		bne.s	.loadTiles		; If so, get to work
+		; tst.w	(v_gfxbigring).w	; Is there any of the art left to load?
+		; bne.s	.loadTiles		; If so, get to work
 		rts	
 ; ===========================================================================
 ; loc_1C518:

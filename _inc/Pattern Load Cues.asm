@@ -60,7 +60,8 @@ PLC_Main:	dc.w ((PLC_Mainend-PLC_Main-2)/6)-1
 ; ---------------------------------------------------------------------------
 PLC_Main2:	dc.w ((PLC_Main2end-PLC_Main2-2)/6)-1
 		plcm	Nem_Monitors, $D000	; monitors
-		plcm	Nem_Lamp, $D600		; lamppost		
+		plcm	Nem_Lamp, $D600		; lamppost
+;		plcm	Nem_BigFlash,	$A760	; giant ring flash
 ;		plcm	Nem_Shield, $A820	; shield
 ;		plcm	Nem_Stars, $AB80	; invincibility	stars
 	PLC_Main2end:
@@ -255,8 +256,6 @@ PLC_Boss:	dc.w ((PLC_Bossend-PLC_Boss-2)/6)-1
 ; ---------------------------------------------------------------------------
 PLC_Signpost:	dc.w ((PLC_Signpostend-PLC_Signpost-2)/6)-1
 		plcm	Nem_SignPost, $D000	; signpost
-		plcm	Nem_Bonus, $96C0	; hidden bonus points
-		plcm	Nem_BigFlash, $8C40	; giant	ring flash effect
 	PLC_Signpostend:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - beta special stage warp effect
