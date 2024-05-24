@@ -8,7 +8,7 @@
 ; registers in which it expects data in:
 ; d1.l: Address to data (In 68k address space)
 ; d2.w: Destination in VRAM
-; d3.w: Length of data
+; d3.w: Length of data / 2
 ; ---------------------------------------------------------------------------
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||

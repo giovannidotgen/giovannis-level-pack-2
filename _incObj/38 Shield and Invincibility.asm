@@ -46,8 +46,7 @@ Shi_Shield:	; Routine 2
 		move.b	(v_player+obStatus).w,obStatus(a0)
 		lea	(Ani_Shield).l,a1
 		jsr	(AnimateSprite).l
-		tst.b	(f_shieldgfxload).w
-		jeq	(DisplaySprite).l
+		jmp	(DisplaySprite).l
 
 	.remove:
 		rts	
@@ -100,8 +99,7 @@ Shi_Stars:	; Routine 4
 		move.b	(v_player+obStatus).w,obStatus(a0)
 		lea	(Ani_Shield).l,a1
 		jsr	(AnimateSprite).l
-		tst.b	(f_shieldgfxload).w
-		jeq	(DisplaySprite).l
+		jmp	(DisplaySprite).l
 ; ===========================================================================
 
 Shi_Start_Delete:	
@@ -116,39 +114,17 @@ Shi_Start_Delete:
 ; ===========================================================================
 
 LoadShieldGraphics:
-		moveq	#0,d1
-
-		move.l	a0,-(sp)
-		move.l	a6,-(sp)
-
-		lea	(vdp_data_port).l,a6
-		locVRAM	$AF80
-		lea	(Art_Shield).l,a0
-		move.w	#(Art_Shield_End-Art_Shield)/2-1,d1
-	.loadgfx:
-		move.w	(a0)+,(a6)
-		dbf	d1,.loadgfx		
-		
-		movea.l	(sp)+,a6
-		movea.l	(sp)+,a0
-		move.b	#1,(f_shieldgfxload).w
-		rts
+		moveq	#0,d2
+		moveq	#0,d3
+		move.l	#Art_Shield,d1
+		move.w	#$AF80,d2
+		move.w	#(Art_Shield_End-Art_Shield)/2,d3
+		jmp		QueueDMATransfer
 		
 LoadInvincibilityGraphics:
-		moveq	#0,d1
-
-		move.l	a0,-(sp)
-		move.l	a6,-(sp)
-
-		lea	(vdp_data_port).l,a6
-		locVRAM	$AF80
-		lea	(Art_Invincibility).l,a0
-		move.w	#(Art_Invincibility_End-Art_Invincibility)/2-1,d1
-	.loadgfx:
-		move.w	(a0)+,(a6)
-		dbf	d1,.loadgfx		
-		
-		movea.l	(sp)+,a6
-		movea.l	(sp)+,a0
-		move.b	#1,(f_shieldgfxload).w
-		rts		
+		moveq	#0,d2
+		moveq	#0,d3
+		move.l	#Art_Invincibility,d1
+		move.w	#$AF80,d2
+		move.w	#(Art_Invincibility_End-Art_Invincibility)/2,d3
+		jmp		QueueDMATransfer
