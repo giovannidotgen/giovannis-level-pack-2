@@ -79,6 +79,7 @@ Pow_ChkShield:
 		move.b	#1,(v_shield).w	; give Sonic a shield
 		move.b	#id_ShieldItem,(v_objspace+$180).w ; load shield object ($38)
 		move.w	#sfx_Shield,d0
+		
 		jmp	(PlaySound).l	; play shield sound
 ; ===========================================================================
 

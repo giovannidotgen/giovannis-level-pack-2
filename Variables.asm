@@ -113,6 +113,7 @@ v_scrshifty:	equ $FFFFF73C	; y-screen shift (new - last) * $100
 v_lookshift:	equ $FFFFF73E	; screen shift when Sonic looks up/down (2 bytes)
 v_dle_routine:	equ $FFFFF742	; dynamic level event - routine counter
 f_nobgscroll:	equ $FFFFF744	; flag set to cancel background scrolling
+f_shieldgfxload:	equ $FFFFF745	; flag to tell the game shield / invincibility graphics were loaded on this frame
 
 v_fg_xblock:	equ	$FFFFF74A	; foreground x-block parity (for redraw)
 v_fg_yblock:	equ	$FFFFF74B	; foreground y-block parity (for redraw)

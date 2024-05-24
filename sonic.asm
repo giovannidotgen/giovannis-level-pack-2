@@ -3010,10 +3010,6 @@ Level_Delay:
 Level_ClrCardArt:
 		moveq	#plcid_Explode,d0
 		jsr	(AddPLC).l	; load explosion gfx
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		addi.w	#plcid_GHZAnimals,d0
-		jsr	(AddPLC).l	; load animal gfx (level no. + $15)
 
 Level_StartGame:
 		move.b	#1,(Level_started_flag).w	; render rings
@@ -6288,7 +6284,7 @@ loc_D348:
 loc_D358:
 		lea	$40(a0),a0	; next object
 		dbf	d7,loc_D348
-		rts	
+		bra.s	ClearObjRAMFlags
 ; ===========================================================================
 
 loc_D362:
@@ -6309,8 +6305,11 @@ loc_D378:
 
 loc_D37C:
 		dbf	d7,loc_D368
-		rts	
-; End of function ExecuteObjects
+
+ClearObjRAMFlags:
+		clr.b	(f_shieldgfxload).w
+
+; End of function ExecuteObjects		
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -7102,7 +7101,8 @@ Map_Drown:	include	"_maps\Drowning Countdown.asm"
 		include	"_incObj\03 Collision Switcher.asm"
 		include	"_incObj\08 Water Splash.asm"
 		include	"_anim\Shield and Invincibility.asm"
-Map_Shield:	include	"_maps\Shield and Invincibility.asm"
+Map_Shield:	include	"_maps\Shield.asm"
+Map_Invincibility:	include "_maps\Invincibility.asm"
 		include	"_anim\Special Stage Entry (Unused).asm"
 Map_Vanish:	include	"_maps\Special Stage Entry (Unused).asm"
 		include	"_anim\Water Splash.asm"
@@ -8491,9 +8491,11 @@ Nem_SyzSparkle:	incbin	"artnem\Unused - SYZ Sparkles.bin"
 		even
 		else
 		endc
-Nem_Shield:	incbin	"artnem\Shield.bin"
+Art_Shield:	incbin	"artunc\Shield.unc"
+Art_Shield_End:
 		even
-Nem_Stars:	incbin	"artnem\Invincibility Stars.bin"
+Art_Invincibility:	incbin	"artunc\Invincibility Stars.unc"
+Art_Invincibility_End:
 		even
 		if Revision=0
 Nem_LzSonic:	incbin	"artnem\Unused - LZ Sonic.bin" ; Sonic holding his breath

@@ -36,6 +36,9 @@ Sonic_Display:
 
 	.removeinvincible:
 		move.b	#0,(v_invinc).w ; cancel invincibility
+		tst.b	(v_shield).w	; does Sonic have a shield?
+		beq.s	.chkshoes		; if not, skip
+		bsr.w	LoadShieldGraphics
 
 	.chkshoes:
 		tst.b	(v_shoes).w	; does Sonic have speed	shoes?
