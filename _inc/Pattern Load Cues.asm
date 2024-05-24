@@ -61,6 +61,7 @@ PLC_Main:	dc.w ((PLC_Mainend-PLC_Main-2)/6)-1
 PLC_Main2:	dc.w ((PLC_Main2end-PLC_Main2-2)/6)-1
 		plcm	Nem_Monitors, $D000	; monitors
 		plcm	Nem_Lamp, $D600		; lamppost
+		plcm	Nem_DiagSpring,	$AAE0 ; diagonal spring		
 ;		plcm	Nem_BigFlash,	$A760	; giant ring flash
 ;		plcm	Nem_Shield, $A820	; shield
 ;		plcm	Nem_Stars, $AB80	; invincibility	stars
@@ -226,7 +227,6 @@ PLC_SBZ2:	dc.w ((PLC_SBZ2end-PLC_SBZ2-2)/6)-1
 		plcm	Nem_SbzDoor2, $8DE0	; horizontal door
 		plcm	Nem_Electric, $8FC0	; electric orb
 		plcm	Nem_Crabmeat, $49E0	; crabmeat enemy
-		plcm	Nem_DiagSpring,	$5260 ; diagonal spring
 		plcm	Nem_SbzFloor, $7F20	; collapsing floor
 		plcm	Nem_SpinPform, $9BE0	; small	spinning platform
 		plcm	Nem_LzSwitch, $A1E0	; switch
