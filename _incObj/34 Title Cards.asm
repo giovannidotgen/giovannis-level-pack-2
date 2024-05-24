@@ -127,10 +127,6 @@ Card_ChangeArt:
 		bne.s	Card_Delete
 		moveq	#plcid_Explode,d0
 		jsr	(AddPLC).l	; load explosion patterns
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		addi.w	#plcid_GHZAnimals,d0
-		jsr	(AddPLC).l	; load animal patterns
 
 Card_Delete:
 		bra.w	DeleteObject

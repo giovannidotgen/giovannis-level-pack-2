@@ -13,8 +13,9 @@ HUD_Index:	dc.w HUD_Main-HUD_Index
 ; ===========================================================================
 
 HUD_Main:	; Routine 0
+		move.b	#id_HUDRing,(v_hudring).w
 		addq.b	#2,obRoutine(a0)
-		move.w	#$90,obX(a0)
+		move.w	#$80,obX(a0)
 		move.w	#$108,obScreenY(a0)
 		move.l	#Map_HUD,obMap(a0)
 		move.w	#$6CA,obGfx(a0)
@@ -23,23 +24,4 @@ HUD_Main:	; Routine 0
 
 HUD_Flash:	; Routine 2
 
-		moveq	#0,d0		
-		
-		btst	#7,(v_gamemode).w	; is the level still loading?
-		bne.s	.display
-		
-		btst	#3,(v_framebyte).w
-		bne.s	.display
-		
-		tst.w	(v_rings).w	; do you have any rings?
-		bne.s	.hasrings	; if not, branch		
-		addq.w	#1,d0		; make ring counter flash
-		
-	.hasrings:	
-		cmpi.b	#9,(v_timemin).w ; have	9 minutes elapsed?
-		bne.s	.display	; if not, branch
-		addq.w	#2,d0		; make time counter flash
-
-	.display:
-		move.b	d0,obFrame(a0)
 		jmp	DisplaySprite

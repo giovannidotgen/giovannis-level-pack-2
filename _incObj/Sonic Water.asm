@@ -29,7 +29,7 @@ Sonic_Water:
 		asr	obVelY(a0)
 		asr	obVelY(a0)	; slow Sonic
 		beq.s	.exit		; branch if Sonic stops moving
-		move.b	#id_Splash,(v_objspace+$300).w ; load splash object
+        move.w    #$100,(v_dust+obAnim).w    ; set the spin dash dust animation to splash
 		move.w	#sfx_Splash,d0
 		jmp	(PlaySound_Special).l	 ; play splash sound
 ; ===========================================================================
@@ -43,7 +43,7 @@ Sonic_Water:
 		move.w	#$80,(v_sonspeeddec).w ; restore Sonic's deceleration
 		asl	obVelY(a0)
 		beq.w	.exit
-		move.b	#id_Splash,(v_objspace+$300).w ; load splash object
+        move.w    #$100,(v_dust+obAnim).w    ; set the spin dash dust animation to splash
 		cmpi.w	#-$1000,obVelY(a0)
 		bgt.s	.belowmaxspeed
 		move.w	#-$1000,obVelY(a0) ; set maximum speed on leaving water

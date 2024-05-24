@@ -6284,7 +6284,7 @@ loc_D348:
 loc_D358:
 		lea	$40(a0),a0	; next object
 		dbf	d7,loc_D348
-		bra.s	ClearObjRAMFlags
+		rts
 ; ===========================================================================
 
 loc_D362:
@@ -6305,9 +6305,7 @@ loc_D378:
 
 loc_D37C:
 		dbf	d7,loc_D368
-
-ClearObjRAMFlags:
-		clr.b	(f_shieldgfxload).w
+		rts
 
 ; End of function ExecuteObjects		
 
@@ -8364,6 +8362,8 @@ Map_SS_Down:	include	"_maps\SS DOWN Block.asm"
 		include	"_inc\AnimateLevelGfx.asm"
 
 		include	"_incObj\21 HUD.asm"
+		
+		include "_incObj\19 HUD Ring.asm"
 Map_HUD:	include	"_maps\HUD.asm"
 
 ; ---------------------------------------------------------------------------

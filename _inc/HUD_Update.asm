@@ -10,8 +10,8 @@ hudVRAM:	macro loc
 
 
 HUD_Update:
-		tst.w	(f_debugmode).w	; is debug mode	on?
-		bne.w	HudDebug	; if yes, branch
+	;	tst.w	(f_debugmode).w	; is debug mode	on?
+	;	bne.w	HudDebug	; if yes, branch
 	;	tst.b	(f_scorecount).w ; does the score need updating?
 	;	beq.s	.chkrings	; if not, branch
 
@@ -28,7 +28,7 @@ HUD_Update:
 
 	.notzero:
 		clr.b	(f_ringcount).w
-		hudVRAM	$DE80		; set VRAM address
+		hudVRAM	$DF00		; set VRAM address
 		moveq	#0,d1
 		move.w	(v_rings).w,d1	; load number of rings
 		bsr.w	Hud_Rings
@@ -40,11 +40,11 @@ HUD_Update:
 		bne.s	.chklives	; if yes, branch
 		lea	(v_time).w,a1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(a1)+ ; is the time 9:59:59?
-		beq.s	TimeOver	; if yes, branch
+		beq.w	TimeOver	; if yes, branch
 
 		addq.b	#1,-(a1)	; increment 1/60s counter
 		cmpi.b	#60,(a1)	; check if passed 60
-		bcs.s	.chklives
+		bcs.s	.updatetime
 		move.b	#0,(a1)
 		addq.b	#1,-(a1)	; increment second counter
 		cmpi.b	#60,(a1)	; check if passed 60
@@ -60,10 +60,17 @@ HUD_Update:
 		moveq	#0,d1
 		move.b	(v_timemin).w,d1 ; load	minutes
 		bsr.w	Hud_Mins
+		
 		hudVRAM	$DE00
 		moveq	#0,d1
 		move.b	(v_timesec).w,d1 ; load	seconds
 		bsr.w	Hud_Secs
+		
+		hudVRAM	$DE80
+		moveq	#0,d1
+		move.b	(v_timecent).w,d1 ; load frames
+		move.b  HUD_CsTimesNTSC(pc,d1.w),d1	; convert into 60Hz centiseconds
+		bra.w	Hud_Secs		 ; seconds rendering can double as centiseconds rendering	
 
 	.chklives:
 	;	tst.b	(f_lifecount).w ; does the lives counter need updating?
@@ -85,6 +92,21 @@ HUD_Update:
 
 	.finish:
 		rts	
+
+; ===========================================================================
+; Centiseconds LUT for NTSC machines.
+; Credits to Kilo.
+; ===========================================================================
+
+HUD_CsTimesNTSC:
+        dc.b    0, 1, 3, 5, 6, 8, 10, 11, 13, 15, 16
+        dc.b    18, 20, 21, 23, 25, 26, 28, 30, 31, 33
+        dc.b    35, 36, 38, 40, 41, 43, 45, 46, 48, 50
+        dc.b    51, 53, 55, 56, 58, 60, 61, 63, 65, 66
+        dc.b    68, 70, 71, 73, 75, 76, 78, 80, 81, 83
+        dc.b    85, 86, 88, 90, 91, 93, 95, 96, 98, 0
+        even		
+		
 ; ===========================================================================
 
 TimeOver:
@@ -144,7 +166,7 @@ HudDebug:
 
 
 Hud_LoadZero:
-		locVRAM	$DE80
+		locVRAM	$DF00
 		lea	Hud_TilesZero(pc),a2
 		move.w	#2,d2
 		bra.s	loc_1C83E
@@ -162,7 +184,7 @@ Hud_Base:
 	;	bsr.w	Hud_Lives
 		locVRAM	$DD80
 		lea	Hud_TilesBase(pc),a2
-		move.w	#$6,d2
+		move.w	#$8,d2
 
 loc_1C83E:
 		lea	Art_Hud(pc),a1
@@ -193,8 +215,9 @@ loc_1C85E:
 ; End of function Hud_Base
 
 ; ===========================================================================
-Hud_TilesBase:	dc.b 0, $14, 0, 0
-Hud_TilesZero:	dc.b $FF, $FF, 0, 0
+Hud_TilesBase:	dc.b 0, $14, 0, 0, $0, $0
+Hud_TilesZero:	dc.b 0, 0, 0, 0
+		even
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load debug mode	numbers	patterns
 ; ---------------------------------------------------------------------------
