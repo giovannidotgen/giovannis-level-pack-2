@@ -370,6 +370,8 @@ ptr_GM_Credits:	bra.w	GM_Credits	; Credits ($1C)
 
 ptr_GM_Giovanni: bra.w	GiovanniSplash	; "GIOVANNI" Splash Screen
 
+ptr_GM_GLP2Title: bra.w GLP2Title	; Giovanni's Level Pack 2 Title Screen
+
 		rts	
 ; ===========================================================================
 
@@ -1349,6 +1351,8 @@ QuickPLC:
 		include "_inc\Text rendering routines.asm"
 
 		include "_inc\Giovanni Splash Screen.asm"		
+
+		include "_inc\GLP2 Title Screen.asm"
 
 Pal_TitleCyc:	incbin	"palette\Cycle - Title Screen Water.bin"
 Pal_GHZCyc:	incbin	"palette\Cycle - GHZ.bin"
@@ -7275,6 +7279,9 @@ loc_14D24:
 		andi.b	#$38,d1
 		bne.s	loc_14D3C
 		addq.w	#8,d2
+        btst    #2,obStatus(a0)    ; Is Sonic rolling?
+        beq.s   loc_14D3C          ; If not, branch
+        subq.w  #5,d2              ; If so, move push sensor up a bit		
 
 loc_14D3C:
 		cmpi.b	#$40,d0
@@ -8736,6 +8743,10 @@ Nem_Cater:	incbin	"artnem\Enemy Caterkiller.bin"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
+Nem_Giovanni: incbin "artnem\Giovanni Splash.bin"
+	even	
+Nem_GLP2: incbin "artnem\GLP2 Title.bin"
+	even
 Nem_TitleCard:	incbin	"artnem\Title Cards.bin"
 		even
 Nem_Hud:	incbin	"artnem\HUD.bin"	; HUD (rings, time, score)

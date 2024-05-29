@@ -10,7 +10,7 @@ RingFlash:
 ; ===========================================================================
 Flash_Index:	dc.w Flash_Main-Flash_Index
 		dc.w Flash_ChkDel-Flash_Index
-		dc.w Flash_Delete-Flash_Index
+		dc.w Flash_EndLevel-Flash_Index
 ; ===========================================================================
 
 Flash_Main:	; Routine 0
@@ -46,6 +46,7 @@ Flash_Collect:
 		move.b	#1,(f_bigring).w ; stop	Sonic getting bonuses
 		clr.b	(v_invinc).w	; remove invincibility
 		clr.b	(v_shield).w	; remove shield
+		clr.b	(f_timecount).w	; freeze timer
 
 locret_9F76:
 		rts	
@@ -54,13 +55,20 @@ locret_9F76:
 Flash_End:
 		addq.b	#2,obRoutine(a0)
 		move.w	#0,(v_player).w ; remove Sonic object
-		addq.l	#4,sp
+		move.b	#60,obTimeFrame(a0)	; set a 1 second timer
+		addq.l	#4,sp			; prematurely end object execution
 		rts	
 ; End of function Flash_Collect
 
 ; ===========================================================================
 
-Flash_Delete:	; Routine 4
+Flash_EndLevel:	; Routine 4
+		sub.b	#1,obTimeFrame(a0)
+		beq.s	.zero
+		rts
+		
+	.zero:
+		move.b	#id_Sega,(v_gamemode).w
 		bra.w	DeleteObject
 
 Flash_LoadGFX:

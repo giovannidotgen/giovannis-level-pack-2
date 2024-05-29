@@ -165,7 +165,7 @@ Giovanni_MainLoop:
     bne.s   Giovanni_MainLoop			; if not, branch
  
 Giovanni_GotoTitle:
-    move.b  #id_Title,(v_gamemode).w      	; set the screen mode to Title Screen
+    move.b  #id_GLP2Title,(v_gamemode).w      	; set the screen mode to Title Screen
     rts									; return
 
 
@@ -235,8 +235,7 @@ Giovanni_ReformLoop:
 ; Giovanni Splash Screen assets
 ; ===============================================================
 
-Nem_Giovanni: incbin "artnem\Giovanni Splash.bin"
-	even
+;Nem_Giovanni
 Map_Giovanni:
 Map_GiovanniA: incbin "tilemaps\Giovanni Splash A.bin"
 	even
