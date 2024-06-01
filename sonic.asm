@@ -1189,12 +1189,12 @@ NewPLC:
 ; Subroutine to	clear the pattern load cues
 ; ---------------------------------------------------------------------------
 
-; Clear the pattern load queue ($FFF680 - $FFF700)
+; Clear the pattern load queue ($FFA500 - $FFA600)
 
 
 ClearPLC:
 		lea	(v_plc_buffer).w,a2 ; PLC buffer space in RAM
-		moveq	#$1F,d0	; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
+		moveq	#$3F,d0	; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
 
 	.loop:
 		clr.l	(a2)+
@@ -2760,7 +2760,7 @@ GM_Level:
 
 loc_37FC:
 		moveq	#plcid_Main2,d0
-		bsr.w	AddPLC		; load standard	patterns
+		bsr.w	QuickPLC	; load standard	patterns (without using extra PLC entries)
 
 Level_ClrRam:
 		lea	(v_objspace).w,a1
@@ -8364,7 +8364,13 @@ Map_SS_Down:	include	"_maps\SS DOWN Block.asm"
 
 		include	"_incObj\09 Sonic in Special Stage.asm"
 
-		include	"_incObj\10.asm"
+		include	"_incObj\10 Red Star Ring.asm"
+		
+Map_RedStarRing:
+		include "_maps\Red Star Ring.asm"
+
+DPLC_RedStarRing:
+		include "_maps\Red Star Ring DPLCs.asm"
 
 		include	"_inc\AnimateLevelGfx.asm"
 
@@ -8754,6 +8760,8 @@ Nem_Hud:	incbin	"artnem\HUD.bin"	; HUD (rings, time, score)
 Nem_Lives:	incbin	"artnem\HUD - Life Counter Icon.bin"
 		even
 Nem_Ring:	incbin	"artnem\Rings.bin"
+		even
+Art_RedStarRing:	incbin	"artunc\Red Star Ring.bin"
 		even
 Nem_Monitors:	incbin	"artnem\Monitors.bin"
 		even

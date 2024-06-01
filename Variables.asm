@@ -145,6 +145,7 @@ v_ssrotate:	equ $FFFFF782	; Special Stage rotation speed (2 bytes)
 
 v_bgscrposy_2ndctrl:	equ $FFFFF784
 v_bgscrposy_3rdctrl:	equ	$FFFFF788
+v_redstar_lastframe:	equ	$FFFFF78C ; byte used by the Red Star Ring to determine what its last frame loaded was
 
 v_btnpushtime1:	equ $FFFFF790	; button push duration - in level (2 bytes)
 v_btnpushtime2:	equ $FFFFF792	; button push duration - in demo (2 bytes)
