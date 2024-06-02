@@ -31,6 +31,39 @@ RedStar_Display:
 RedStar_Collect:
 		move.b	#0,obColType(a0)
 		move.b	#1,obPriority(a0)
+		moveq	#4-1,d4
+		lea		Redstar_SparklePos,a2
+		moveq	#0,d2
+		moveq	#0,d3
+		
+	.makesparkles:
+		jsr		FindFreeObj
+		bne.s	.delete
+		
+		; Make a sparkle
+		move.b	#id_Rings,(a1)
+		move.b	#6,obRoutine(a1)
+		move.l	#Map_Ring,obMap(a1)
+		move.w	#$7B2,obGfx(a1)
+		move.b	#4,obRender(a1)
+		move.b	#1,obPriority(a1)
+
+		; Set its coordinates
+		move	d4,d1
+		add.b	d1,d1
+		add.b	d1,d1
+		move.l	(a2,d1.w),d2
+		move.w	obX(a0),obX(a1)
+		add.w	d2,obX(a1)
+		swap	d2
+		move.w	obY(a0),obY(a1)
+		add.w	d2,obY(a1)
+		
+		dbf		d4,.makesparkles
+		
+	.delete:	
+		move.w	#sfx_GiantRing,d0
+		jsr	(PlaySound_Special).l	; play giant ring sound	
 		jmp		DeleteObject
 		
 RedStar_LoadGFX:
@@ -70,3 +103,10 @@ RedStar_LoadGFX:
 		
 	.nochange:
 		rts	
+		
+Redstar_SparklePos:
+		dc.w	-8, -8
+		dc.w	-8, 8
+		dc.w	8, -8
+		dc.w	8, 8
+		even

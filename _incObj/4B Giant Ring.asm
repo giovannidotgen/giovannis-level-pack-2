@@ -39,6 +39,7 @@ GRing_Collect:	; Routine 4
 		bsr.w	FindFreeObj
 		bne.w	GRing_PlaySnd
 		move.b	#id_RingFlash,0(a1) ; load giant ring flash object
+		st.b	(v_gfxbigring+1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.l	a0,$3C(a1)
@@ -50,7 +51,7 @@ GRing_Collect:	; Routine 4
 GRing_PlaySnd:
 		move.w	#sfx_GiantRing,d0
 		jsr	(PlaySound_Special).l	; play giant ring sound
-		bra.s	GRing_Animate
+		bra.w	GRing_Animate
 ; ===========================================================================
 
 GRing_Delete:	; Routine 6
