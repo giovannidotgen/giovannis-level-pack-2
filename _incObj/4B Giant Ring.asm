@@ -24,12 +24,11 @@ GRing_Okay:
 		addq.b	#2,obRoutine(a0)
 		move.b	#2,obPriority(a0)
 		move.b	#$52,obColType(a0)
-;		move.w	#$C40,(v_gfxbigring).w	; Signal that Art_BigRing should be loaded ($C40 is the size of Art_BigRing)
 
 GRing_Animate:	; Routine 2
 		move.b	(v_ani1_frame).w,obFrame(a0)
 		out_of_range_S3.w	DeleteObject
-		bsr.w	GRing_LoadGFX
+		bsr.w	GRing_LoadGFX		; now with DPLCs!
 		bra.w	DisplaySprite
 ; ===========================================================================
 
@@ -47,6 +46,7 @@ GRing_Collect:	; Routine 4
 		cmp.w	obX(a0),d0	; has Sonic come from the left?
 		bcs.s	GRing_PlaySnd	; if yes, branch
 		bset	#0,obRender(a1)	; reverse flash	object
+		clr.b	(v_dust).w		; delete dust object
 
 GRing_PlaySnd:
 		move.w	#sfx_GiantRing,d0

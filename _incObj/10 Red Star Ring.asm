@@ -82,6 +82,9 @@ RedStar_LoadGFX:
 		bmi.s	.nochange	; if zero, branch
 		move.w	#$A760,d4
 		move.l	#Art_RedStarRing,d6
+		tst.b	obSubtype(a0)
+		bpl.s	.readentry
+		move.l	#Art_GrayStarRing,d6
 		
 	.readentry:
 		moveq	#0,d1

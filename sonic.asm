@@ -8763,6 +8763,8 @@ Nem_Ring:	incbin	"artnem\Rings.bin"
 		even
 Art_RedStarRing:	incbin	"artunc\Red Star Ring.bin"
 		even
+Art_GrayStarRing:	incbin	"artunc\Gray Star Ring.bin"
+		even		
 Nem_Monitors:	incbin	"artnem\Monitors.bin"
 		even
 Nem_Explode:	incbin	"artnem\Explosion.bin"

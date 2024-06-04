@@ -70,7 +70,7 @@ Spring_Init_DiagonallyUp:
     move.b  #8,obRoutine(a0)
     move.b  #4,obAnim(a0)
     move.b  #7,obFrame(a0)
-    move.w  #($AAE0/$20),obGfx(a0)	
+    move.w  #($ABA0/$20),obGfx(a0)	
     bra.s   Spring_Init_Common
 
 ; ===========================================================================
@@ -80,7 +80,7 @@ Spring_Init_DiagonallyDown:
     move.b  #$A,obRoutine(a0)
     move.b  #4,obAnim(a0)
     move.b  #$A,obFrame(a0)
-    move.w  #($AAE0/$20),obGfx(a0)	
+    move.w  #($ABA0/$20),obGfx(a0)	
     bset    #1,obStatus(a0)
 ; ===========================================================================
 

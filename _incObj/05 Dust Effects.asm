@@ -21,9 +21,9 @@ loc_1DD36:				; DATA XREF: h+6DBA?o
 		ori.b	#4,1(a0)
 		move.b	#1,$18(a0)
 		move.b	#$10,$19(a0)
-		move.w	#$7A0,2(a0)
+		move.w	#$54B,2(a0)
 		move.w	#-$3000,$3E(a0)
-		move.w	#$F400,$3C(a0)
+		move.w	#($54B*$20),$3C(a0)
 		cmp	#-$2E40,a0
 		beq.s	loc_1DD8C
 		move.b	#1,$34(a0)
