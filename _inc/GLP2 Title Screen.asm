@@ -20,6 +20,7 @@ GLP2Title:
 	move.w	#$9001,(a6)	; 64-cell hscroll size
 	move.w	#$9200,(a6)	; window vertical position
 	move.w	#$8B03,(a6)
+	move.w	#$8720,(a6)	; set background colour (palette line 2, entry 0)	
 
     ; load art, mappings and the palette
 
@@ -33,9 +34,24 @@ GLP2Title:
     moveq   #6,d2						; height - 1
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM
 	
+    lea     ($FF0000).l,a1				; load dump location
+    lea     (Map_MainMenu).l,a0				; load compressed mappings address
+    move.w  #$4020,d0	             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
+    jsr     EniDec						; decompress and dump
+    lea     ($FF0000).l,a1				; load dump location
+    move.l  #$60000003,d0				; VRAM location
+    moveq   #63,d1						; width - 1
+    moveq   #31,d2						; height - 1
+    bsr.w   TilemapToVRAM	         	; flush mappings to VRAM	
+	
     move.l  #$68000000,($C00004).l		; VRAM location
     lea     (Nem_GLP2).l,a0			; load background art
     jsr     NemDec              		; run NemDec to decompress art for display
+
+    move.l  #$44000000,($C00004).l		; VRAM location
+    lea     (Nem_MainMenu).l,a0			; load background art
+    jsr     NemDec              		; run NemDec to decompress art for display
+
 
     lea 	Pal_Giovanni.l,a0        	; load this palette
     lea 	(v_pal_dry).l,a1        		; get beginning of palette line
@@ -45,6 +61,15 @@ GLP2_PalLoop:
     move.l  (a0)+,(a1)+					; copy colours to buffer
     move.l  (a0)+,(a1)+
     dbf d0,GLP2_PalLoop				; repeat until done
+
+    lea 	Pal_MainMenu.l,a0        	; load this palette
+    lea 	(v_pal_dry+$40).l,a1        ; get beginning of palette line
+    move.w  #$3,d0						; number of entries / 4
+ 
+GLP2_PalLoop2:
+    move.l  (a0)+,(a1)+					; copy colours to buffer
+    move.l  (a0)+,(a1)+
+    dbf d0,GLP2_PalLoop2				; repeat until done
 
 GLP2_TestRender:
 	lea	($C00000).l,a6
@@ -91,7 +116,11 @@ GLP2_GotoTitle:
 ; GLP2 Splash Screen assets
 ; ===============================================================
 Map_GLP2:
-	incbin		"tilemaps\GLP2 Title.bin"
+		incbin		"tilemaps\GLP2 Title.bin"
+Map_MainMenu:
+		incbin		"tilemaps\Main Menu.bin"
+Pal_MainMenu:
+		incbin		"palette\Main Menu.bin"
 Text_GLP2: 
 				dc.b	"TEST                                "
 				dc.b	"                                    "

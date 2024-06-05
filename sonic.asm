@@ -8753,6 +8753,8 @@ Nem_Giovanni: incbin "artnem\Giovanni Splash.bin"
 	even	
 Nem_GLP2: incbin "artnem\GLP2 Title.bin"
 	even
+Nem_MainMenu:	incbin "artnem\Main Menu.bin"
+	even
 Nem_TitleCard:	incbin	"artnem\Title Cards.bin"
 		even
 Nem_Hud:	incbin	"artnem\HUD.bin"	; HUD (rings, time, score)
