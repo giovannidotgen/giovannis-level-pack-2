@@ -33,6 +33,8 @@ loc_137AE:
 		bne.s	loc_137E4
 		cmp.b   #4,obRoutine(a0)
 		beq.s   loc_137E4	
+		tst.b	f_spindash(a0)		; check if Sonic is charging a Spin Dash
+		bne.s	loc_137E4			; spin dash takes priority over rolling
 		move.w	obInertia(a0),d0
 		bpl.s	.rollspeedcheck
 		neg.w	d0		

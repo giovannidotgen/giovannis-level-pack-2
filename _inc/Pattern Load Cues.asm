@@ -61,7 +61,7 @@ PLC_Main:	dc.w ((PLC_Mainend-PLC_Main-2)/6)-1
 PLC_Main2:	dc.w ((PLC_Main2end-PLC_Main2-2)/6)-1
 		plcm	Nem_Monitors, $D000	; monitors
 		plcm	Nem_Lamp, $D600		; lamppost
-		plcm	Nem_DiagSpring,	$ABA0 ; diagonal spring		
+		plcm	Nem_DiagSpring,	$AB80 ; diagonal spring		
 ;		plcm	Nem_BigFlash,	$A760	; giant ring flash
 ;		plcm	Nem_Shield, $A820	; shield
 ;		plcm	Nem_Stars, $AB80	; invincibility	stars
