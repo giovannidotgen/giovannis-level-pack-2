@@ -2956,6 +2956,7 @@ Level_LoadObj:
 		move.b	#1,(f_scorecount).w ; update score counter
 		move.b	#1,(f_ringcount).w ; update rings counter
 		move.b	#1,(f_timecount).w ; update time counter
+		move.b	#1,(f_redstar_update).w	; update Red Star Ring tracker
 		move.w	#0,(v_btnpushtime1).w
 		lea	(DemoDataPtr).l,a1 ; load demo data
 		moveq	#0,d0
@@ -8764,9 +8765,11 @@ Nem_Lives:	incbin	"artnem\HUD - Life Counter Icon.bin"
 Nem_Ring:	incbin	"artnem\Rings.bin"
 		even
 Art_RedStarRing:	incbin	"artunc\Red Star Ring.bin"
-		even
-Art_GrayStarRing:	incbin	"artunc\Gray Star Ring.bin"
 		even		
+Art_GrayStarRing:	incbin	"artunc\Gray Star Ring.bin"
+		even
+Art_StarRingHUD:	incbin	"artunc\Star Ring HUD.bin"
+		even
 Nem_Monitors:	incbin	"artnem\Monitors.bin"
 		even
 Nem_Explode:	incbin	"artnem\Explosion.bin"

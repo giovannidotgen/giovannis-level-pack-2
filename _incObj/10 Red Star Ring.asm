@@ -22,6 +22,15 @@ RedStar_Init:
 		move.b	#2,obPriority(a0)
 		move.b	#$5A,obColType(a0)
 		move.b	#$10,obActWid(a0)
+		lea		(v_redstar_collection).w,a1		; get collection array
+		moveq	#0,d0		
+		move.b	obSubtype(a0),d0				; get subtype				
+		andi.b	#$7F,d0							; clear MSB		
+		adda.l	d0,a1
+		tst.b	(a1)							; was this ring collected?
+		beq.s	RedStar_Display					; keep as is if no
+		bset	#7,obSubtype(a0)				; display as collected if yes
+		clr.b	obColType(a0)					; also make intangible (temp)
 		
 RedStar_Display:
 		move.b	(v_ani1_frame).w,obFrame(a0) ; set frame
@@ -62,6 +71,14 @@ RedStar_Collect:
 		dbf		d4,.makesparkles
 		
 	.delete:	
+		lea		(v_redstar_collection).w,a1		; get collection array
+		moveq	#0,d0		
+		move.b	obSubtype(a0),d0				; get subtype				
+		andi.b	#$7F,d0							; clear MSB		
+		adda.l	d0,a1
+		st.b	(a1)							; mark ring as collected	
+		ori.b	#1,(f_redstar_update).w
+	
 		move.w	#sfx_GiantRing,d0
 		jsr	(PlaySound_Special).l	; play giant ring sound	
 		jmp		DeleteObject
@@ -82,7 +99,7 @@ RedStar_LoadGFX:
 		bmi.s	.nochange	; if zero, branch
 		move.w	#$A760,d4
 		move.l	#Art_RedStarRing,d6
-		tst.b	obSubtype(a0)
+		tst.b	obSubtype(a0)		; MSB = ring was collected
 		bpl.s	.readentry
 		move.l	#Art_GrayStarRing,d6
 		

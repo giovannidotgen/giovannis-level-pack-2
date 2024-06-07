@@ -35,9 +35,9 @@ HUD_Update:
 
 	.chktime:
 		tst.b	(f_timecount).w	; does the time	need updating?
-		beq.s	.chklives	; if not, branch
+		beq.s	.chkredstar	; if not, branch
 		tst.w	(f_pause).w	; is the game paused?
-		bne.s	.chklives	; if yes, branch
+		bne.w	.finish	; if yes, branch
 		lea	(v_time).w,a1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(a1)+ ; is the time 9:59:59?
 		beq.w	TimeOver	; if yes, branch
@@ -70,25 +70,18 @@ HUD_Update:
 		moveq	#0,d1
 		move.b	(v_timecent).w,d1 ; load frames
 		move.b  HUD_CsTimesNTSC(pc,d1.w),d1	; convert into 60Hz centiseconds
-		bra.w	Hud_Secs		 ; seconds rendering can double as centiseconds rendering	
+		bsr.w	Hud_Secs		 ; seconds rendering can double as centiseconds rendering	
 
-	.chklives:
-	;	tst.b	(f_lifecount).w ; does the lives counter need updating?
-	;	beq.s	.chkbonus	; if not, branch
-	;	clr.b	(f_lifecount).w
-	;	bsr.w	Hud_Lives
-
-	.chkbonus:
-	;	tst.b	(f_endactbonus).w ; do time/ring bonus counters need updating?
-	;	beq.s	.finish		; if not, branch
-	;	clr.b	(f_endactbonus).w
-	;	locVRAM	$AE00
-	;	moveq	#0,d1
-	;	move.w	(v_timebonus).w,d1 ; load time bonus
-	;	bsr.w	Hud_TimeRingBonus
-	;	moveq	#0,d1
-	;	move.w	(v_ringbonus).w,d1 ; load ring bonus
-	;	bsr.w	Hud_TimeRingBonus
+	.chkredstar:
+		tst.b	(f_redstar_update).w	; does the Red Star Ring counter need to be updated?
+		beq.s	.finish
+		
+		hudVRAM	$F2E0
+		moveq	#4,d6						; number of Red Star Ring icons -1
+		lea		(v_redstar_collection).w,a1
+		lea		(Art_StarRingHUD).l,a2
+		move.l	d0,4(a6)			
+		bra.w	Hud_RedStar		
 
 	.finish:
 		rts	
@@ -344,3 +337,51 @@ loc_1C92C:
 		rts	
 
 ; End of function Hud_Score
+
+Hud_RedStar:
+		movea.l	a2,a3		; copy art address
+
+		tst.b	(a1)+		; check if red star ring was collected
+		bne.s	.red		; if yes, keep ring as red
+		adda.l	#128,a3		; get gray patterns
+		
+	.red:	
+		; move 128 bytes of data into VRAM
+		move.l	(a3)+,(a6)	
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)
+		move.l	(a3)+,(a6)		
+		
+		dbf		d6,Hud_RedStar
+		rts
+
+	
+
