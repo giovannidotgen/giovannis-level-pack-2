@@ -372,6 +372,8 @@ ptr_GM_Giovanni: bra.w	GiovanniSplash	; "GIOVANNI" Splash Screen
 
 ptr_GM_GLP2Title: bra.w GLP2Title	; Giovanni's Level Pack 2 Title Screen
 
+ptr_GM_GLP2LevelSelect:	bra.w GLP2LevelSelect	; Giovanni's Level Pack 2 Level Select
+
 		rts	
 ; ===========================================================================
 
@@ -1353,6 +1355,8 @@ QuickPLC:
 		include "_inc\Giovanni Splash Screen.asm"		
 
 		include "_inc\GLP2 Title Screen.asm"
+		
+		include "_inc\GLP2 Level Select.asm"
 
 Pal_TitleCyc:	incbin	"palette\Cycle - Title Screen Water.bin"
 Pal_GHZCyc:	incbin	"palette\Cycle - GHZ.bin"

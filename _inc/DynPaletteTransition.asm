@@ -216,6 +216,8 @@ DynPalette_ColorCheck:
 ; ---------------------------------------------------------------------------
 
 DynPalette_CycleOverride:
+
+
 		moveq	#0,d0					; initialize d0
 		move.b	(v_zone).w,d0		; get the zone number
 		add.w	d0,d0					; double all that
@@ -258,6 +260,12 @@ CycleOverride_Return:
 		
 DynPalette_AboveIgnore:
 
+		cmpi.b	#id_Level,(v_gamemode).w	
+		beq.s	.level
+		lea		(AboveIgnore_Null).w,a2
+		rts
+	
+	.level:
 		moveq	#0,d0							; initialize d0
 		move.b	(v_zone).w,d0				; get the zone number
 		lsl.w	#2,d0						; quadruple that
@@ -287,6 +295,12 @@ AboveIgnore_Null:	dc.l	$FFFFFFFF
 		
 DynPalette_BelowIgnore:
 
+		cmpi.b	#id_Level,(v_gamemode).w	
+		beq.s	.level
+		lea		(BelowIgnore_Null).w,a2
+		rts
+	
+	.level:
 		moveq	#0,d0							; initialize d0
 		move.b	(v_zone).w,d0				; get the zone number
 		lsl.w	#2,d0						; quadruple that

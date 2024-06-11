@@ -51,6 +51,7 @@ id_Ending:	equ ptr_GM_Ending-GameModeArray	; $18
 id_Credits:	equ ptr_GM_Credits-GameModeArray; $1C
 id_Giovanni:	equ ptr_GM_Giovanni-GameModeArray ; $20
 id_GLP2Title:	equ ptr_GM_GLP2Title-GameModeArray ; $24
+id_LevelSelect:	equ ptr_GM_GLP2LevelSelect-GameModeArray ; $28
 
 ; Levels
 id_GHZ:		equ 0
