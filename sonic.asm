@@ -2388,10 +2388,12 @@ LevSel_Level_SS:
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
-		move.l	d0,(v_score).w	; clear score
+	;	move.l	d0,(v_score).w	; clear score
+		move.l	d0,(v_redstar_collection).w
+		move.b	d0,(v_redstar_collection+4).w
 		if Revision=0
 		else
-			move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
+	;		move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
 		endc
 		rts	
 ; ===========================================================================
@@ -2405,7 +2407,8 @@ PlayLevel:
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
-		move.l	d0,(v_score).w	; clear score
+		move.l	d0,(v_redstar_collection).w
+		move.b	d0,(v_redstar_collection+4).w
 		move.b	d0,(v_lastspecial).w ; clear special stage number
 		move.b	d0,(v_emeralds).w ; clear emeralds
 		move.l	d0,(v_emldlist).w ; clear emeralds
@@ -2413,7 +2416,7 @@ PlayLevel:
 		move.b	d0,(v_continues).w ; clear continues
 		if Revision=0
 		else
-			move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
+	;		move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
 		endc
 		move.b	#bgm_Fade,d0
 		bsr.w	PlaySound_Special ; fade out music
@@ -2534,10 +2537,11 @@ Demo_Level:
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
-		move.l	d0,(v_score).w	; clear score
+		move.l	d0,(v_redstar_collection).w
+		move.b	d0,(v_redstar_collection+4).w
 		if Revision=0
 		else
-			move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
+	;		move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
 		endc
 		rts	
 ; ===========================================================================
@@ -3839,7 +3843,8 @@ Cont_GotoLevel:
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
-		move.l	d0,(v_score).w	; clear score
+		move.l	d0,(v_redstar_collection).w
+		move.b	d0,(v_redstar_collection+4).w
 		move.b	d0,(v_lastlamp).w ; clear lamppost count
 		subq.b	#1,(v_continues).w ; subtract 1 from continues
 		rts	
@@ -4185,7 +4190,8 @@ EndingDemoLoad:
 		moveq	#0,d0
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
-		move.l	d0,(v_score).w	; clear score
+		move.l	d0,(v_redstar_collection).w
+		move.b	d0,(v_redstar_collection+4).w
 		move.b	d0,(v_lastlamp).w ; clear lamppost counter
 		cmpi.w	#4,(v_creditsnum).w ; is SLZ demo running?
 		bne.s	EndDemo_Exit	; if not, branch

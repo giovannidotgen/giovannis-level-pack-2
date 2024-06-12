@@ -139,7 +139,7 @@ Lamp_StoreInfo:
 		move.w	obY(a0),($FFFFFE34).w		; y-position
 		move.w	(v_rings).w,($FFFFFE36).w 	; rings
 		move.b	(v_lifecount).w,($FFFFFE54).w 	; lives
-		move.l	(v_time).w,($FFFFFE38).w 	; time
+;		move.l	(v_time).w,($FFFFFE38).w 	; time
 		move.b	(v_dle_routine).w,($FFFFFE3C).w ; routine counter for dynamic level mod
 		move.w	(v_limitbtm2).w,($FFFFFE3E).w 	; lower y-boundary of level
 		move.w	(v_screenposx).w,($FFFFFE40).w 	; screen x-position
@@ -154,6 +154,8 @@ Lamp_StoreInfo:
 		move.b	(v_wtr_routine).w,($FFFFFE52).w ; rountine counter for water
 		move.b	(f_wtr_state).w,($FFFFFE53).w 	; water direction
 		move.b  (v_paltracker).w,(v_lamp_paltracker).w	; GIO: palette tracker		
+		move.l	(v_redstar_collection).w,(v_lamp_redstar).w
+		move.b	(v_redstar_collection+$4).w,(v_lamp_redstar+$4).w		
 		rts	
 
 ; ---------------------------------------------------------------------------
@@ -172,9 +174,9 @@ Lamp_LoadInfo:
 		move.b  (v_lamp_paltracker).w,(v_paltracker).w	; GIO: palette tracker		
 		clr.w	(v_rings).w
 		clr.b	(v_lifecount).w
-		move.l	($FFFFFE38).w,(v_time).w
-		move.b	#59,(v_timecent).w
-		subq.b	#1,(v_timesec).w
+		move.l	(v_lamp_time).w,(v_time).w
+;		move.b	#59,(v_timecent).w
+;		subq.b	#1,(v_timesec).w
 		move.b	($FFFFFE3C).w,(v_dle_routine).w
 		move.b	($FFFFFE52).w,(v_wtr_routine).w
 		move.w	($FFFFFE3E).w,(v_limitbtm2).w
@@ -187,6 +189,8 @@ Lamp_LoadInfo:
 		move.w	($FFFFFE4A).w,(v_bg2screenposy).w
 		move.w	($FFFFFE4C).w,(v_bg3screenposx).w
 		move.w	($FFFFFE4E).w,(v_bg3screenposy).w
+		move.l	(v_lamp_redstar).w,(v_redstar_collection).w
+		move.b	(v_lamp_redstar+$4).w,(v_redstar_collection+$4).w
 		cmpi.b	#1,(v_zone).w	; is this Labyrinth Zone?
 		bne.s	.notlabyrinth	; if not, branch
 

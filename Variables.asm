@@ -191,8 +191,6 @@ v_ringbonus:	equ $FFFFF7D4	; ring bonus at the end of an act (2 bytes)
 f_endactbonus:	equ $FFFFF7D6	; time/ring bonus update flag at the end of an act
 v_sonicend:	equ $FFFFF7D7	; routine counter for Sonic in the ending sequence
 v_lz_deform:	equ	$FFFFF7D8	; LZ deformtaion offset, in units of $80 (2 bytes)
-v_redstar_collection:	equ $FFFFF7DA	; Red Star Ring collection variables (5 byte array)
-f_redstar_update:		equ $FFFFF7DF	; Flag used by the HUD to determine whether to update Red Star Rings (1 byte)
 f_switch:	equ $FFFFF7E0	; flags set when Sonic stands on a switch ($10 bytes)
 v_scroll_block_1_size:	equ $FFFFF7F0	; (2 bytes)
 v_scroll_block_2_size:	equ $FFFFF7F2	; unused (2 bytes)
@@ -230,14 +228,15 @@ v_lifecount:	equ $FFFFFE1B	; lives counter value (for actual number, see "v_live
 f_lifecount:	equ $FFFFFE1C	; lives counter update flag
 f_ringcount:	equ $FFFFFE1D	; ring counter update flag
 f_timecount:	equ $FFFFFE1E	; time counter update flag
-f_scorecount:	equ $FFFFFE1F	; score counter update flag
+f_scorecount:	equ $FFFFFE1F	; score counter update flag (legacy)
+f_redstar_update:		equ $FFFFFE1F	; Flag used by the HUD to determine whether to update Red Star Rings (1 byte)
 v_rings:		equ $FFFFFE20	; rings (2 bytes)
 v_ringbyte:	equ v_rings+1	; low byte for rings
 v_time:		equ $FFFFFE22	; time (4 bytes)
 v_timemin:	equ $FFFFFE23	; time - minutes
 v_timesec:	equ $FFFFFE24	; time - seconds
 v_timecent:	equ $FFFFFE25	; time - centiseconds
-v_score:		equ $FFFFFE26	; score (4 bytes)
+v_score:		equ $FFFFFE26	; score (4 bytes) (legacy)
 v_shield:	equ $FFFFFE2C	; shield status (00 = no; 01 = yes)
 v_invinc:	equ $FFFFFE2D	; invinciblity status (00 = no; 01 = yes)
 v_shoes:		equ $FFFFFE2E	; speed shoes status (00 = no; 01 = yes)
@@ -261,6 +260,7 @@ v_emldlist:	equ $FFFFFE58	; which individual emeralds you have (00 = no; 01 = ye
 v_oscillate:	equ $FFFFFE5E	; values which oscillate - for swinging platforms, et al ($42 bytes)
 
 v_paltracker:	= $FFFFFEA0	; GIO: palette tracker for your level. Feel free to change the RAM address. It is recommended to use something that is reset upon level beginning. (1 byte)
+v_redstar_collection:	equ $FFFFFEA2	; Red Star Ring collection variables (5 byte array)
 
 v_ani0_time:	equ $FFFFFEC0	; synchronised sprite animation 0 - time until next frame (used for synchronised animations)
 v_ani0_frame:	equ $FFFFFEC1	; synchronised sprite animation 0 - current frame
@@ -290,6 +290,7 @@ v_bg3_scroll_flags_dup:	equ $FFFFFF36
 v_levseldelay:	equ $FFFFFF80	; level select - time until change when up/down is held (2 bytes)
 v_levselitem:	equ $FFFFFF82	; level select - item selected (2 bytes)
 v_levselsound:	equ $FFFFFF84	; level select - sound selected (2 bytes)
+v_lamp_redstar:	equ $FFFFFF86	
 v_scorecopy:	equ $FFFFFFC0	; score, duplicate (4 bytes)
 v_scorelife:	equ $FFFFFFC0	; points required for an extra life (4 bytes) (JP1 only)
 v_colladdr1:	equ $FFFFFFD0	; (4 bytes)

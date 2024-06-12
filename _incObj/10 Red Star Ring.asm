@@ -31,6 +31,7 @@ RedStar_Init:
 		beq.s	RedStar_Display					; keep as is if no
 		bset	#7,obSubtype(a0)				; display as collected if yes
 		clr.b	obColType(a0)					; also make intangible (temp)
+		move.b	#0,obPriority(a0)				; put in front of Sonic
 		
 RedStar_Display:
 		move.b	(v_ani1_frame).w,obFrame(a0) ; set frame
