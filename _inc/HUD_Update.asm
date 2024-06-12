@@ -35,13 +35,16 @@ HUD_Update:
 
 	.chktime:
 		tst.b	(f_timecount).w	; does the time	need updating?
-		beq.s	.chkredstar	; if not, branch
+		beq.w	.chkredstar	; if not, branch
 		tst.w	(f_pause).w	; is the game paused?
 		bne.w	.finish	; if yes, branch
 		lea	(v_time).w,a1
 		cmpi.l	#(9*$10000)+(59*$100)+59,(a1)+ ; is the time 9:59:59?
-		beq.w	TimeOver	; if yes, branch
+		bne.s	.normal		; if yes, branch
+		clr.b	(f_timecount).w
+		bra.s	.updatetime
 
+	.normal:
 		addq.b	#1,-(a1)	; increment 1/60s counter
 		cmpi.b	#60,(a1)	; check if passed 60
 		bcs.s	.updatetime
@@ -70,6 +73,10 @@ HUD_Update:
 		moveq	#0,d1
 		move.b	(v_timecent).w,d1 ; load frames
 		move.b  HUD_CsTimesNTSC(pc,d1.w),d1	; convert into 60Hz centiseconds
+		cmpi.l	#(9*$10000)+(59*$100)+59,(v_time).w ; is the time 9:59:59?
+		bne.w	.rendercenti	; if not, render as is
+		move.b	#99,d1			; force 99
+	.rendercenti:
 		bsr.w	Hud_Secs		 ; seconds rendering can double as centiseconds rendering	
 
 	.chkredstar:
@@ -100,15 +107,6 @@ HUD_CsTimesNTSC:
         dc.b    85, 86, 88, 90, 91, 93, 95, 96, 98, 0
         even		
 		
-; ===========================================================================
-
-TimeOver:
-		clr.b	(f_timecount).w
-		lea	(v_player).w,a0
-		movea.l	a0,a2
-		bsr.w	KillSonic
-		move.b	#1,(f_timeover).w
-		rts	
 ; ===========================================================================
 
 HudDebug:
