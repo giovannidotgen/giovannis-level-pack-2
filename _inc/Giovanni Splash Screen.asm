@@ -86,7 +86,12 @@ Giovanni_DeformLoop:
 	bne.s	Giovanni_DeformLoop			; if not 0, perform deformation again
 
 	lea		(vdp_data_port).l,a6
-	move.l	#$50000003,4(a6)			; set VRAM write address
+	move.l	#$4FE00003,4(a6)
+	move.w	#$F,d1
+	
+.blanktile:
+	move.w	#0,(a6)
+	dbf	d1,.blanktile
 	lea	(Art_S2Text).l,a5				; fetch the text graphics
 	move.w	#$39F,d1					; amount of data to be loaded
 ; load text

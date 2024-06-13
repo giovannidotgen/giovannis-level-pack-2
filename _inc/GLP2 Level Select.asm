@@ -22,8 +22,7 @@ GLP2LevelSelect:
 	move.w	#$8B03,(a6)
 	move.w	#$8720,(a6)	; set background colour (palette line 2, entry 0)	
 
-    ; load art, mappings and the palette
-	
+; Plane mappings (BG)
     lea     ($FF0000).l,a1				; load dump location
     lea     (Map_MainMenu).l,a0				; load compressed mappings address
     move.w  #$4020,d0	             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
@@ -34,12 +33,20 @@ GLP2LevelSelect:
     moveq   #31,d2						; height - 1
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM	
 	
+; Graphics (BG)	
     move.l  #$44000000,($C00004).l		; VRAM location
     lea     (Nem_MainMenu).l,a0			; load background art
     jsr     NemDec              		; run NemDec to decompress art for display
 
+; Graphics (Text)
 	lea		(vdp_data_port).l,a6
-	move.l	#$50000003,4(a6)			; set VRAM write address
+	move.l	#$4FE00003,4(a6)
+	move.w	#$F,d1
+	
+.blanktile:
+	move.w	#0,(a6)
+	dbf	d1,.blanktile
+	
 	lea	(Art_S2Text).l,a5				; fetch the text graphics
 	move.w	#$39F,d1					; amount of data to be loaded
 	
@@ -47,6 +54,7 @@ GLP2LevelSelect:
 	move.w	(a5)+,(a6)					; load the text
 	dbf	d1,.LoadText 				; repeat until done	
 
+; Palette (is loaded by DynPaletteTransition)
     lea 	Pal_Giovanni.l,a0        	; load this palette
     lea 	(v_pal_dry_dup).l,a1        ; get beginning of palette line
     moveq  	#$3,d0						; number of entries / 4
@@ -74,27 +82,20 @@ GLP2LevelSelect:
     move.l  (a0)+,(a1)+
     dbf d0,.PalLoop3				; repeat until done
 
-LevelSelect_TestRender:
-	lea	($C00000).l,a6
-	lea	(Text_GLP2).l,a1 ; where to fetch the lines from	
-	move.l	#$48840003,d4	; starting screen position 
-	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	moveq	#1,d1		; number of lines of text to be displayed -1
-
-.looptext
-	move.l	d4,4(a6)
-	moveq	#35,d2		; number of characters to be rendered in a line -1
-	bsr.w	SingleLineRender
-	addi.l	#(1*$800000),d4  ; replace number to the left with desired distance between each line
-	dbf	d1,.looptext
-
+; DynPaletteTransition variable initialization
 	move.b	#1,(v_paltime).w
 	move.b	#1,(v_paltimecur).w
 	move.b	#1,(v_palflags).w
 	move.b	#$2F,(v_awcount).w
 	move.l	#v_pal_dry_dup,(p_awtarget).w
 	move.l	#v_pal_dry,(p_awreplace).w
+
+; Initialize Menu Structure
+LevelSelect_InitRender:
+	bsr.w	LevelSelect_Headings
+	bsr.w	LevelSelect_LevelInfo
 	
+; Fade in	
 LevelSelect_TextFadeIn:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
@@ -102,19 +103,106 @@ LevelSelect_TextFadeIn:
 	tst.b	(v_palflags).w				; check if the palette is fully loaded
 	bne.s	LevelSelect_TextFadeIn
 	
+; Main loop	
 LevelSelect_MainLoop:
     move.b  #2,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   LevelSelect_StartPressed    ; if so, branch
+	bsr.w	LevelSelect_Controls
 	bra.s	LevelSelect_MainLoop
  
+; Quit Menu
 LevelSelect_StartPressed:
-    move.b  #id_Title,(v_gamemode).w      	; set the screen mode to Title Screen
-    rts									; return
+	lea		(LevelSelect_LevelEntries).l,a0
+	lea		(v_level_savedata).w,a1
+	moveq	#0,d0
+	move.w	(v_levselitem).w,d0
+	add.w	d0,d0
+	adda.l	d0,a0
+	lsl.w	#2,d0	; save data size is 8
+	adda.l	d0,a1
+	move.w	(a0),(v_zone).w	; set level
+    move.b  #id_Level,(v_gamemode).w    ; set the screen mode to Level
+	moveq	#0,d0
+	move.w	d0,(v_rings).w	; clear rings
+	move.l	d0,(v_time).w	; clear time
+	move.l	d0,(v_redstar_collection).w
+	move.b	d0,(v_redstar_collection+4).w
+	move.b	#bgm_Fade,d0
+	bra.w	PlaySound_Special ; fade out music
+
+; ===============================================================
+; Controls routine
+; ===============================================================
+LevelSelect_Controls:
+
+		move.b	(v_jpadpress1).w,d1 ; fetch commands		
+		andi.b	#$C,d1		; is left/right pressed and held?
+		bne.s	.leftright	; if yes, branch
+		rts	
+
+.leftright:	
+		move.w  (v_levselitem).w,d2        ; load choice number		
+		btst	#2,d1		; is left pressed?
+		beq.s	.right	; if not, branch
+		subq.w	#1,d2		; subtract 1 to selection
+		bpl.s	.right
+		move.w  #1,d2     
+		
+.right:
+		btst	#3,d1		; is right pressed?
+		beq.s	.refresh	; if not, branch
+		addq.w	#1,d2	; add 1 selection
+		cmp.w	#1,d2
+		ble.s	.refresh
+		move.w	#0,d2	
+		
+.refresh:
+		move.w	d2,(v_levselitem).w
+		bra.w	LevelSelect_LevelInfo
+;		move.w	#SndID_Blip,d0
+;		jmp	(PlaySound).l			
+
+; ===============================================================
+; Foreground Plane Graphics Rendering Routines
+; ===============================================================
+
+LevelSelect_Headings:
+	lea	($C00000).l,a6
+	lea	(LevelSelect_Heading1).l,a1 ; where to fetch the lines from	
+	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
+	move.l	#$41040003,4(a6)
+	moveq	#12,d2		; number of characters to be rendered in a line -1
+	bra.w	SingleLineRender
+
+; ===============================================================
+
+LevelSelect_LevelInfo:
+	lea	($C00000).l,a6
+	lea	(LevelSelect_LevelNames).l,a1 ; where to fetch the lines from
+	move.w	(v_levselitem).w,d1
+	mulu.w	#11,d1
+	adda.l	d1,a1	
+	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
+	move.l	#$41220003,4(a6)
+	moveq	#10,d2		; number of characters to be rendered in a line -1
+	bra.w	SingleLineRender
 
 ; ===============================================================
 ; GLP2 Level Select assets
 ; ===============================================================
 
+LevelSelect_LevelEntries:
+	dc.b	id_SBZ,	0
+	dc.b	id_MZ,	0
+	even
+
+LevelSelect_LevelNames:
+	dc.b	"SCRAP BRAIN"
+	dc.b	"MARBLE     "
+	even
+
+LevelSelect_Heading1:
+	dc.b	"SELECT LEVEL:"
 	even

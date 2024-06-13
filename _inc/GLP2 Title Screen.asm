@@ -52,7 +52,12 @@ GLP2Title:
     jsr     NemDec              		; run NemDec to decompress art for display
 
 	lea		(vdp_data_port).l,a6
-	move.l	#$50000003,4(a6)			; set VRAM write address
+	move.l	#$4FE00003,4(a6)
+	move.w	#$F,d1
+	
+.blanktile:
+	move.w	#0,(a6)
+	dbf	d1,.blanktile
 	lea	(Art_S2Text).l,a5				; fetch the text graphics
 	move.w	#$39F,d1					; amount of data to be loaded
 	
@@ -87,19 +92,8 @@ GLP2_PalLoop3:
     move.l  (a0)+,(a1)+
     dbf d0,GLP2_PalLoop3				; repeat until done
 
-GLP2_TestRender:
-	lea	($C00000).l,a6
-	lea	(Text_GLP2).l,a1 ; where to fetch the lines from	
-	move.l	#$48840003,d4	; starting screen position 
-	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	moveq	#1,d1		; number of lines of text to be displayed -1
-
-.looptext
-	move.l	d4,4(a6)
-	moveq	#35,d2		; number of characters to be rendered in a line -1
-	bsr.w	SingleLineRender
-	addi.l	#(1*$800000),d4  ; replace number to the left with desired distance between each line
-	dbf	d1,.looptext
+	moveq	#plcid_Main,d0
+	bsr.w	NewPLC
 
 	move.b	#1,(v_paltime).w
 	move.b	#1,(v_paltimecur).w

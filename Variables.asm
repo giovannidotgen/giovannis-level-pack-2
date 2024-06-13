@@ -22,6 +22,12 @@ p_bwreplace		=	$FFFFA422	; GIO: RAM pointer to the first below water palette ent
 p_pcyctarget	=	$FFFFA426	; GIO: ROM pointer to the palette cycle target palette. (4 bytes)
 v_palcycleram	= 	$FFFFA42A	; GIO: Buffer for the palette cycling data (as much RAM as you want)
 
+v_level_savedata:	equ	$FFFFA500
+; Level Save Data format:
+; 0-3: 	Best Time (same format as v_time)
+; 4-5: 	Most Rings 
+; 6:	00000EEE: Level Endings
+; 7:	000RRRRR: Red Star Rings
 
 v_bgscroll_buffer:	equ	$FFFFA800	; background scroll buffer ($200 bytes)
 v_ngfx_buffer:	equ $FFFFAA00	; Nemesis graphics decompression buffer ($200 bytes)
