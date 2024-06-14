@@ -265,6 +265,6 @@ fr_WaterSlide:	equ $57
 ; GLP2 Save Format:
 LSD_Time: equ 0
 LSD_Rings: equ 4
-LSD_Exits: equ 6
-LSD_RedStar: equ 7
+LSD_RedStar: equ 6
+LSD_Exits: equ 7
 LSD_SizeofEntry: equ 8

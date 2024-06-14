@@ -41,6 +41,7 @@ GRing_Collect:	; Routine 4
 		st.b	(v_gfxbigring+1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
+		move.b	obSubtype(a0),obSubtype(a1)
 		move.l	a0,$3C(a1)
 		move.w	(v_player+obX).w,d0
 		cmp.w	obX(a0),d0	; has Sonic come from the left?

@@ -129,6 +129,24 @@ LevelSelect_StartPressed:
 	move.l	d0,(v_time).w	; clear time
 	move.l	d0,(v_redstar_collection).w
 	move.b	d0,(v_redstar_collection+4).w
+
+; load Red Star Rings
+	lea		(v_redstar_collection).w,a2
+	lea		(v_level_savedata).w,a1
+	adda.l	#LSD_RedStar,a1	; get RSR buffer
+	moveq	#4,d2
+		
+.looprings:
+	movea.l	a2,a3	; copy red star ring buffer address
+	adda.l	d2,a3	; get exact RSR address
+	btst	d2,(a1)	; test if ring was collected
+	beq.s	.skip	; if yes, skip check entirely
+	st.b	(a3)	; mark RSR as collected
+	
+.skip:
+	dbf		d2,.looprings
+	
+	move.b	d0,(v_lastlamp).w
 	move.b	#bgm_Fade,d0
 	bra.w	PlaySound_Special ; fade out music
 

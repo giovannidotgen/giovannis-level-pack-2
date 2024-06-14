@@ -68,6 +68,42 @@ Flash_EndLevel:	; Routine 4
 		rts
 		
 	.zero:
+; Fetch Save data
+		lea		(v_level_savedata).w,a1
+		moveq	#0,d0
+		move.w	(v_levselitem).w,d0
+		lsl.w	#3,d0	; save data size is 8
+		adda.l	d0,a1
+		
+; Time
+		adda.l	#4,a1
+
+; Rings
+		adda.l	#2,a1
+		
+; Red Star Rings
+		lea		(v_redstar_collection).w,a2
+		moveq	#4,d0
+		
+		
+	.looprings:
+		movea.l	a2,a3	; copy red star ring buffer address
+		adda.l	d0,a3	; get exact RSR address
+		btst	d0,(a1)	; test if ring was collected already
+		bne.s	.skip	; if yes, skip check entirely
+		tst.b	(a3)	; check if ring was collected
+		beq.s	.skip	; if not, skip this ring
+		bset	d0,(a1)	; mark RSR as collected
+		
+	.skip:
+		dbf		d0,.looprings
+		adda.l	#1,a1
+		
+; Exits
+		moveq	#0,d0
+		move.b	obSubtype(a0),d0	; get Exit ID
+		bset	d0,(a1)				; mark as found	
+			
 		move.b	#id_Sega,(v_gamemode).w
 		bra.w	DeleteObject
 

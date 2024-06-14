@@ -266,7 +266,6 @@ v_emldlist:	equ $FFFFFE58	; which individual emeralds you have (00 = no; 01 = ye
 v_oscillate:	equ $FFFFFE5E	; values which oscillate - for swinging platforms, et al ($42 bytes)
 
 v_paltracker:	= $FFFFFEA0	; GIO: palette tracker for your level. Feel free to change the RAM address. It is recommended to use something that is reset upon level beginning. (1 byte)
-v_redstar_collection:	equ $FFFFFEA2	; Red Star Ring collection variables (5 byte array)
 
 v_ani0_time:	equ $FFFFFEC0	; synchronised sprite animation 0 - time until next frame (used for synchronised animations)
 v_ani0_frame:	equ $FFFFFEC1	; synchronised sprite animation 0 - current frame
@@ -297,6 +296,8 @@ v_levseldelay:	equ $FFFFFF80	; level select - time until change when up/down is 
 v_levselitem:	equ $FFFFFF82	; level select - item selected (2 bytes)
 v_levselsound:	equ $FFFFFF84	; level select - sound selected (2 bytes)
 v_lamp_redstar:	equ $FFFFFF86	
+v_redstar_collection:	equ $FFFFFF8C	; Red Star Ring collection variables (5 byte array)
+
 v_scorecopy:	equ $FFFFFFC0	; score, duplicate (4 bytes)
 v_scorelife:	equ $FFFFFFC0	; points required for an extra life (4 bytes) (JP1 only)
 v_colladdr1:	equ $FFFFFFD0	; (4 bytes)
