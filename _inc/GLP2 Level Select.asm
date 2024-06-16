@@ -5,6 +5,12 @@
 ; Code based on Static Splash Screen for Sonic 1 by Hixatas and ProjectFM
 ; ================================================================
 
+Tilemap_RedStarRing: 	equ $FF1000
+Tilemap_GrayStarRing: 	equ $FF1008
+Tilemap_GrayRing:		equ $FF1010
+Tilemap_YellowRing:		equ $FF1018
+
+
 GLP2LevelSelect:
     move.b  #$E4,d0					; set music ID to "stop music"
     jsr     PlaySound_Special		; play ID
@@ -25,7 +31,7 @@ GLP2LevelSelect:
 ; Plane mappings (BG)
     lea     ($FF0000).l,a1				; load dump location
     lea     (Map_MainMenu).l,a0				; load compressed mappings address
-    move.w  #$4020,d0	             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
+    move.w  #$4020,d0	             		; prepare pattern index value to patch to mappings
     jsr     EniDec						; decompress and dump
     lea     ($FF0000).l,a1				; load dump location
     move.l  #$60000003,d0				; VRAM location
@@ -54,8 +60,23 @@ GLP2LevelSelect:
 	move.w	(a5)+,(a6)					; load the text
 	dbf	d1,.LoadText 				; repeat until done	
 
+	lea	(Art_StarRingHUD).l,a5				; fetch the text graphics
+	move.w	#$7F,d1					; amount of data to be loaded
+
+.LoadStarRings:
+	move.w	(a5)+,(a6)					; load the graphics
+	dbf	d1,.LoadStarRings 				; repeat until done	
+
+	locVRAM	$F5C0
+	lea	(Art_GrayRings).l,a5				; fetch the text graphics
+	move.w	#$3F,d1					; amount of data to be loaded
+
+.LoadGrayRings:
+	move.w	(a5)+,(a6)					; load the graphics
+	dbf	d1,.LoadGrayRings 				; repeat until done	
+
 ; Palette (is loaded by DynPaletteTransition)
-    lea 	Pal_Giovanni.l,a0        	; load this palette
+    lea 	Pal_GHZ.l,a0        		; load this palette
     lea 	(v_pal_dry_dup).l,a1        ; get beginning of palette line
     moveq  	#$3,d0						; number of entries / 4
  
@@ -82,11 +103,43 @@ GLP2LevelSelect:
     move.l  (a0)+,(a1)+
     dbf d0,.PalLoop3				; repeat until done
 
+    lea 	Pal_Sonic.l,a0        	; load this palette
+    lea 	(v_pal_dry_dup+$60).l,a1        ; get beginning of palette line
+    moveq  	#$3,d0						; number of entries / 4
+ 
+.PalLoop4:
+    move.l  (a0)+,(a1)+					; copy colours to buffer
+    move.l  (a0)+,(a1)+
+    dbf d0,.PalLoop4				; repeat until done
+
+; Prepare all tilemaps for screen assets
+    lea     (Tilemap_RedStarRing).l,a1				; load dump location
+    lea     (Eni_2x2_Sprite).l,a0				; load compressed mappings address
+    move.w  #$66BA,d0	             		; prepare pattern index value to patch to mappings
+    jsr     EniDec						; decompress and dump
+
+    lea     (Tilemap_GrayStarRing).l,a1				; load dump location
+    lea     (Eni_2x2_Sprite).l,a0				; load compressed mappings address
+    move.w  #$6BE,d0	             		; prepare pattern index value to patch to mappings
+    jsr     EniDec						; decompress and dump
+
+    lea     (Tilemap_GrayRing).l,a1				; load dump location
+    lea     (Eni_2x2_Sprite).l,a0				; load compressed mappings address
+    move.w  #($F5C0/$20),d0	             		; prepare pattern index value to patch to mappings
+    jsr     EniDec						; decompress and dump
+
+    lea     (Tilemap_YellowRing).l,a1				; load dump location
+    lea     (Eni_2x2_Sprite).l,a0				; load compressed mappings address
+    move.w  #($F640/$20),d0	             		; prepare pattern index value to patch to mappings
+    jsr     EniDec						; decompress and dump
+
+
+
 ; DynPaletteTransition variable initialization
 	move.b	#1,(v_paltime).w
 	move.b	#1,(v_paltimecur).w
 	move.b	#1,(v_palflags).w
-	move.b	#$2F,(v_awcount).w
+	move.b	#$3F,(v_awcount).w
 	move.l	#v_pal_dry_dup,(p_awtarget).w
 	move.l	#v_pal_dry,(p_awreplace).w
 
@@ -98,14 +151,14 @@ LevelSelect_InitRender:
 ; Fade in	
 LevelSelect_TextFadeIn:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
-    jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
+    jsr 	WaitForVBla					; wait for V-blank
 	bsr.w	DynPaletteTransition
 	tst.b	(v_palflags).w				; check if the palette is fully loaded
 	bne.s	LevelSelect_TextFadeIn
 	
 ; Main loop	
 LevelSelect_MainLoop:
-    move.b  #2,(v_vbla_routine).w			; set V-blank routine to run
+    move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   LevelSelect_StartPressed    ; if so, branch
@@ -133,6 +186,12 @@ LevelSelect_StartPressed:
 ; load Red Star Rings
 	lea		(v_redstar_collection).w,a2
 	lea		(v_level_savedata).w,a1
+	moveq	#0,d0
+	move.w	(v_levselitem).w,d0
+	add.w	d0,d0
+	adda.l	d0,a0
+	lsl.w	#2,d0	; save data size is 8
+	adda.l	d0,a1
 	adda.l	#LSD_RedStar,a1	; get RSR buffer
 	moveq	#4,d2
 		
@@ -190,9 +249,30 @@ LevelSelect_Headings:
 	lea	($C00000).l,a6
 	lea	(LevelSelect_Heading1).l,a1 ; where to fetch the lines from	
 	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	move.l	#$41040003,4(a6)
+	move.l	#$42080003,4(a6)
 	moveq	#12,d2		; number of characters to be rendered in a line -1
+	bsr.w	SingleLineRender
+	
+	; MOST RINGS
+	move.l	#$45080003,4(a6)
+	moveq	#10,d2		; number of characters to be rendered in a line -1
+	bsr.w	SingleLineRender
+
+	; BEST TIME
+	move.l	#$46080003,4(a6)
+	moveq	#9,d2		; number of characters to be rendered in a line -1
+	bsr.w	SingleLineRender	
+
+	; EXITS
+	move.l	#$47080003,4(a6)
+	moveq	#4,d2		; number of characters to be rendered in a line -1
+	bsr.w	SingleLineRender
+	
+	; RED STAR RINGS
+	move.l	#$472C0003,4(a6)
+	moveq	#13,d2		; number of characters to be rendered in a line -1
 	bra.w	SingleLineRender
+	
 
 ; ===============================================================
 
@@ -203,10 +283,73 @@ LevelSelect_LevelInfo:
 	mulu.w	#11,d1
 	adda.l	d1,a1	
 	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	move.l	#$41220003,4(a6)
+	move.l	#$42240003,4(a6)
 	moveq	#10,d2		; number of characters to be rendered in a line -1
-	bra.w	SingleLineRender
+	bsr.w	SingleLineRender
+	
+LevelSelect_RedStarRings:
+	lea		(v_level_savedata).w,a2
+	moveq	#0,d0
+	move.w	(v_levselitem).w,d0
+	add.w	d0,d0
+	adda.l	d0,a0
+	lsl.w	#2,d0	; save data size is 8
+	adda.l	d0,a2	
 
+	move.l	#$48340003,d4
+	moveq	#4,d3
+
+	
+.loop:
+	moveq	#1,d1
+	moveq	#1,d2
+	move.l	d4,d5
+	move.l	d3,d6
+	
+	; multiply by $40000
+	swap	d6
+	lsl.l	#2,d6
+	
+	add.l	d6,d5
+	move.l	d5,d0
+	lea		(Tilemap_RedStarRing).l,a1
+	btst	d3,LSD_RedStar(a2)
+	bne.s	.red
+	lea		(Tilemap_GrayStarRing).l,a1
+.red	
+	movem.l	d0-d6,-(sp)	
+	jsr		TilemapToVRAM
+	movem.l	(sp)+,d0-d6
+	dbf		d3,.loop
+	
+LevelSelect_Exits:
+	move.l	#$48080003,d4
+	moveq	#2,d3
+	
+.loop:
+	moveq	#1,d1
+	moveq	#1,d2
+	move.l	d4,d5
+	move.l	d3,d6
+	
+	; multiply by $40000
+	swap	d6
+	lsl.l	#2,d6
+	
+	add.l	d6,d5
+	move.l	d5,d0
+	lea		(Tilemap_YellowRing).l,a1
+	btst	d3,LSD_Exits(a2)
+	bne.s	.yellow
+	lea		(Tilemap_GrayRing).l,a1
+.yellow	
+	movem.l	d0-d6,-(sp)	
+	jsr		TilemapToVRAM
+	movem.l	(sp)+,d0-d6
+	dbf		d3,.loop
+	
+	rts
+	
 ; ===============================================================
 ; GLP2 Level Select assets
 ; ===============================================================
@@ -223,4 +366,8 @@ LevelSelect_LevelNames:
 
 LevelSelect_Heading1:
 	dc.b	"SELECT LEVEL:"
+	dc.b	"MOST RINGS:"
+	dc.b	"BEST TIME:"
+	dc.b	"EXITS"
+	dc.b	"RED STAR RINGS"
 	even

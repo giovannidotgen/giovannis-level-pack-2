@@ -8486,7 +8486,8 @@ Eni_JapNames:	incbin	"tilemaps\Hidden Japanese Credits.bin" ; Japanese credits (
 		even
 Nem_JapNames:	incbin	"artnem\Hidden Japanese Credits.bin"
 		even
-
+Eni_2x2_Sprite:	incbin	"tilemaps\2x2.bin"
+		even
 Map_Sonic:	include	"_maps\Sonic.asm"
 SonicDynPLC:	include	"_maps\Sonic - Dynamic Gfx Script.asm"
 
@@ -8764,6 +8765,8 @@ Nem_Hud:	incbin	"artnem\HUD.bin"	; HUD (rings, time, score)
 Nem_Lives:	incbin	"artnem\HUD - Life Counter Icon.bin"
 		even
 Nem_Ring:	incbin	"artnem\Rings.bin"
+		even
+Art_GrayRings:	incbin	"artunc\Gray Rings.bin"
 		even
 Art_RedStarRing:	incbin	"artunc\Red Star Ring.bin"
 		even		

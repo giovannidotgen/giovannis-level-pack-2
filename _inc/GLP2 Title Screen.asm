@@ -93,7 +93,7 @@ GLP2_PalLoop3:
     dbf d0,GLP2_PalLoop3				; repeat until done
 
 	moveq	#plcid_Main,d0
-	bsr.w	NewPLC
+	bsr.w	NewPLC		
 
 	move.b	#1,(v_paltime).w
 	move.b	#1,(v_paltimecur).w
