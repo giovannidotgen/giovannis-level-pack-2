@@ -271,7 +271,15 @@ LevelSelect_Headings:
 	; RED STAR RINGS
 	move.l	#$472C0003,4(a6)
 	moveq	#13,d2		; number of characters to be rendered in a line -1
-	bra.w	SingleLineRender
+	bsr.w	SingleLineRender
+	
+	move.l	#$46220003,4(a6)
+	move.w	#$A680+":"-$21,(a6)
+	
+	move.l	#$46280003,4(a6)
+	move.w	#$A680+":"-$21,(a6)
+
+	rts
 	
 
 ; ===============================================================
@@ -286,16 +294,72 @@ LevelSelect_LevelInfo:
 	move.l	#$42240003,4(a6)
 	moveq	#10,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
+
 	
-LevelSelect_RedStarRings:
-	lea		(v_level_savedata).w,a2
+	lea		(v_level_savedata).w,a3
 	moveq	#0,d0
 	move.w	(v_levselitem).w,d0
 	add.w	d0,d0
 	adda.l	d0,a0
 	lsl.w	#2,d0	; save data size is 8
-	adda.l	d0,a2	
+	adda.l	d0,a3	
 
+LevelSelect_Time:
+
+; Centiseconds
+	move.l	#$462A0003,4(a6)
+
+	movem.l	d0-d6,-(sp)
+	lea	(Hud_10).l,a2 			; get the number of digits
+	moveq	#1,d0             			; repeat X-1 times
+	moveq	#0,d1	
+	move.b	LSD_Time+3(a3),d1			; get value to render
+	lea		(HUD_CsTimesNTSC).l,a4
+	adda.l	d1,a4
+	move.b	(a4),d1						; convert to centiseconds
+	cmpi.l	#(9*$10000)+(59*$100)+59,LSD_Time(a3) ; is the time 9:59:59?
+	bne.w	.rendercenti	; if not, render as is
+	move.b	#99,d1			; force 99
+.rendercenti:	
+	move.w	#$A68F,d3					; get 0 from font
+	bsr.w	DecimalNumberRender
+	movem.l	(sp)+,d0-d6	
+	
+; Seconds
+	move.l	#$46240003,4(a6)
+
+	movem.l	d0-d6,-(sp)
+	lea	(Hud_10).l,a2 			; get the number of digits
+	moveq	#1,d0             			; repeat X-1 times
+	moveq	#0,d1	
+	move.b	LSD_Time+2(a3),d1			; get value to render
+	move.w	#$A68F,d3					; get 0 from font
+	bsr.w	DecimalNumberRender
+	movem.l	(sp)+,d0-d6		
+	
+; Minutes
+	move.l	#$46200003,4(a6)
+
+	move.w	#$A68F,d3					; get 0 from font
+	moveq	#0,d0
+	move.b	LSD_Time+1(a3),d0
+	add.w	d0,d3
+	move.w	d3,(a6)
+	
+LevelSelect_Rings:
+	move.l	#$45200003,4(a6)
+
+	movem.l	d0-d6,-(sp)
+	lea	(Hud_100).l,a2 			; get the number of digits
+	moveq	#2,d0             			; repeat X-1 times
+	moveq	#0,d1
+	move.w	LSD_Rings(a3),d1			; get value to render
+	move.w	#$A68F,d3					; get 0 from font
+	bsr.w	DecimalNumberRender
+	movem.l	(sp)+,d0-d6	
+
+
+LevelSelect_RedStarRings:
 	move.l	#$48340003,d4
 	moveq	#4,d3
 
@@ -313,7 +377,7 @@ LevelSelect_RedStarRings:
 	add.l	d6,d5
 	move.l	d5,d0
 	lea		(Tilemap_RedStarRing).l,a1
-	btst	d3,LSD_RedStar(a2)
+	btst	d3,LSD_RedStar(a3)
 	bne.s	.red
 	lea		(Tilemap_GrayStarRing).l,a1
 .red	
@@ -339,7 +403,7 @@ LevelSelect_Exits:
 	add.l	d6,d5
 	move.l	d5,d0
 	lea		(Tilemap_YellowRing).l,a1
-	btst	d3,LSD_Exits(a2)
+	btst	d3,LSD_Exits(a3)
 	bne.s	.yellow
 	lea		(Tilemap_GrayRing).l,a1
 .yellow	

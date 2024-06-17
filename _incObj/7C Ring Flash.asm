@@ -76,9 +76,32 @@ Flash_EndLevel:	; Routine 4
 		adda.l	d0,a1
 		
 ; Time
+		move.l	(v_time),d1
+		move.l	d1,d2
+		swap	d2
+		cmp.b	1(a1),d2	; test minutes
+		blt.s	Time_SaveRecord		; if lower, save
+		move.l	d1,d2
+		lsl.l	#8,d2
+		cmp.b	2(a1),d2	; test seconds
+		blt.s	Time_SaveRecord		; if lower, save
+		cmp.b	3(a1),d1	; test frames
+		bge.s	Time_AdvanceToNext	; if higher, advance to next
+		
+	Time_SaveRecord:
+		move.l	(v_time),(a1)		; copy time to save data
+	
+	Time_AdvanceToNext:
 		adda.l	#4,a1
 
 ; Rings
+		moveq	#0,d2
+		move.w	(v_rings),d2
+		cmp.w	(a1),d2		; test rings
+		blt.s	Rings_AdvanceToNext	; if not higher, advance to next
+		move.w	(v_rings),(a1)
+		
+	Rings_AdvanceToNext:	
 		adda.l	#2,a1
 		
 ; Red Star Rings

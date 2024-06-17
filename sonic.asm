@@ -338,6 +338,7 @@ GameInit:
 		bsr.w	VDPSetupGame
 		bsr.w	SoundDriverLoad
 		bsr.w	JoypadInit
+		bsr.w	SaveInit
 		move.b	#id_Sega,(v_gamemode).w ; set Game Mode to Sega Screen
 
 MainGameLoop:
@@ -923,6 +924,37 @@ JoypadInit:
 		startZ80
 		rts	
 ; End of function JoypadInit
+
+; ---------------------------------------------------------------------------
+; Subroutine to	initialize Save Data
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+
+SaveInit:
+		lea		(v_level_savedata).w,a0
+		lea		(Save_Default).l,a1
+		moveq	#1,d0
+		
+	.loop:
+		move.l	(a1),(a0)+
+		move.l	4(a1),(a0)+
+		dbf		d0,.loop
+		
+		rts
+		
+; End of function SaveInit	
+	
+; ---------------------------------------------------------------------------
+; Default Save Data
+; ---------------------------------------------------------------------------	
+	
+Save_Default:
+		dc.l	(9*$10000)+(59*$100)+59	; Best time
+		dc.w	0						; Most rings
+		dc.b	0						; Red Star Rings bitfield
+		dc.b	0						; Exits bitfield
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	read joypad input, and send it to the RAM
