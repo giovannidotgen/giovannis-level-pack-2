@@ -127,7 +127,7 @@ Flash_EndLevel:	; Routine 4
 		move.b	obSubtype(a0),d0	; get Exit ID
 		bset	d0,(a1)				; mark as found	
 			
-		move.b	#id_Sega,(v_gamemode).w
+		move.b	#id_LevelEnd,(v_gamemode).w
 		bra.w	DeleteObject
 
 Flash_LoadGFX:

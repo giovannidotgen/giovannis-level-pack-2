@@ -375,6 +375,8 @@ ptr_GM_GLP2Title: bra.w GLP2Title	; Giovanni's Level Pack 2 Title Screen
 
 ptr_GM_GLP2LevelSelect:	bra.w GLP2LevelSelect	; Giovanni's Level Pack 2 Level Select
 
+ptr_GM_GLP2LevelEnd:	bra.w GLP2LevelEnd		; GLP2 Level End Card
+
 		rts	
 ; ===========================================================================
 
@@ -675,7 +677,7 @@ VBla_04:
 
 VBla_06:
 		bsr.w	sub_106E
-		bsr.w	ProcessDPLC2
+		bsr.w	sub_1642		
 		rts	
 ; ===========================================================================
 
@@ -1258,7 +1260,6 @@ RunPLC:
 
 loc_160E:
 		andi.w	#$7FFF,d2
-		move.w	d2,(f_plc_execute).w
 		bsr.w	NemDec_BuildCodeTable
 		move.b	(a0)+,d5
 		asl.w	#8,d5
@@ -1272,6 +1273,7 @@ loc_160E:
 		move.l	d0,($FFFFF6EC).w
 		move.l	d5,($FFFFF6F0).w
 		move.l	d6,($FFFFF6F4).w
+		move.w	d2,(f_plc_execute).w		
 
 Rplc_Exit:
 		rts	
@@ -1390,6 +1392,8 @@ QuickPLC:
 		include "_inc\GLP2 Title Screen.asm"
 		
 		include "_inc\GLP2 Level Select.asm"
+		
+		include "_inc\GLP2 Level End Cards.asm"		
 
 Pal_TitleCyc:	incbin	"palette\Cycle - Title Screen Water.bin"
 Pal_GHZCyc:	incbin	"palette\Cycle - GHZ.bin"
@@ -3249,25 +3253,7 @@ SyncEnd:
 
 
 SignpostArtLoad:
-		tst.w	(v_debuguse).w	; is debug mode	being used?
-		bne.w	.exit		; if yes, branch
-		cmpi.b	#2,(v_act).w	; is act number 02 (act 3)?
-		beq.s	.exit		; if yes, branch
 
-		move.w	(v_screenposx).w,d0
-		move.w	(v_limitright2).w,d1
-		subi.w	#$100,d1
-		cmp.w	d1,d0		; has Sonic reached the	edge of	the level?
-		blt.s	.exit		; if not, branch
-		tst.b	(f_timecount).w
-		beq.s	.exit
-		cmp.w	(v_limitleft2).w,d1
-		beq.s	.exit
-		move.w	d1,(v_limitleft2).w ; move left boundary to current screen position
-		moveq	#plcid_Signpost,d0
-		bra.w	NewPLC		; load signpost	patterns
-
-	.exit:
 		rts	
 ; End of function SignpostArtLoad
 

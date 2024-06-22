@@ -153,7 +153,7 @@ GotThroughAct:
 		move.w	(v_rings).w,d0	; load number of rings
 		mulu.w	#10,d0		; multiply by 10
 		move.w	d0,(v_ringbonus).w ; set ring bonus
-		move.w	#bgm_GotThrough,d0
+		move.w	#bgm_ClearS3K,d0
 		jsr	(PlaySound_Special).l	; play "Sonic got through" music
 
 locret_ECEE:

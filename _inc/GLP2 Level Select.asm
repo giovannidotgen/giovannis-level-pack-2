@@ -188,9 +188,7 @@ LevelSelect_StartPressed:
 	lea		(v_level_savedata).w,a1
 	moveq	#0,d0
 	move.w	(v_levselitem).w,d0
-	add.w	d0,d0
-	adda.l	d0,a0
-	lsl.w	#2,d0	; save data size is 8
+	lsl.w	#3,d0	; save data size is 8
 	adda.l	d0,a1
 	adda.l	#LSD_RedStar,a1	; get RSR buffer
 	moveq	#4,d2
@@ -205,7 +203,7 @@ LevelSelect_StartPressed:
 .skip:
 	dbf		d2,.looprings
 	
-	move.b	d0,(v_lastlamp).w
+	clr.b	(v_lastlamp).w
 	move.b	#bgm_Fade,d0
 	bra.w	PlaySound_Special ; fade out music
 

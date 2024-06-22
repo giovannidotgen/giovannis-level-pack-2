@@ -295,30 +295,7 @@ DLE_MZx:	dc.w DLE_MZ1-DLE_MZx
 ; ===========================================================================
 
 DLE_MZ1:
-		moveq	#0,d0
-		move.b	(v_dle_routine).w,d0
-		move.w	off_6FB2(pc,d0.w),d0
-		jmp	off_6FB2(pc,d0.w)
-; ===========================================================================
-off_6FB2:	dc.w loc_6FBA-off_6FB2
-		dc.w loc_6FEA-off_6FB2
-		dc.w loc_702E-off_6FB2
-		dc.w loc_7050-off_6FB2
-; ===========================================================================
 
-loc_6FBA:
-		move.w	#$1D0,(v_limitbtm1).w
-		cmpi.w	#$700,(v_screenposx).w
-		bcs.s	locret_6FE8
-		move.w	#$220,(v_limitbtm1).w
-		cmpi.w	#$D00,(v_screenposx).w
-		bcs.s	locret_6FE8
-		move.w	#$340,(v_limitbtm1).w
-		cmpi.w	#$340,(v_screenposy).w
-		bcs.s	locret_6FE8
-		addq.b	#2,(v_dle_routine).w
-
-locret_6FE8:
 		rts	
 ; ===========================================================================
 
