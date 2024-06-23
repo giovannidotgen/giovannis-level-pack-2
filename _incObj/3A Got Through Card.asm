@@ -43,12 +43,12 @@ Got_Loop:
 		move.b	(a2)+,d0
 		cmpi.b	#6,d0
 		bne.s	loc_C5CA
-		add.b	(v_act).w,d0	; add act number to frame number
+		add.b	(v_exitfound).w,d0	; add exit ID to frame number
 
 	loc_C5CA:
 		move.b	d0,obFrame(a1)
 		move.l	#Map_Got,obMap(a1)
-		move.w	#$8580,obGfx(a1)
+		move.w	#($A800/$20),obGfx(a1)
 		move.b	#0,obRender(a1)
 		lea	$40(a1),a1
 		dbf	d1,Got_Loop	; repeat 6 times
@@ -99,43 +99,9 @@ Got_Display:
 ; ===========================================================================
 
 Got_TimeBonus:	; Routine 6
-		bsr.w	DisplaySprite
-		move.b	#1,(f_endactbonus).w ; set time/ring bonus update flag
-		moveq	#0,d0
-		tst.w	(v_timebonus).w	; is time bonus	= zero?
-		beq.s	Got_RingBonus	; if yes, branch
-		addi.w	#10,d0		; add 10 to score
-		subi.w	#10,(v_timebonus).w ; subtract 10 from time bonus
-
-Got_RingBonus:
-		tst.w	(v_ringbonus).w	; is ring bonus	= zero?
-		beq.s	Got_ChkBonus	; if yes, branch
-		addi.w	#10,d0		; add 10 to score
-		subi.w	#10,(v_ringbonus).w ; subtract 10 from ring bonus
-
-Got_ChkBonus:
-		tst.w	d0		; is there any bonus?
-		bne.s	Got_AddBonus	; if yes, branch
-		move.w	#sfx_Cash,d0
-		jsr	(PlaySound_Special).l	; play "ker-ching" sound
-		addq.b	#2,obRoutine(a0)
-		cmpi.w	#(id_SBZ<<8)+1,(v_zone).w
-		bne.s	Got_SetDelay
-		addq.b	#4,obRoutine(a0)
-
-Got_SetDelay:
-		move.w	#180,obTimeFrame(a0) ; set time delay to 3 seconds
-
-locret_C692:
+		bra.w	DisplaySprite
 		rts	
-; ===========================================================================
 
-Got_AddBonus:
-		move.b	(v_vbla_byte).w,d0
-		andi.b	#3,d0
-		bne.s	locret_C692
-		move.w	#sfx_Switch,d0
-		jmp	(PlaySound_Special).l	; play "blip" sound
 ; ===========================================================================
 
 Got_NextLevel:	; Routine $A
@@ -250,13 +216,13 @@ loc_C766:	; Routine $10
 		;    x-start,	x-main,	y-main,
 		;				routine, frame number
 
-Got_Config:	dc.w 4,		$124,	$BC			; "SONIC HAS"
+Got_Config:	dc.w $8,	$128,	$BC			; "SONIC HAS"
 		dc.b 				2,	0
 
-		dc.w -$120,	$120,	$D0			; "PASSED"
+		dc.w $248,	$128,	$D0			; "PASSED"
 		dc.b 				2,	1
 
-		dc.w $40C,	$14C,	$D6			; "ACT" 1/2/3
+		dc.w $410,	$160,	$CC			; "ACT" 1/2/3
 		dc.b 				2,	6
 
 		dc.w $520,	$120,	$EC			; score
@@ -268,5 +234,5 @@ Got_Config:	dc.w 4,		$124,	$BC			; "SONIC HAS"
 		dc.w $560,	$120,	$10C			; ring bonus
 		dc.b 				2,	4
 
-		dc.w $20C,	$14C,	$CC			; oval
+		dc.w $308,	$158,	$C8			; oval
 		dc.b 				2,	5
