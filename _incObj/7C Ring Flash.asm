@@ -82,10 +82,12 @@ Flash_EndLevel:	; Routine 4
 		swap	d2
 		cmp.b	1(a1),d2	; test minutes
 		blt.s	Time_SaveRecord		; if lower, save
+		bgt.s	Time_AdvanceToNext	; if higher, don't
 		move.l	d1,d2
-		lsl.l	#8,d2
+		ror.l	#8,d2
 		cmp.b	2(a1),d2	; test seconds
 		blt.s	Time_SaveRecord		; if lower, save
+		bgt.s	Time_AdvanceToNext	; if higher, don't		
 		cmp.b	3(a1),d1	; test frames
 		bge.s	Time_AdvanceToNext	; if higher, advance to next
 		

@@ -87,13 +87,53 @@ loc_C61A:
 		cmpi.b	#4,obFrame(a0)
 		bne.s	loc_C5FE
 		addq.b	#2,obRoutine(a0)
-		move.w	#180,obTimeFrame(a0) ; set time delay to 3 seconds
+		move.w	#240,obTimeFrame(a0) ; set time delay to 3 seconds
 
 Got_Wait:	; Routine 4, 8, $C
 		subq.w	#1,obTimeFrame(a0) ; subtract 1 from time delay
 		bne.s	Got_Display
 		addq.b	#2,obRoutine(a0)
 
+		moveq	#0,d6
+		
+		lea		(v_level_savedata).w,a3
+		moveq	#0,d0
+		move.w	(v_levselitem).w,d0
+		lsl.w	#3,d0	; save data size is 8
+		adda.l	d0,a3	
+		
+		move.l	LSD_Time(a3),d2
+		cmp.l	(v_time).w,d2
+		bne.s	.skiptime
+		
+		moveq	#-1,d6
+		jsr		FindFreeObj
+		bne.s	Got_Display
+		move.b	#id_Obj4F,(a1)
+		move.w	#$17A,obX(a1)
+		move.w	#$EA,obScreenY(a1)
+	
+	.skiptime:
+
+		moveq	#0,d2
+		move.w	LSD_Rings(a3),d2
+		cmp.w	(v_rings).w,d2
+		ble.s	.skiprings
+
+		moveq	#-1,d6		
+		jsr		FindNextFreeObj
+		bne.s	Got_Display
+		move.b	#id_Obj4F,(a1)
+		move.w	#$17A,obX(a1)
+		move.w	#$FC,obScreenY(a1)
+
+	.skiprings:
+		tst.b	d6
+		beq.s	Got_Display
+		
+		move.b	#sfx_Continue,d0
+		jsr		PlaySound_Special
+	
 Got_Display:
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -228,10 +268,10 @@ Got_Config:	dc.w $8,	$128,	$BC			; "SONIC HAS"
 		dc.w $520,	$120,	$EC			; score
 		dc.b 				2,	2
 
-		dc.w $540,	$120,	$FC			; time bonus
+		dc.w $540,	$120,	$FE			; time bonus
 		dc.b 				2,	3
 
-		dc.w $560,	$120,	$10C			; ring bonus
+		dc.w $560,	$120,	$110			; ring bonus
 		dc.b 				2,	4
 
 		dc.w $308,	$158,	$C8			; oval

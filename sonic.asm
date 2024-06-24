@@ -2783,9 +2783,6 @@ GM_Level:
 		tst.w	(f_demo).w	; is an ending sequence demo running?
 		bmi.s	Level_ClrRam	; if yes, branch
 		disable_ints
-		locVRAM	$B000
-		lea	(Nem_TitleCard).l,a0 ; load title card patterns
-		bsr.w	NemDec
 		enable_ints
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
@@ -2800,6 +2797,8 @@ GM_Level:
 loc_37FC:
 		moveq	#plcid_Main2,d0
 		bsr.w	QuickPLC	; load standard	patterns (without using extra PLC entries)
+		moveq	#plcid_Explode,d0
+		bsr.w	QuickPLC	; load explosion patterns		
 
 Level_ClrRam:
 		lea	(v_objspace).w,a1
@@ -3425,9 +3424,6 @@ loc_47D4:
 		move.w	#$8400+(vram_bg>>13),(a6) ; set background nametable address
 		move.w	#$9001,(a6)		; 64-cell hscroll size
 		bsr.w	ClearScreen
-		locVRAM	$B000
-		lea	(Nem_TitleCard).l,a0 ; load title card patterns
-		bsr.w	NemDec
 		jsr	(Hud_Base).l
 		clr.w	($FFFFC800).w
 		move.l	#$FFFFC800,($FFFFC8FC).w		
@@ -3792,9 +3788,6 @@ GM_Continue:
 		move.l	d0,(a1)+
 		dbf	d1,Cont_ClrObjRam ; clear object RAM
 
-		locVRAM	$B000
-		lea	(Nem_TitleCard).l,a0 ; load title card patterns
-		bsr.w	NemDec
 		locVRAM	$A000
 		lea	(Nem_ContSonic).l,a0 ; load Sonic patterns
 		bsr.w	NemDec
