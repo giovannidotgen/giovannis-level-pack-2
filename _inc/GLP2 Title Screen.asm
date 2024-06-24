@@ -5,10 +5,12 @@
 ; ================================================================
 
 GLP2Title:
-    move.b  #$E4,d0					; set music ID to "stop music"
+    move.b  #bgm_Stop,d0					; set music ID to "stop music"
     jsr     PlaySound_Special		; play ID
     jsr     PaletteFadeOut			; fade palettes out
     jsr     ClearScreen.w			; clear the plane mappings
+	clr.w	(v_bgscreenposy).w
+	clr.w	(v_bgscreenposx).w
 	lea		(vdp_control_port).l,a6
 	
 	; setup VDP
@@ -102,6 +104,9 @@ GLP2_PalLoop3:
 	move.l	#v_pal_dry_dup,(p_awtarget).w
 	move.l	#v_pal_dry,(p_awreplace).w
 	
+	move.b	#bgm_Menu,d0
+	jsr		PlaySound_Special
+	
 GLP2_TextFadeIn:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
@@ -116,11 +121,28 @@ GLP2_MainLoop:
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   GLP2_GotoTitle         	; if so, branch
+	bsr.s	GLP2_Camera
 	bra.s	GLP2_MainLoop
  
 GLP2_GotoTitle:
     move.b  #id_LevelSelect,(v_gamemode).w      	; set the screen mode to Title Screen
     rts									; return
+
+; ===============================================================
+GLP2_Camera:
+	add.w	#1,(v_bgscrposy_dup).w
+	moveq	#0,d0
+	move.w	(v_bgscrposy_dup).w,d0
+	lea		(v_hscrolltablebuffer+2).w,a1
+	move.w	#223,d1
+	neg.w	d0
+	
+.loop:
+	move.w	d0,(a1)
+	adda.l	#4,a1
+	dbf		d1,.loop
+	
+	rts
 
 ; ===============================================================
 ; GLP2 Splash Screen assets

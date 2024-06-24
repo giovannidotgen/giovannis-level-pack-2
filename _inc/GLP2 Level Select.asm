@@ -12,9 +12,11 @@ Tilemap_YellowRing:		equ $FF1018
 
 
 GLP2LevelSelect:
-    move.b  #$E4,d0					; set music ID to "stop music"
+    move.b  #bgm_Stop,d0					; set music ID to "stop music"
     jsr     PlaySound_Special		; play ID
     jsr     PaletteFadeOut			; fade palettes out
+	clr.w	(v_bgscreenposy).w
+	clr.w	(v_bgscreenposx).w	
     jsr     ClearScreen.w			; clear the plane mappings
 	lea		(vdp_control_port).l,a6
 	
@@ -39,10 +41,24 @@ GLP2LevelSelect:
     moveq   #31,d2						; height - 1
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM	
 	
+    lea     ($FF0000).l,a1				; load dump location
+    lea     (Tilemap_MenuBox).l,a0				; load compressed mappings address
+    move.w  #$2060,d0	             		; prepare pattern index value to patch to mappings
+    jsr     EniDec						; decompress and dump
+    lea     ($FF0000).l,a1				; load dump location
+    move.l  #$41040003,d0				; VRAM location
+    moveq   #36,d1						; width - 1
+    moveq   #24,d2						; height - 1
+    bsr.w   TilemapToVRAM	         	; flush mappings to VRAM			
+	
 ; Graphics (BG)	
     move.l  #$44000000,($C00004).l		; VRAM location
     lea     (Nem_MainMenu).l,a0			; load background art
     jsr     NemDec              		; run NemDec to decompress art for display
+	
+	move.l	#$4C000000,($C00004).l
+	lea		(Nem_MenuBox).l,a0
+	jsr		NemDec
 
 ; Graphics (Text)
 	lea		(vdp_data_port).l,a6
@@ -143,6 +159,9 @@ GLP2LevelSelect:
 	move.l	#v_pal_dry_dup,(p_awtarget).w
 	move.l	#v_pal_dry,(p_awreplace).w
 
+	move.b	#bgm_Menu,d0
+	jsr		PlaySound_Special
+
 ; Initialize Menu Structure
 LevelSelect_InitRender:
 	bsr.w	LevelSelect_Headings
@@ -163,6 +182,7 @@ LevelSelect_MainLoop:
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   LevelSelect_StartPressed    ; if so, branch
 	bsr.w	LevelSelect_Controls
+	bsr.w	GLP2_Camera
 	bra.s	LevelSelect_MainLoop
  
 ; Quit Menu
@@ -247,34 +267,34 @@ LevelSelect_Headings:
 	lea	($C00000).l,a6
 	lea	(LevelSelect_Heading1).l,a1 ; where to fetch the lines from	
 	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	move.l	#$42080003,4(a6)
+	move.l	#$428C0003,4(a6)
 	moveq	#12,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
 	
 	; MOST RINGS
-	move.l	#$45080003,4(a6)
+	move.l	#$46080003,4(a6)
 	moveq	#10,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
 
 	; BEST TIME
-	move.l	#$46080003,4(a6)
+	move.l	#$47080003,4(a6)
 	moveq	#9,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender	
 
 	; EXITS
-	move.l	#$47080003,4(a6)
+	move.l	#$4A080003,4(a6)
 	moveq	#4,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
 	
 	; RED STAR RINGS
-	move.l	#$472C0003,4(a6)
+	move.l	#$4A2C0003,4(a6)
 	moveq	#13,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
 	
-	move.l	#$46220003,4(a6)
+	move.l	#$47220003,4(a6)
 	move.w	#$A680+":"-$21,(a6)
 	
-	move.l	#$46280003,4(a6)
+	move.l	#$47280003,4(a6)
 	move.w	#$A680+":"-$21,(a6)
 
 	rts
@@ -289,7 +309,7 @@ LevelSelect_LevelInfo:
 	mulu.w	#11,d1
 	adda.l	d1,a1	
 	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	move.l	#$42240003,4(a6)
+	move.l	#$42A80003,4(a6)
 	moveq	#10,d2		; number of characters to be rendered in a line -1
 	bsr.w	SingleLineRender
 
@@ -305,7 +325,7 @@ LevelSelect_LevelInfo:
 LevelSelect_Time:
 
 ; Centiseconds
-	move.l	#$462A0003,4(a6)
+	move.l	#$472A0003,4(a6)
 
 	movem.l	d0-d6,-(sp)
 	lea	(Hud_10).l,a2 			; get the number of digits
@@ -324,7 +344,7 @@ LevelSelect_Time:
 	movem.l	(sp)+,d0-d6	
 	
 ; Seconds
-	move.l	#$46240003,4(a6)
+	move.l	#$47240003,4(a6)
 
 	movem.l	d0-d6,-(sp)
 	lea	(Hud_10).l,a2 			; get the number of digits
@@ -336,7 +356,7 @@ LevelSelect_Time:
 	movem.l	(sp)+,d0-d6		
 	
 ; Minutes
-	move.l	#$46200003,4(a6)
+	move.l	#$47200003,4(a6)
 
 	move.w	#$A68F,d3					; get 0 from font
 	moveq	#0,d0
@@ -345,7 +365,7 @@ LevelSelect_Time:
 	move.w	d3,(a6)
 	
 LevelSelect_Rings:
-	move.l	#$45200003,4(a6)
+	move.l	#$46200003,4(a6)
 
 	movem.l	d0-d6,-(sp)
 	lea	(Hud_100).l,a2 			; get the number of digits
@@ -358,7 +378,7 @@ LevelSelect_Rings:
 
 
 LevelSelect_RedStarRings:
-	move.l	#$48340003,d4
+	move.l	#$4B340003,d4
 	moveq	#4,d3
 
 	
@@ -385,7 +405,7 @@ LevelSelect_RedStarRings:
 	dbf		d3,.loop
 	
 LevelSelect_Exits:
-	move.l	#$48080003,d4
+	move.l	#$4B080003,d4
 	moveq	#2,d3
 	
 .loop:

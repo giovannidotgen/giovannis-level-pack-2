@@ -5,9 +5,12 @@
 ; ================================================================
 
 GLP2LevelEnd:
-    move.b  #$E4,d0					; set music ID to "stop music"
+    move.b  #bgm_Stop,d0					; set music ID to "stop music"
     jsr     PlaySound_Special		; play ID
     jsr     PaletteFadeOut			; fade palettes out
+	clr.w	(v_bgscreenposy).w
+	clr.w	(v_bgscreenposx).w		
+	
 	
 	lea	(v_objspace).w,a1
 	moveq	#0,d0
@@ -119,6 +122,7 @@ GLP2LevelEnd_MainLoop:
 	jsr		ExecuteObjects		
 	jsr		(BuildSprites).l	
 	jsr		RunPLC	
+	bsr.w	GLP2_Camera
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   .GotoTitle         	; if so, branch
 	bra.s	GLP2LevelEnd_MainLoop

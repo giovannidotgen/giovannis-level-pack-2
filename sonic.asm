@@ -8722,6 +8722,10 @@ Nem_GLP2: incbin "artnem\GLP2 Title.bin"
 	even
 Nem_MainMenu:	incbin "artnem\Main Menu.bin"
 	even
+Nem_MenuBox:	incbin "artnem\A menu box with a Shadow.bin"
+	even
+Tilemap_MenuBox:	incbin "tilemaps\Main Menu Box.bin"
+	even
 Nem_TitleCard:	incbin	"artnem\Title Cards.bin"
 		even
 Nem_Hud:	incbin	"artnem\HUD.bin"	; HUD (rings, time, score)

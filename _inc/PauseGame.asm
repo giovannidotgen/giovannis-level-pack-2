@@ -19,20 +19,12 @@ Pause_StopGame:
 Pause_Loop:
 		move.b	#$10,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		tst.b	(f_slomocheat).w ; is slow-motion cheat on?
-		beq.s	Pause_ChkStart	; if not, branch
 		btst	#bitA,(v_jpadpress1).w ; is button A pressed?
-		beq.s	Pause_ChkBC	; if not, branch
-		move.b	#id_Title,(v_gamemode).w ; set game mode to 4 (title screen)
+		beq.s	Pause_ChkStart	; if not, branch
+		move.b	#id_LevelSelect,(v_gamemode).w ; set game mode to level select
 		nop	
 		bra.s	Pause_EndMusic
 ; ===========================================================================
-
-Pause_ChkBC:
-		btst	#bitB,(v_jpadhold1).w ; is button B pressed?
-		bne.s	Pause_SlowMo	; if yes, branch
-		btst	#bitC,(v_jpadpress1).w ; is button C pressed?
-		bne.s	Pause_SlowMo	; if yes, branch
 
 Pause_ChkStart:
 		btst	#bitStart,(v_jpadpress1).w ; is Start button pressed?
