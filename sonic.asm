@@ -1425,188 +1425,182 @@ Pal_SBZCyc10:	incbin	"palette\Cycle - SBZ 10.bin"
 
 
 PaletteFadeIn:
-		move.w	#$003F,(v_pfade_start).w ; set start position = 0; size = $40
+		move.w	#$3F,($FFFFF626).w
 
-PalFadeIn_Alt:				; start position and size are already set
+PalFadeIn_Alt:
 		moveq	#0,d0
-		lea	(v_pal_dry).w,a0
-		move.b	(v_pfade_start).w,d0
+		lea	($FFFFFB00).w,a0
+		move.b	($FFFFF626).w,d0
 		adda.w	d0,a0
-		moveq	#cBlack,d1
-		move.b	(v_pfade_size).w,d0
+		moveq	#0,d1
+		move.b	($FFFFF627).w,d0
 
-	.fill:
+Pal_ToBlack:
 		move.w	d1,(a0)+
-		dbf	d0,.fill 	; fill palette with black
+		dbf	d0,Pal_ToBlack	; fill pallet with $000	(black)
+		moveq	#$0E,d4					; MJ: prepare maximum colour check
+		moveq	#$00,d6					; MJ: clear d6
 
-		move.w	#$15,d4
-
-	.mainloop:
-		move.b	#$12,(v_vbla_routine).w
-		bsr.w	WaitForVBla
-		bsr.s	FadeIn_FromBlack
+loc_1DCE:
 		bsr.w	RunPLC
-		dbf	d4,.mainloop
+		move.b	#$12,($FFFFF62A).w
+		bsr.w	WaitForVBla
+		bchg	#$00,d6					; MJ: change delay counter
+		beq	loc_1DCE				; MJ: if null, delay a frame
+		bsr.s	Pal_FadeIn
+		subq.b	#$02,d4					; MJ: decrease colour check
+		bne	loc_1DCE				; MJ: if it has not reached null, branch
+		move.b	#$12,($FFFFF62A).w			; MJ: wait for V-blank again (so colours transfer)
+		bra	WaitForVBla				; MJ: ''
+
+; End of function Pal_FadeTo
+
+; ---------------------------------------------------------------------------
+; Pallet fade-in subroutine
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+
+Pal_FadeIn:				; XREF: Pal_FadeTo
+		moveq	#0,d0
+		lea	($FFFFFB00).w,a0
+		lea	($FFFFFB80).w,a1
+		move.b	($FFFFF626).w,d0
+		adda.w	d0,a0
+		adda.w	d0,a1
+		move.b	($FFFFF627).w,d0
+
+loc_1DFA:
+		bsr.s	Pal_AddColor
+		dbf	d0,loc_1DFA
+		cmpi.b	#1,($FFFFFE10).w
+		bne.s	locret_1E24
+		moveq	#0,d0
+		lea	($FFFFFA80).w,a0
+		lea	($FFFFFA00).w,a1
+		move.b	($FFFFF626).w,d0
+		adda.w	d0,a0
+		adda.w	d0,a1
+		move.b	($FFFFF627).w,d0
+
+loc_1E1E:
+		bsr.s	Pal_AddColor
+		dbf	d0,loc_1E1E
+
+locret_1E24:
 		rts	
-; End of function PaletteFadeIn
+; End of function Pal_FadeIn
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-FadeIn_FromBlack:
-		moveq	#0,d0
-		lea	(v_pal_dry).w,a0
-		lea	(v_pal_dry_dup).w,a1
-		move.b	(v_pfade_start).w,d0
-		adda.w	d0,a0
-		adda.w	d0,a1
-		move.b	(v_pfade_size).w,d0
+Pal_AddColor:				; XREF: Pal_FadeIn
+		move.b	(a1),d5					; MJ: load blue
+		move.w	(a1)+,d1				; MJ: load green and red
+		move.b	d1,d2					; MJ: load red
+		lsr.b	#$04,d1					; MJ: get only green
+		andi.b	#$0E,d2					; MJ: get only red
+		move.w	(a0),d3					; MJ: load current colour in buffer
+		cmp.b	d5,d4					; MJ: is it time for blue to fade?
+		bhi	FCI_NoBlue				; MJ: if not, branch
+		addi.w	#$0200,d3				; MJ: increase blue
 
-	.addcolour:
-		bsr.s	FadeIn_AddColour ; increase colour
-		dbf	d0,.addcolour	; repeat for size of palette
+FCI_NoBlue:
+		cmp.b	d1,d4					; MJ: is it time for green to fade?
+		bhi	FCI_NoGreen				; MJ: if not, branch
+		addi.b	#$20,d3					; MJ: increase green
 
-		cmpi.b	#id_LZ,(v_zone).w	; is level Labyrinth?
-		bne.s	.exit		; if not, branch
+FCI_NoGreen:
+		cmp.b	d2,d4					; MJ: is it time for red to fade?
+		bhi	FCI_NoRed				; MJ: if not, branch
+		addq.b	#$02,d3					; MJ: increase red
 
-		moveq	#0,d0
-		lea	(v_pal_water).w,a0
-		lea	(v_pal_water_dup).w,a1
-		move.b	(v_pfade_start).w,d0
-		adda.w	d0,a0
-		adda.w	d0,a1
-		move.b	(v_pfade_size).w,d0
+FCI_NoRed:
+		move.w	d3,(a0)+				; MJ: save colour
+		rts						; MJ: return
 
-	.addcolour2:
-		bsr.s	FadeIn_AddColour ; increase colour again
-		dbf	d0,.addcolour2 ; repeat
-
-.exit:
-		rts	
-; End of function FadeIn_FromBlack
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-FadeIn_AddColour:
-.addblue:
-		move.w	(a1)+,d2
-		move.w	(a0),d3
-		cmp.w	d2,d3		; is colour already at threshold level?
-		beq.s	.next		; if yes, branch
-		move.w	d3,d1
-		addi.w	#$200,d1	; increase blue	value
-		cmp.w	d2,d1		; has blue reached threshold level?
-		bhi.s	.addgreen	; if yes, branch
-		move.w	d1,(a0)+	; update palette
-		rts	
-; ===========================================================================
-
-.addgreen:
-		move.w	d3,d1
-		addi.w	#$20,d1		; increase green value
-		cmp.w	d2,d1
-		bhi.s	.addred
-		move.w	d1,(a0)+	; update palette
-		rts	
-; ===========================================================================
-
-.addred:
-		addq.w	#2,(a0)+	; increase red value
-		rts	
-; ===========================================================================
-
-.next:
-		addq.w	#2,a0		; next colour
-		rts	
-; End of function FadeIn_AddColour
-
-
-; ---------------------------------------------------------------------------
-; Subroutine to fade out to black
-; ---------------------------------------------------------------------------
+; End of function Pal_AddColor
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
 PaletteFadeOut:
-		move.w	#$003F,(v_pfade_start).w ; start position = 0; size = $40
-		move.w	#$15,d4
+		move.w	#$3F,($FFFFF626).w
+		moveq	#$07,d4					; MJ: set repeat times
+		moveq	#$00,d6					; MJ: clear d6
 
-	.mainloop:
-		move.b	#$12,(v_vbla_routine).w
-		bsr.w	WaitForVBla
-		bsr.s	FadeOut_ToBlack
+loc_1E5C:
 		bsr.w	RunPLC
-		dbf	d4,.mainloop
+		move.b	#$12,($FFFFF62A).w
+		bsr.w	WaitForVBla
+		bchg	#$00,d6					; MJ: change delay counter
+		beq	loc_1E5C				; MJ: if null, delay a frame
+		bsr.s	FadeOut_ToBlack
+		dbf	d4,loc_1E5C
 		rts	
-; End of function PaletteFadeOut
+; End of function Pal_FadeFrom
+
+; ---------------------------------------------------------------------------
+; Pallet fade-out subroutine
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+
+FadeOut_ToBlack:				; XREF: Pal_FadeFrom
+		moveq	#0,d0
+		lea	($FFFFFB00).w,a0
+		move.b	($FFFFF626).w,d0
+		adda.w	d0,a0
+		move.b	($FFFFF627).w,d0
+
+loc_1E82:
+		bsr.s	Pal_DecColor
+		dbf	d0,loc_1E82
+
+		moveq	#0,d0
+		lea	($FFFFFA80).w,a0
+		move.b	($FFFFF626).w,d0
+		adda.w	d0,a0
+		move.b	($FFFFF627).w,d0
+
+loc_1E98:
+		bsr.s	Pal_DecColor
+		dbf	d0,loc_1E98
+		rts	
+; End of function Pal_FadeOut
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 
-FadeOut_ToBlack:
-		moveq	#0,d0
-		lea	(v_pal_dry).w,a0
-		move.b	(v_pfade_start).w,d0
-		adda.w	d0,a0
-		move.b	(v_pfade_size).w,d0
+Pal_DecColor:				; XREF: Pal_FadeOut
+		move.w	(a0),d5					; MJ: load colour
+		move.w	d5,d1					; MJ: copy to d1
+		move.b	d1,d2					; MJ: load green and red
+		move.b	d1,d3					; MJ: load red
+		andi.w	#$0E00,d1				; MJ: get only blue
+		beq	FCO_NoBlue				; MJ: if blue is finished, branch
+		subi.w	#$0200,d5				; MJ: decrease blue
 
-	.decolour:
-		bsr.s	FadeOut_DecColour ; decrease colour
-		dbf	d0,.decolour	; repeat for size of palette
+FCO_NoBlue:
+		andi.w	#$00E0,d2				; MJ: get only green (needs to be word)
+		beq	FCO_NoGreen				; MJ: if green is finished, branch
+		subi.b	#$20,d5					; MJ: decrease green
 
-		moveq	#0,d0
-		lea	(v_pal_water).w,a0
-		move.b	(v_pfade_start).w,d0
-		adda.w	d0,a0
-		move.b	(v_pfade_size).w,d0
+FCO_NoGreen:
+		andi.b	#$0E,d3					; MJ: get only red
+		beq	FCO_NoRed				; MJ: if red is finished, branch
+		subq.b	#$02,d5					; MJ: decrease red
 
-	.decolour2:
-		bsr.s	FadeOut_DecColour
-		dbf	d0,.decolour2
-		rts	
-; End of function FadeOut_ToBlack
+FCO_NoRed:
+		move.w	d5,(a0)+				; MJ: save new colour
+		rts						; MJ: return
 
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-FadeOut_DecColour:
-.dered:
-		move.w	(a0),d2
-		beq.s	.next
-		move.w	d2,d1
-		andi.w	#$E,d1
-		beq.s	.degreen
-		subq.w	#2,(a0)+	; decrease red value
-		rts	
-; ===========================================================================
-
-.degreen:
-		move.w	d2,d1
-		andi.w	#$E0,d1
-		beq.s	.deblue
-		subi.w	#$20,(a0)+	; decrease green value
-		rts	
-; ===========================================================================
-
-.deblue:
-		move.w	d2,d1
-		andi.w	#$E00,d1
-		beq.s	.next
-		subi.w	#$200,(a0)+	; decrease blue	value
-		rts	
-; ===========================================================================
-
-.next:
-		addq.w	#2,a0
-		rts	
-; End of function FadeOut_DecColour
+; End of function Pal_DecColor
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	fade in from white (Special Stage)
@@ -2974,6 +2968,7 @@ Level_ChkWater:
 Level_LoadObj:
 		jsr	(ObjPosLoad).l
 		move.b	#0,(Rings_manager_routine).w
+		move.b	#1,(Level_started_flag).w	; render rings		
 		jsr	(RingsManager).l		
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
@@ -3044,21 +3039,8 @@ Level_Delay:
 
 		move.w	#$202F,(v_pfade_start).w ; fade in 2nd, 3rd & 4th palette lines
 		bsr.w	PalFadeIn_Alt
-		tst.w	(f_demo).w	; is an ending sequence demo running?
-		bmi.s	Level_ClrCardArt ; if yes, branch
-		addq.b	#2,(v_objspace+$80+obRoutine).w ; make title card move
-		addq.b	#4,(v_objspace+$C0+obRoutine).w
-		addq.b	#4,(v_objspace+$100+obRoutine).w
-		addq.b	#4,(v_objspace+$140+obRoutine).w
-		bra.s	Level_StartGame
-; ===========================================================================
-
-Level_ClrCardArt:
-		moveq	#plcid_Explode,d0
-		jsr	(AddPLC).l	; load explosion gfx
 
 Level_StartGame:
-		move.b	#1,(Level_started_flag).w	; render rings
 		bclr	#7,(v_gamemode).w ; subtract $80 from mode to end pre-level stuff
 
 ; ---------------------------------------------------------------------------
