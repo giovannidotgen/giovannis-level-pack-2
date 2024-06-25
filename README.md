@@ -1,6 +1,6 @@
 # Sonic 1 - Magnified Engine
 
-An overhauled version of Sonic the Hedgehog for the SEGA Mega Drive/Genesis, designed specifically for the creation of Sonic Magnified.
+An overhauled version of Sonic the Hedgehog for the SEGA Mega Drive/Genesis, initially conceived for the creation of a so-called "Sonic Magnified". It is now in use for "Giovanni's Level Pack 2", and will be discontinued in favor of the SCE remake of Sonic 1.
 
 # Technical Specifications
 
@@ -16,11 +16,6 @@ An overhauled version of Sonic the Hedgehog for the SEGA Mega Drive/Genesis, des
 - Spin Dash, from Sonic 2
 - Super Peel-Out, from Sonic CD
 - Drop Dash, from Sonic Mania
-- Spring Dash, from Sonic Magnified (2022 cancellation build)
-
-## Nice-to-haves
-
-- Layout manager to load levels in a format like that of Sonic 3's
 
 See: http://info.sonicretro.org/Disassemblies
 
