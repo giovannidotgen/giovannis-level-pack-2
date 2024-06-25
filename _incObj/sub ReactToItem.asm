@@ -147,13 +147,6 @@ React_Monitor:
 		subi.w	#$10,d0
 		cmp.w	obY(a1),d0
 		bcs.s	.donothing
-		neg.w	obVelY(a0)	; reverse Sonic's vertical speed
-		move.w	#-$180,obVelY(a1)
-		tst.b	ob2ndRout(a1)
-		bne.s	.donothing
-		addq.b	#4,ob2ndRout(a1) ; advance the monitor's routine counter
-		rts	
-; ===========================================================================
 
 .movingdown:
 		cmpi.b	#id_DropDash,obAnim(a0) ; is Sonic charging a Drop Dash?

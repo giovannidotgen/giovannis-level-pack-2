@@ -116,14 +116,11 @@ loc_E0:
 		dc.l ErrorTrap
 	endc
 Console:	dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
-Date:		dc.b "(C)SEGA 1991.APR" ; Copyright holder and release date (generally year)
-Title_Local:	dc.b "SONIC THE               HEDGEHOG                " ; Domestic name
-Title_Int:	dc.b "SONIC THE               HEDGEHOG                " ; International name
-Serial:		if Revision=0
-		dc.b "GM 00001009-00"   ; Serial/version number (Rev 0)
-		else
-			dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
-		endc
+Date:		dc.b "DOTGENSTUDIOS.24" ; Copyright holder and release date (generally year)
+Title_Local:	dc.b "GIOVANNI'S LEVEL PACK 2 - v0.1.1 FOR PLAYTESTERS" ; Domestic name
+Title_Int:	dc.b "GIOVANNI'S LEVEL PACK 2 - v0.1.1 FOR PLAYTESTERS" ; International name
+Serial:		
+		dc.b "DGS-GLP2-V011P"   ; Serial/version number        
 Checksum: dc.w $0
 		dc.b "J               " ; I/O support
 RomStartLoc:	dc.l StartOfRom		; Start address of ROM
@@ -137,7 +134,7 @@ SRAMSupport:	if EnableSRAM=1
 		endc
 		dc.l $20202020		; SRAM start ($200001)
 		dc.l $20202020		; SRAM end ($20xxxx)
-Notes:		dc.b "                                                    " ; Notes (unused, anything can be put in this space, but it has to be 52 bytes.)
+Notes:		dc.b "IF THIS GOT LEAKED LIKE THIS, THE LEAKER'S A DUMBASS" ; Notes (unused, anything can be put in this space, but it has to be 52 bytes.)
 Region:		dc.b "JUE             " ; Region (Country code)
 EndOfHeader:
 

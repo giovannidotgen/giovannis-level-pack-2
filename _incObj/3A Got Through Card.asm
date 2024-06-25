@@ -103,6 +103,8 @@ Got_Wait:	; Routine 4, 8, $C
 		adda.l	d0,a3	
 		
 		move.l	LSD_Time(a3),d2
+		cmpi.l	#(9*$10000)+(59*$100)+59,(v_time).w
+		beq.s	.skiptime
 		cmp.l	(v_time).w,d2
 		bne.s	.skiptime
 		
@@ -117,8 +119,10 @@ Got_Wait:	; Routine 4, 8, $C
 
 		moveq	#0,d2
 		move.w	LSD_Rings(a3),d2
+		tst.w	(v_rings).w
+		beq.s	.skiprings
 		cmp.w	(v_rings).w,d2
-		ble.s	.skiprings
+		bne.s	.skiprings
 
 		moveq	#-1,d6		
 		jsr		FindNextFreeObj
@@ -129,18 +133,24 @@ Got_Wait:	; Routine 4, 8, $C
 
 	.skiprings:
 		tst.b	d6
-		beq.s	Got_Display
-		
+		beq.s	Got_ToMenu
+	
+		move.w	#420,obTimeFrame(a0)	
 		move.b	#sfx_Continue,d0
 		jsr		PlaySound_Special
 	
 Got_Display:
 		bra.w	DisplaySprite
+		
+Got_ToMenu:
+		move.b	#id_LevelSelect,(v_gamemode).w
+		bra.s	Got_Display2		
 ; ===========================================================================
 
 Got_TimeBonus:	; Routine 6
-		bra.w	DisplaySprite
-		rts	
+		subq.w	#1,obTimeFrame(a0) ; subtract 1 from time delay
+		bne.w	DisplaySprite
+		bra.s	Got_ToMenu
 
 ; ===========================================================================
 

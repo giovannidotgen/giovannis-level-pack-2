@@ -89,8 +89,8 @@ Jun_Action:	; Routine 2
 		bsr.w	Jun_ChgPos
 		add.w	d2,obX(a1)
 		add.w	d3,obY(a1)
-		asr	obX(a1)
-		asr	obY(a1)
+		lsr.w	#1,obX(a1)
+		lsr.w	#1,obY(a1)
 
 Jun_Display:	; Routine 4
 		bra.w	RememberState

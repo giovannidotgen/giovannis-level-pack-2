@@ -124,6 +124,8 @@ GLP2LevelEnd_MainLoop:
 	jsr		(BuildSprites).l	
 	jsr		RunPLC	
 	bsr.w	GLP2_Camera
+	cmpi.b	#id_LevelEnd,(v_gamemode).w
+	bne.s	.GotoTitle
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   .GotoTitle         	; if so, branch
 	bra.s	GLP2LevelEnd_MainLoop
