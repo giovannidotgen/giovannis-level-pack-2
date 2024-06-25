@@ -1,0 +1,61 @@
+Operating system: Microsoft Windows NT 6.2.9200.0
+Opening INI file "C:\GitHub\s1magnified\SonPLN.ini"...
+Game type is S1.
+Loading Main Menu Box...
+Loading plane mappings from file "tilemaps/Main Menu Box.bin", using compression Enigma...
+Loading palette file "palette/Sonic 2 Text used in Splash Screen.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading 8x8 tiles from file "artnem/A menu box with a shadow.bin", using compression Nemesis...
+Load completed.
+Opening INI file "C:\GitHub\s1magnified\SonPLN.ini"...
+Game type is S1.
+Loading Title Screen...
+Loading dummy tile data.
+Loading palette file "palette/Title Screen.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading 8x8 tiles from file "artnem/Title Screen Foreground.bin", using compression Nemesis...
+Loading plane mappings from file "tilemaps/Title Screen.bin", using compression Enigma...
+Load completed.
+Loading Title Screen...
+Loading dummy tile data.
+Loading palette file "palette/Title Screen.bin"...
+Source: 0 Destination: 0 Length: 16
+Loading 8x8 tiles from file "artnem/Title Screen Foreground.bin", using compression Nemesis...
+Loading plane mappings from file "tilemaps/Title Screen.bin", using compression Enigma...
+Load completed.
+System.ArgumentOutOfRangeException: '-7' non è un valore valido per 'Value'. 'Value' deve essere compreso tra 'minimum' e 'maximum'.
+Nome parametro: Value
+   in System.Windows.Forms.ScrollBar.set_Value(Int32 value)
+   in SonicRetro.SonLVL.SonPLN.ScrollingPanel.set_HScrollValue(Int32 value) in D:\Programs\SonLVL\SonPLN\ScrollingPanel.cs:riga 99
+   in SonicRetro.SonLVL.SonPLN.MainForm.foregroundPanel_KeyDown(Object sender, KeyEventArgs e) in D:\Programs\SonLVL\SonPLN\MainForm.cs:riga 1038
+   in System.Windows.Forms.KeyEventHandler.Invoke(Object sender, KeyEventArgs e)
+   in SonicRetro.SonLVL.SonPLN.ScrollingPanel.panel_KeyDown(Object sender, KeyEventArgs e) in D:\Programs\SonLVL\SonPLN\ScrollingPanel.cs:riga 130
+   in System.Windows.Forms.Control.OnKeyDown(KeyEventArgs e)
+   in System.Windows.Forms.Control.ProcessKeyEventArgs(Message& m)
+   in System.Windows.Forms.Control.ProcessKeyMessage(Message& m)
+   in System.Windows.Forms.Control.WmKeyChar(Message& m)
+   in System.Windows.Forms.Control.WndProc(Message& m)
+   in System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   in System.Windows.Forms.ContainerControl.WndProc(Message& m)
+   in System.Windows.Forms.UserControl.WndProc(Message& m)
+   in System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   in System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   in System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+System.ArgumentOutOfRangeException: '-7' non è un valore valido per 'Value'. 'Value' deve essere compreso tra 'minimum' e 'maximum'.
+Nome parametro: Value
+   in System.Windows.Forms.ScrollBar.set_Value(Int32 value)
+   in SonicRetro.SonLVL.SonPLN.ScrollingPanel.set_VScrollValue(Int32 value) in D:\Programs\SonLVL\SonPLN\ScrollingPanel.cs:riga 63
+   in SonicRetro.SonLVL.SonPLN.MainForm.foregroundPanel_KeyDown(Object sender, KeyEventArgs e) in D:\Programs\SonLVL\SonPLN\MainForm.cs:riga 1038
+   in System.Windows.Forms.KeyEventHandler.Invoke(Object sender, KeyEventArgs e)
+   in SonicRetro.SonLVL.SonPLN.ScrollingPanel.panel_KeyDown(Object sender, KeyEventArgs e) in D:\Programs\SonLVL\SonPLN\ScrollingPanel.cs:riga 130
+   in System.Windows.Forms.Control.OnKeyDown(KeyEventArgs e)
+   in System.Windows.Forms.Control.ProcessKeyEventArgs(Message& m)
+   in System.Windows.Forms.Control.ProcessKeyMessage(Message& m)
+   in System.Windows.Forms.Control.WmKeyChar(Message& m)
+   in System.Windows.Forms.Control.WndProc(Message& m)
+   in System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   in System.Windows.Forms.ContainerControl.WndProc(Message& m)
+   in System.Windows.Forms.UserControl.WndProc(Message& m)
+   in System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   in System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   in System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)

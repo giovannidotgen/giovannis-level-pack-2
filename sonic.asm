@@ -6632,6 +6632,9 @@ Map_LWall:	include	"_maps\Wall of Lava.asm"
 Map_Moto:	include	"_maps\Moto Bug.asm"
 		include	"_incObj\4F.asm"
 
+Map_PressStart:	include	"_maps\Press Start Button.asm"	
+		even
+
 		include	"_incObj\50 Yadrin.asm"
 		include	"_anim\Yadrin.asm"
 Map_Yad:	include	"_maps\Yadrin.asm"
@@ -8426,6 +8429,8 @@ Nem_TitleFg:	incbin	"artnem\Title Screen Foreground.bin"
 		even
 Nem_TitleSonic:	incbin	"artnem\Title Screen Sonic.bin"
 		even
+Nem_PressStart:	incbin  "artnem\Press Start Button.bin"
+		even
 Nem_TitleTM:	incbin	"artnem\Title Screen TM.bin"
 		even
 Eni_JapNames:	incbin	"tilemaps\Hidden Japanese Credits.bin" ; Japanese credits (mappings)
@@ -8472,6 +8477,7 @@ Nem_Goggle:	incbin	"artnem\Unused - Goggles.bin" ; unused goggles
 		endc
 
 Map_SSWalls:	include	"_maps\SS Walls.asm"
+		even
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage

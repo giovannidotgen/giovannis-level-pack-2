@@ -52,6 +52,7 @@ GLP2LevelEnd:
 	move.w	#$8004,(a6)	; 8-colour mode
 	move.w	#$8200+(vram_fg>>10),(a6) ; set foreground nametable address
 	move.w	#$8400+(vram_bg>>13),(a6) ; set background nametable address
+	move.w	#$8500+(vram_sprites>>9),(a6) ; set sprite table address	
 	move.w	#$9001,(a6)	; 64-cell hscroll size
 	move.w	#$9200,(a6)	; window vertical position
 	move.w	#$8B03,(a6)

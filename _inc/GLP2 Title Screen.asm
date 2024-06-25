@@ -11,6 +11,14 @@ GLP2Title:
     jsr     ClearScreen.w			; clear the plane mappings
 	clr.w	(v_bgscreenposy).w
 	clr.w	(v_bgscreenposx).w
+	
+	lea	(v_objspace).w,a1
+	moveq	#0,d0
+	move.w	#$7FF,d1
+.ClrObjRam:
+	move.l	d0,(a1)+
+	dbf	d1,.ClrObjRam ; clear object RAM	
+	
 	lea		(vdp_control_port).l,a6
 	
 	; setup VDP
@@ -18,6 +26,7 @@ GLP2Title:
 	move.w	#$8004,(a6)	; 8-colour mode
 	move.w	#$8200+(vram_fg>>10),(a6) ; set foreground nametable address
 	move.w	#$8400+(vram_bg>>13),(a6) ; set background nametable address
+	move.w	#$8500+(vram_sprites>>9),(a6) ; set sprite table address	
 	move.w	#$9001,(a6)	; 64-cell hscroll size
 	move.w	#$9200,(a6)	; window vertical position
 	move.w	#$8B03,(a6)
@@ -30,7 +39,7 @@ GLP2Title:
     move.w  #320,d0             		; prepare pattern index value to patch to mappings (unsure of what this is but it may be VRAM related)
     jsr     EniDec						; decompress and dump
     lea     ($FF0000).l,a1				; load dump location
-    move.l  #$40040003,d0				; VRAM location
+    move.l  #$420A0003,d0				; VRAM location
     moveq   #29,d1						; width - 1
     moveq   #6,d2						; height - 1
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM
@@ -52,6 +61,10 @@ GLP2Title:
     move.l  #$44000000,($C00004).l		; VRAM location
     lea     (Nem_MainMenu).l,a0			; load background art
     jsr     NemDec              		; run NemDec to decompress art for display
+
+	move.l	#$4C000000,($C00004).l
+	lea		(Nem_PressStart).l,a0
+	jsr		NemDec
 
 	lea		(vdp_data_port).l,a6
 	move.l	#$4FE00003,4(a6)
@@ -94,13 +107,23 @@ GLP2_PalLoop3:
     move.l  (a0)+,(a1)+
     dbf d0,GLP2_PalLoop3				; repeat until done
 
+    lea 	Pal_Title.l,a0        	; load this palette
+    lea 	(v_pal_dry_dup+$60).l,a1        ; get beginning of palette line
+    moveq  	#$3,d0						; number of entries / 4
+ 
+GLP2_PalLoop4:
+    move.l  (a0)+,(a1)+					; copy colours to buffer
+    move.l  (a0)+,(a1)+
+    dbf d0,GLP2_PalLoop4				; repeat until done
+
+
 	moveq	#plcid_Main,d0
 	bsr.w	NewPLC		
 
 	move.b	#1,(v_paltime).w
 	move.b	#1,(v_paltimecur).w
 	move.b	#1,(v_palflags).w
-	move.b	#$2F,(v_awcount).w
+	move.b	#$3F,(v_awcount).w
 	move.l	#v_pal_dry_dup,(p_awtarget).w
 	move.l	#v_pal_dry,(p_awreplace).w
 	
@@ -116,9 +139,20 @@ GLP2_TextFadeIn:
 	tst.b	(v_palflags).w				; check if the palette is fully loaded
 	bne.s	GLP2_TextFadeIn
 	
+	move.b	#id_Obj4F,(v_objspace+$80).w
+	move.b	#2,(v_objspace+$80+obRoutine).w
+	move.b	#0,(v_objspace+$80+obFrame).w
+	move.b	#0,(v_objspace+$80+obRender).w
+	move.w	#$120,(v_objspace+$80+obX).w
+	move.w	#$120,(v_objspace+$80+obScreenY).w
+	move.w	#$6060,(v_objspace+$80+obGfx).w
+	move.l	#Map_PressStart,(v_objspace+$80+obMap).w
+	
 GLP2_MainLoop:
-    move.b  #2,(v_vbla_routine).w			; set V-blank routine to run
+    move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
+	jsr		ExecuteObjects
+	jsr		BuildSprites
     tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
     bmi.s   GLP2_GotoTitle         	; if so, branch
 	bsr.s	GLP2_Camera
