@@ -2043,7 +2043,10 @@ GM_Sega:
 		move.w	#$8200+(vram_fg>>10),(a6) ; set foreground nametable address
 		move.w	#$8400+(vram_bg>>13),(a6) ; set background nametable address
 		move.w	#$8700,(a6)	; set background colour (palette entry 0)
-		move.w	#$8B00,(a6)	; full-screen vertical scrolling
+		move.w	#$8B03,(a6)			; VScroll: full; HScroll: 1px
+		move.w	#$8004,(a6)			; disable HInt
+		move.w	#$9001,(a6)	; 64-cell hscroll size
+		
 		clr.b	(f_wtr_state).w
 		disable_ints
 		move.w	(v_vdp_buffer1).w,d0
@@ -2094,12 +2097,63 @@ Sega_WaitPal:
 Sega_WaitEnd:
 		move.b	#2,(v_vbla_routine).w
 		bsr.w	WaitForVBla
+		moveq 	#0, d0
 		tst.w	(v_demolength).w
-		beq.s	Sega_GotoTitle
+		beq.s	Sega_Transition
 		andi.b	#btnStart,(v_jpadpress1).w ; is Start button pressed?
 		beq.s	Sega_WaitEnd	; if not, branch
 
-Sega_GotoTitle:
+Sega_Transition:
+    	move.b  #sfx_Teleport,d0		; set sound ID
+    	jsr     PlaySound_Special		; play ID	
+
+Sega_TransitionLoop:
+		move.b	#2,(v_vbla_routine).w
+		bsr.w	WaitForVBla
+
+		moveq	#0, d4
+		moveq	#10, d5
+
+		lea	v_hscrolltablebuffer+332, a0	; height before SEGA graphics * 3 (long-word per entry)  
+		move.w	#58, d3						; height of SEGA graphics
+
+		move.b	(v_bgscroll_buffer).w, d6
+
+.ScrollLoop:
+		add.b 	#1, d4
+			
+		; cmp.b 	d4, d0
+		; blt.s 	.Skip
+			
+		move.w	(a0), d1
+		
+		cmp.w 	#-$100, d1
+		ble.s 	.GoToTitle
+
+		neg.w	d5
+		add.w 	d5, d1
+		move.w	d1, (a0)+		; AAAA hscroll entry
+
+		move.w	(a0), d1
+		add.w 	d5, d1
+		move.w	d1, (a0)+		; BBBB hscroll entry
+		dbra	d3, .ScrollLoop
+		bra.s 	.Skip
+
+.SkipLine:
+		adda	#4, a0
+		dbra	d3, .ScrollLoop
+
+.Skip:
+		cmp.b 	#58, d0
+		bge.s 	.AddNoMore
+
+		add.b 	#1, d0
+
+.AddNoMore:
+		bra.s 	Sega_TransitionLoop
+
+.GoToTitle:
 		move.b	#id_Giovanni,(v_gamemode).w ; go to title screen
 		rts	
 ; ===========================================================================
