@@ -105,9 +105,9 @@ loc_155E2:
 ; ===========================================================================
 
 loc_155FA:
-		cmpi.w	#-$F00,d0
+		cmpi.w	#-$E00,d0
 		bge.s	locret_15606
-		move.w	#-$F00,obInertia(a1)
+		move.w	#-$E00,obInertia(a1)
 
 locret_15606:
 		rts	
@@ -121,9 +121,9 @@ loc_15608:
 ; ===========================================================================
 
 loc_15616:
-		cmpi.w	#$F00,d0
+		cmpi.w	#$E00,d0
 		ble.s	locret_15622
-		move.w	#$F00,obInertia(a1)
+		move.w	#$E00,obInertia(a1)
 
 locret_15622:
 		rts	
