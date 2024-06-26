@@ -164,18 +164,40 @@ GLP2_GotoTitle:
 
 ; ===============================================================
 GLP2_Camera:
+	cmpi.w 	#$40, v_bgscrposy_dup
+	blt.s 	.AddY
+	move.w 	#0, v_bgscrposy_dup
+
+.AddY:
 	add.w	#1,(v_bgscrposy_dup).w
 	moveq	#0,d0
+	moveq	#0,d2
 	move.w	(v_bgscrposy_dup).w,d0
 	lea		(v_hscrolltablebuffer+2).w,a1
 	move.w	#223,d1
+	move.w 	v_bgscrposy_dup, d2
+	
+.Loop:
+	add.b 	#1, d2
+
+	cmpi.w 	#$40, d2
+	bge.s 	.ChangeDirection
+
+	move.w	d0, (a1)
+	adda.l	#4, a1
+	dbf		d1, .Loop
+	
+	bra.s 	.Die
+	
+.ChangeDirection:
+	moveq	#0, d2
 	neg.w	d0
-	
-.loop:
-	move.w	d0,(a1)
-	adda.l	#4,a1
-	dbf		d1,.loop
-	
+
+	move.w	d0, (a1)
+	adda.l	#4, a1
+	dbf		d1, .Loop
+
+.Die:
 	rts
 
 ; ===============================================================
