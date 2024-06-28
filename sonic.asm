@@ -28,6 +28,8 @@ zeroOffsetOptimization = 0	; unsupported
 
 ObjectOverloadCrash = 1 	; set to 1 to crash the game in case of object overload
 
+TeaserBuild	= 0				; replaces the "PRESS START BUTTON" text with "SUMMER 2024" text
+
 	include "MacroSetup.asm"
 	include	"Constants.asm"
 	include	"Variables.asm"
@@ -6683,8 +6685,14 @@ Map_LWall:	include	"_maps\Wall of Lava.asm"
 Map_Moto:	include	"_maps\Moto Bug.asm"
 		include	"_incObj\4F.asm"
 
+	if TeaserBuild=0
 Map_PressStart:	include	"_maps\Press Start Button.asm"	
+	else
+Map_PressStart:	include	"_maps\Press Start Button (Summer 2024 Edit).asm"	
+	endif
+	
 		even
+	
 
 		include	"_incObj\50 Yadrin.asm"
 		include	"_anim\Yadrin.asm"
@@ -8480,7 +8488,11 @@ Nem_TitleFg:	incbin	"artnem\Title Screen Foreground.bin"
 		even
 Nem_TitleSonic:	incbin	"artnem\Title Screen Sonic.bin"
 		even
+	if TeaserBuild=0
 Nem_PressStart:	incbin  "artnem\Press Start Button.bin"
+	else
+Nem_PressStart:	incbin  "artnem\Press Start Button (Summer 2024 Edit).bin"
+	endif
 		even
 Nem_TitleTM:	incbin	"artnem\Title Screen TM.bin"
 		even
