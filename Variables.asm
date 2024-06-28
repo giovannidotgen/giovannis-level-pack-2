@@ -29,6 +29,8 @@ v_level_savedata:	equ	$FFFFA500
 ; 6:	00000EEE: Level Endings
 ; 7:	000RRRRR: Red Star Rings
 
+v_GLP2_invertBG	=	$FFFFA600
+
 v_bgscroll_buffer:	equ	$FFFFA800	; background scroll buffer ($200 bytes)
 v_ngfx_buffer:	equ $FFFFAA00	; Nemesis graphics decompression buffer ($200 bytes)
 v_spritequeue:	equ $FFFFAC00	; sprite display queue, in order of priority ($400 bytes)

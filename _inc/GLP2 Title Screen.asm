@@ -11,6 +11,7 @@ GLP2Title:
     jsr     ClearScreen.w			; clear the plane mappings
 	clr.w	(v_bgscreenposy).w
 	clr.w	(v_bgscreenposx).w
+	clr.b	(v_GLP2_invertBG).w
 	
 	lea	(v_objspace).w,a1
 	moveq	#0,d0
@@ -167,6 +168,7 @@ GLP2_Camera:
 	cmpi.w 	#$40, v_bgscrposy_dup
 	blt.s 	.AddY
 	move.w 	#0, v_bgscrposy_dup
+	not.b	(v_GLP2_invertBG).w
 
 .AddY:
 	add.w	#1,(v_bgscrposy_dup).w
@@ -184,6 +186,11 @@ GLP2_Camera:
 	bge.s 	.ChangeDirection
 
 	move.w	d0, (a1)
+	tst.b	(v_GLP2_invertBG).w
+	beq.s	.keepasis
+	neg.w	(a1)
+	
+.keepasis:
 	adda.l	#4, a1
 	dbf		d1, .Loop
 	
@@ -194,6 +201,11 @@ GLP2_Camera:
 	neg.w	d0
 
 	move.w	d0, (a1)
+	tst.b	(v_GLP2_invertBG).w
+	beq.s	.keepasis2
+	neg.w	(a1)
+	
+.keepasis2:
 	adda.l	#4, a1
 	dbf		d1, .Loop
 

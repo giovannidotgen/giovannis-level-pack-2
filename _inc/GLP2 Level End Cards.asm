@@ -10,6 +10,7 @@ GLP2LevelEnd:
     jsr     PaletteFadeOut			; fade palettes out
 	clr.w	(v_bgscreenposy).w
 	clr.w	(v_bgscreenposx).w		
+	clr.b	(v_GLP2_invertBG).w	
 	
 	
 	lea	(v_objspace).w,a1
