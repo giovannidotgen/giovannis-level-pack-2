@@ -178,6 +178,7 @@ GLP2_Camera:
 	lea		(v_hscrolltablebuffer+2).w,a1
 	move.w	#223,d1
 	move.w 	v_bgscrposy_dup, d2
+	sub.b	#1,d2
 	
 .Loop:
 	add.b 	#1, d2
