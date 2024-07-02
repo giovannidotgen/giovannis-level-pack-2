@@ -28,7 +28,14 @@ zeroOffsetOptimization = 0	; unsupported
 
 ObjectOverloadCrash = 1 	; set to 1 to crash the game in case of object overload
 
-TeaserBuild	= 0				; replaces the "PRESS START BUTTON" text with "SUMMER 2024" text
+; Teaser Build Flag:
+; 0: Builds a normal copy
+; 1:
+; - Replaces "PRESS START BUTTON" with "SUMMER 2024" in the Title Screen
+; - Hides HUD elements
+; - Adds a DLE used to create the GLP2 Trailer for the SHS2024. May make SBZ impossible to clear.
+
+TeaserBuild	= 1				
 
 	include "MacroSetup.asm"
 	include	"Constants.asm"
@@ -2156,6 +2163,16 @@ Sega_TransitionLoop:
 		bra.s 	Sega_TransitionLoop
 
 .GoToTitle:
+		move.l	#$EEE0EEE,d0 	; two whole entries of white
+		moveq	#$1F,d1			; entire palette buffer
+		lea		(v_pal_dry).w,a0
+		
+	.WhiteScreen:
+		move.l	d0,(a0)+
+		dbf		d1,.WhiteScreen
+
+		bsr.w	WaitForVBla		; one extra frame...	
+	
 		move.b	#id_Giovanni,(v_gamemode).w ; go to title screen
 		rts	
 ; ===========================================================================
@@ -6894,24 +6911,24 @@ Sonic_MdNormal:
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_LevelBound
 
-        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         ble.s   .skipline1       ; if yes, branch
-        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline1:				
 
-        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         ble.s   .skipline2       ; if yes, branch
-        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline2:				
 
-        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #-$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         bge.s   .skipline3       ; if yes, branch
-        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #-$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline3:				
 
-        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #-$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         bge.s   .skipline4       ; if yes, branch
-        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #-$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline4:				
 
 		
@@ -6926,24 +6943,24 @@ Sonic_MdJump:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
-        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         ble.s   .skipline1       ; if yes, branch
-        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline1:				
 
-        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         ble.s   .skipline2       ; if yes, branch
-        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline2:				
 
-        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #-$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         bge.s   .skipline3       ; if yes, branch
-        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #-$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline3:				
 
-        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #-$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         bge.s   .skipline4       ; if yes, branch
-        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #-$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline4:				
 
 
@@ -6963,24 +6980,24 @@ Sonic_MdRoll:
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound
-        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         ble.s   .skipline1       ; if yes, branch
-        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline1:				
 
-        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         ble.s   .skipline2       ; if yes, branch
-        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline2:				
 	
-        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #-$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         bge.s   .skipline3       ; if yes, branch
-        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #-$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline3:				
 
-        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #-$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         bge.s   .skipline4       ; if yes, branch
-        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #-$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline4:				
 
 		jsr	(SpeedToPos).l
@@ -6994,24 +7011,24 @@ Sonic_MdJump2:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
-        cmp.w   #$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         ble.s   .skipline1       ; if yes, branch
-        move.w  #$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline1:				
 
-        cmp.w   #$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         ble.s   .skipline2       ; if yes, branch
-        move.w  #$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline2:				
 
-        cmp.w   #-$FC8,obVelX(a0)   ; check if Sonic's X speed is lower than this value
+        cmp.w   #-$F00,obVelX(a0)   ; check if Sonic's X speed is lower than this value
         bge.s   .skipline3       ; if yes, branch
-        move.w  #-$FC8,obVelX(a0)    ; alter Sonic's X speed
+        move.w  #-$F00,obVelX(a0)    ; alter Sonic's X speed
     .skipline3:				
 
-        cmp.w   #-$FC8,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
+        cmp.w   #-$F00,obVelY(a0)   ; check if Sonic's Y speed is lower than this value
         bge.s   .skipline4       ; if yes, branch
-        move.w  #-$FC8,obVelY(a0)    ; alter Sonic's Y speed
+        move.w  #-$F00,obVelY(a0)    ; alter Sonic's Y speed
     .skipline4:				
 
 		jsr	(ObjectFall).l

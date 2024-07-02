@@ -158,7 +158,7 @@ PLC_MZ2:	dc.w ((PLC_MZ2end-PLC_MZ2-2)/6)-1
 		plcm	Nem_Spikes, $A360	; spikes
 		plcm	Nem_HSpring, $A460	; horizontal spring
 		plcm	Nem_VSpring, $A5E0	; vertical spring
-		plcm	Nem_MzBlock, $5700	; green	stone block
+		plcm	Nem_MzBlock, $5740	; green	stone block
 	PLC_MZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Star Light

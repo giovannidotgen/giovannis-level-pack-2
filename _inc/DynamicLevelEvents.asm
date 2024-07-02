@@ -595,6 +595,11 @@ DLE_SBZ1:
 		bcs.s   .return
 		move.w	#$1C20,(v_limitbtm1).w
 		move.w	#$1C20,(v_limitbtm2).w		
+		if TeaserBuild=1
+		cmpi.w	#$3800,(v_screenposx).w
+		bcs.s	.return
+		move.w	#$1780,(v_limittop2).w
+		endif
 
 	.return:	
 		rts	
