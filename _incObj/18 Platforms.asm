@@ -20,6 +20,16 @@ Plat_Main:	; Routine 0
 		move.w	#$4000,obGfx(a0)
 		move.l	#Map_Plat_GHZ,obMap(a0)
 		move.b	#$20,obActWid(a0)
+		cmpi.b	#id_MZ,(v_zone).w
+		bne.s	.notMZ
+
+		move.l	#Map_Swing_GHZ,obMap(a0) ; GHZ and MZ specific code
+		move.w	#$4380,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#3,obPriority(a0)
+		move.b	#$18,obActWid(a0)
+		
+	.notMZ:	
 		cmpi.b	#id_SYZ,(v_zone).w ; check if level is SYZ
 		bne.s	.notSYZ
 

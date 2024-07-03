@@ -154,6 +154,7 @@ v_ssrotate:	equ $FFFFF782	; Special Stage rotation speed (2 bytes)
 v_bgscrposy_2ndctrl:	equ $FFFFF784
 v_bgscrposy_3rdctrl:	equ	$FFFFF788
 v_redstar_lastframe:	equ	$FFFFF78C ; byte used by the Red Star Ring to determine what its last frame loaded was
+v_bgswapper:			equ $FFFFF78D
 
 v_btnpushtime1:	equ $FFFFF790	; button push duration - in level (2 bytes)
 v_btnpushtime2:	equ $FFFFF792	; button push duration - in demo (2 bytes)
@@ -300,6 +301,7 @@ v_levselsound:	equ $FFFFFF84	; level select - sound selected (2 bytes)
 v_lamp_redstar:	equ $FFFFFF86	
 v_redstar_collection:	equ $FFFFFF8C	; Red Star Ring collection variables (5 byte array)
 v_exitfound:	equ	$FFFFFF91
+v_lamp_bgswapper:	equ $FFFFFF92
 
 v_scorecopy:	equ $FFFFFFC0	; score, duplicate (4 bytes)
 v_scorelife:	equ $FFFFFFC0	; points required for an extra life (4 bytes) (JP1 only)

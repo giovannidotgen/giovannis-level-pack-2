@@ -440,7 +440,6 @@ LoadObj:
 	move.b	d2,$22(a1)
     moveq	#0,d0
     move.b	(a0)+,d0
-	andi.b	#$7F,d0
 	move.b	d0,0(a1)
 	move.b	(a0)+,$28(a1)
 	move.w	a3,respawn_index(a1)
