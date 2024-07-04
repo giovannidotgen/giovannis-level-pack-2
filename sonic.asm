@@ -35,7 +35,7 @@ ObjectOverloadCrash = 1 	; set to 1 to crash the game in case of object overload
 ; - Hides HUD elements
 ; - Adds a DLE used to create the GLP2 Trailer for the SHS2024. May make SBZ impossible to clear.
 
-TeaserBuild	= 1				
+TeaserBuild	= 0				
 
 	include "MacroSetup.asm"
 	include	"Constants.asm"

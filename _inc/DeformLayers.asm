@@ -128,9 +128,23 @@ Deform_MZ:
 		moveq	#0,d5
 		bsr.w	ScrollBlock1
 		move.w	#$200,d0
-		move.w	(v_screenposy).w,d1
-		subi.w	#$1C8,d1
-		bcs.s	loc_6402
+		move.w	(v_bg3screenposy).w,d1
+		tst.b	(v_bgswapper).w			; check which BG to display
+		beq.s	.topbg
+.bottombg:
+		cmpi.w	#$160,d1
+		beq.s	.common
+		addi.w	#$10,d1
+		bra.s	.common
+		
+.topbg:
+		tst.w	d1
+		beq.s	.common
+		subi.w	#$10,d1
+		
+
+.common:	
+		move.w	d1,(v_bg3screenposy).w
 		move.w	d1,d2
 		add.w	d1,d1
 		add.w	d2,d1

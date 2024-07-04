@@ -256,6 +256,11 @@ BgScroll_LZ:
 ; ===========================================================================
 
 BgScroll_MZ:
+		clr.w	(v_bg3screenposy).w
+		tst.b	(v_bgswapper).w
+		beq.s	.common
+		move.w	#$160,(v_bg3screenposy).w
+	.common:
 		rts	
 ; ===========================================================================
 
