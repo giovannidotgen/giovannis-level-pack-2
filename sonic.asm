@@ -732,6 +732,7 @@ VBla_08:
 
 Demo_Time:
 		bsr.w	LoadTilesAsYouMove
+		bsr.w	GraduallyRefreshBackground	
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	ProcessDPLC2
@@ -5243,6 +5244,41 @@ LoadTilesFromStart:
 			; beq.w	Draw_GHz_Bg
 		; endc
 ; End of function LoadTilesFromStart
+
+; ---------------------------------------------------------------------------
+; Subroutine to gradually refresh the background.
+; Renders from the bottom, to the top.
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+GraduallyRefreshBackground:
+		tst.b	(v_bgswapper_vblank).w	; should it?
+		beq.s	.return					; no, don't.
+		lea	(vdp_control_port).l,a5
+		lea	(vdp_data_port).l,a6
+		lea	(v_screenposx).w,a3
+		lea	(v_bgscreenposx).w,a3
+		movea.l	(v_lvllayoutbg).w,a4	; MJ: Load address of layout BG
+		move.w	#$6000,d2
+
+		moveq	#-16,d4						; get initial value
+		moveq	#0,d6					
+		move.b	(v_bgswapper_vblank).w,d6	; get swapper status
+		lsl.w	#4,d6						; times 16
+		add.w	d6,d4						; add to d4
+		subi.b	#1,(v_bgswapper_vblank).w	; subtract 1 to swapper
+	
+		moveq	#0,d5
+		move.w	d4,d1
+		bsr.w	Calc_VRAM_Pos
+		move.w	d1,d4
+		moveq	#0,d5
+		moveq	#(512/16)-1,d6
+		bra.w	DrawBlocks_LR_2	
+	.return:
+		rts
+		
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	refresh the entire background

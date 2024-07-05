@@ -129,18 +129,27 @@ Deform_MZ:
 		bsr.w	ScrollBlock1
 		move.w	#$200,d0
 		move.w	(v_bg3screenposy).w,d1
+		move.w	d1,d2
+		lsr.w	#8,d2	
 		tst.b	(v_bgswapper).w			; check which BG to display
 		beq.s	.topbg
 .bottombg:
-		cmpi.w	#$160,d1
-		beq.s	.common
-		addi.w	#$10,d1
+		move.w	#$160,d1
+		tst.b	d2			; were you at the bottom in the first place?
+		bne.s	.vertiscroll		; if not, skip
+		move.b	#16,(v_bgswapper_vblank).w	; enable the BG refresher
+
+.vertiscroll:
+		move.w	(v_screenposy).w,d2
+		lsr.w	#5,d2			; divide by 32
+		add.w	d2,d1
 		bra.s	.common
 		
 .topbg:
-		tst.w	d1
+		clr.w	d1
+		tst.b	d2
 		beq.s	.common
-		subi.w	#$10,d1
+		move.b	#16,(v_bgswapper_vblank).w	; enable the BG refresher
 		
 
 .common:	
