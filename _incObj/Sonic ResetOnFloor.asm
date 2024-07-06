@@ -128,7 +128,9 @@ Sonic_DropRelease:
 		move.w  d4,obInertia(a0)		; update ground speed
 		move.b  #1,hasdropdashed(a0)		; set the "sonic has just performed the drop dash" flag
 	    move.b	#id_Roll,obAnim(a0) ; use "rolling" animation
-		move.w  #$400,($FFFFD1DC).w    ; set the spin dash dust animation to drop dash		
+		move.w  #$400,($FFFFD1DC).w    ; set the spin dash dust animation to drop dash	
+		move.b	(v_player+obStatus).w,($FFFFD122).w 	; transfer Sonic status data onto the dust object
+		andi.b	#1,($FFFFD122).w		; but only the orientation
 		move.b	#sfx_Teleport,d0
 		jmp		PlaySound_Special						
 ; End of function Sonic_ResetOnFloor

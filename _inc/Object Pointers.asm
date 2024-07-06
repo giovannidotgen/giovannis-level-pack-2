@@ -25,11 +25,7 @@ ptr_SwingingPlatform:	dc.l SwingingPlatform
 ptr_Harpoon:		dc.l Harpoon
 ptr_Helix:		dc.l Helix
 ptr_BasicPlatform:	dc.l BasicPlatform	; $18
-	if TeaserBuild=1
-ptr_Obj19:		dc.l DeleteObject
-	else
 ptr_Obj19:		dc.l HUDRing
-	endif
 ptr_CollapseLedge:	dc.l CollapseLedge
 ptr_WaterSurface:	dc.l WaterSurface
 ptr_Scenery:		dc.l Scenery
@@ -37,11 +33,7 @@ ptr_MagicSwitch:	dc.l MagicSwitch
 ptr_BallHog:		dc.l BallHog
 ptr_Crabmeat:		dc.l Crabmeat
 ptr_Cannonball:		dc.l Cannonball		; $20
-	if TeaserBuild=1
-ptr_HUD:		dc.l DeleteObject
-	else
 ptr_HUD:		dc.l HUD
-	endif
 ptr_BuzzBomber:		dc.l BuzzBomber
 ptr_Missile:		dc.l Missile
 ptr_MissileDissolve:	dc.l MissileDissolve

@@ -38,8 +38,11 @@ loc_1DD8C:				; CODE XREF: h+6DF6?j h+6E04?j
 
 loc_1DD90:				; DATA XREF: h+6DBA?o
 		movea.w	$3E(a0),a2
+		cmpi.b	#4,obAnim(a0)
+		beq.s	.skip
 		move.b	$22(a2),$22(a0)
-		andi.b  #1,$22(a0)		
+		andi.b  #1,$22(a0)
+	.skip:
 		moveq	#0,d0
 		move.b	$1C(a0),d0
 		add	d0,d0
