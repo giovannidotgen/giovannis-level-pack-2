@@ -4490,6 +4490,8 @@ locret_6952:
 
 ; sub_6954:
 DrawBGScrollBlock1:
+		tst.b	(v_bgswapper_vblank).w	; check if bg swapper is enabled
+		bne.s	locret_6952				; if so, skip BG rendering
 		tst.b	(a2)
 		beq.w	locret_69F2
 		bclr	#0,(a2)
@@ -4627,7 +4629,8 @@ locret_69F2:
 ; sub_69F4:
 DrawBGScrollBlock2:
 ;		if Revision=0
-
+		tst.b	(v_bgswapper_vblank).w	; check if BG swapper is enabled
+		bne.s	locret_69F2				; if so, skip BG rendering
 		tst.b	(a2)
 		beq.w	locret_6A80
 		bclr	#2,(a2)
