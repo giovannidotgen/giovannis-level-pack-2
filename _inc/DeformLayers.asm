@@ -119,14 +119,8 @@ loc_63C6:
 
 
 Deform_MZ:
-		move.w	(v_scrshiftx).w,d4
-		ext.l	d4
-		asl.l	#6,d4
-		move.l	d4,d1
-		asl.l	#1,d4
-		add.l	d1,d4
+		moveq	#0,d4
 		moveq	#0,d5
-		bsr.w	ScrollBlock1
 		move.w	#$200,d0
 		move.w	(v_bg3screenposy).w,d1
 		move.w	d1,d2
@@ -164,19 +158,24 @@ loc_6402:
 		move.w	d0,(v_bg2screenposy).w
 		bsr.w	ScrollBlock3
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
-		lea	(v_hscrolltablebuffer).w,a1
-		move.w	#223,d1
-		move.w	(v_screenposx).w,d0
-		neg.w	d0
-		swap	d0
-		move.w	(v_bgscreenposx).w,d0
-		neg.w	d0
 
-loc_6426:
-		move.l	d0,(a1)+
-		dbf	d1,loc_6426
-		rts	
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$03,d0					; divide by 8
+		move.w	d0,(v_bgscroll_buffer).w			; set speed 1
+
+		lea	DMZ_Act1(pc),a0			; load scroll data to use
+		bra.w	DeformScroll				; continue
+		
 ; End of function Deform_MZ
+
+; ---------------------------------------------------------------------------
+; Scroll data
+; ---------------------------------------------------------------------------
+
+DMZ_Act1:	dc.w	$A800,  $1				; top 70 scroll
+			dc.w	$0000
+
 
 ; ---------------------------------------------------------------------------
 ; Star Light Zone background layer deformation code

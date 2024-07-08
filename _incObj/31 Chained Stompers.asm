@@ -119,14 +119,6 @@ loc_B798:	; Routine 2
 		move.w	#$D,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
-		btst	#3,obStatus(a0)
-		beq.s	CStom_Display
-		cmpi.b	#$10,$32(a0)
-		bcc.s	CStom_Display
-		movea.l	a0,a2
-		lea	(v_player).w,a0
-		jsr	(KillSonic).l
-		movea.l	a2,a0
 
 CStom_Display:
 		bsr.w	DisplaySprite

@@ -19,7 +19,7 @@ cflo_collapse_flag:	equ $3A
 CFlo_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_CFlo,obMap(a0)
-		move.w	#$42B8,obGfx(a0)
+		move.w	#$42BA,obGfx(a0)
 		cmpi.b	#id_SLZ,(v_zone).w ; check if level is SLZ
 		bne.s	.notSLZ
 
