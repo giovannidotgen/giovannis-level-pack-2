@@ -21,7 +21,7 @@ PushB_Main:	; Routine 0
 		move.b	#$F,obHeight(a0)
 		move.b	#$F,obWidth(a0)
 		move.l	#Map_Push,obMap(a0)
-		move.w	#$42B8,obGfx(a0) ; MZ specific code
+		move.w	#$42BA,obGfx(a0) ; MZ specific code
 		cmpi.b	#1,(v_zone).w
 		bne.s	.notLZ
 		move.w	#$43DE,obGfx(a0) ; LZ specific code
@@ -192,28 +192,9 @@ loc_C104:
 ; ===========================================================================
 
 PushB_ChkLava:
-		cmpi.w	#(id_MZ<<8)+1,(v_zone).w ; is the level MZ act 2?
-		bne.s	PushB_ChkLava2	; if not, branch
 		move.w	#-$20,d2
-		cmpi.w	#$DD0,obX(a0)
+		cmpi.w	#$1A30,obX(a0)
 		beq.s	PushB_LoadLava
-		cmpi.w	#$CC0,obX(a0)
-		beq.s	PushB_LoadLava
-		cmpi.w	#$BA0,obX(a0)
-		beq.s	PushB_LoadLava
-		rts	
-; ===========================================================================
-
-PushB_ChkLava2:
-		cmpi.w	#(id_MZ<<8)+2,(v_zone).w ; is the level MZ act 3?
-		bne.s	PushB_NoLava	; if not, branch
-		move.w	#$20,d2
-		cmpi.w	#$560,obX(a0)
-		beq.s	PushB_LoadLava
-		cmpi.w	#$5C0,obX(a0)
-		beq.s	PushB_LoadLava
-
-PushB_NoLava:
 		rts	
 ; ===========================================================================
 
