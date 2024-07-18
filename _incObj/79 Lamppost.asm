@@ -156,6 +156,7 @@ Lamp_StoreInfo:
 		move.b  (v_paltracker).w,(v_lamp_paltracker).w	; GIO: palette tracker		
 		move.l	(v_redstar_collection).w,(v_lamp_redstar).w
 		move.b	(v_redstar_collection+$4).w,(v_lamp_redstar+$4).w		
+		move.b	(v_bgswapper),(v_lamp_bgswapper).w
 		rts	
 
 ; ---------------------------------------------------------------------------
@@ -191,6 +192,7 @@ Lamp_LoadInfo:
 		move.w	($FFFFFE4E).w,(v_bg3screenposy).w
 		move.l	(v_lamp_redstar).w,(v_redstar_collection).w
 		move.b	(v_lamp_redstar+$4).w,(v_redstar_collection+$4).w
+		move.b	(v_lamp_bgswapper),(v_bgswapper).w
 		cmpi.b	#1,(v_zone).w	; is this Labyrinth Zone?
 		bne.s	.notlabyrinth	; if not, branch
 

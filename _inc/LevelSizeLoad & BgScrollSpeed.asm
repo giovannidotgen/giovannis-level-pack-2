@@ -257,12 +257,7 @@ BgScroll_LZ:
 
 BgScroll_MZ:
 		move.w	#$0100,(v_bgscreenposx).w
-		clr.w	(v_bg3screenposy).w
-		tst.b	(v_bgswapper).w
-		beq.s	.common
-		move.w	#$160,(v_bg3screenposy).w
-	.common:
-		rts	
+		bra.w	Deform_MZ
 ; ===========================================================================
 
 BgScroll_SLZ:
