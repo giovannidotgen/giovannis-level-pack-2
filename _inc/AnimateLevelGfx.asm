@@ -180,7 +180,7 @@ AniArt_MZ_Torch:
 		moveq	#0,d0
 		move.b	(v_lani3_frame).w,d0
 		addq.b	#1,(v_lani3_frame).w ; increment frame counter
-		andi.b	#3,(v_lani3_frame).w ; there are 3 frames
+		andi.b	#3,(v_lani3_frame).w ; there are 4 frames
 		mulu.w	#.size*$20,d0
 		adda.w	d0,a1		; jump to appropriate tile
 		locVRAM	$5E40
