@@ -100,11 +100,7 @@ Brick_Type03:
 		move.b	#4,obSubtype(a0)
 		move.w	(a1),d0
 		andi.w	#$3FF,d0
-		if Revision=0
-		cmpi.w	#$2E8,d0
-		else
-			cmpi.w	#$16A,d0
-		endc
+		cmpi.w	#$155,d0
 		bcc.s	locret_E8EE
 		move.b	#0,obSubtype(a0)
 
