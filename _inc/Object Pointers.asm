@@ -40,8 +40,8 @@ ptr_MissileDissolve:	dc.l MissileDissolve
 ptr_Rings:		dc.l Rings
 ptr_Monitor:		dc.l Monitor
 ptr_ExplosionItem:	dc.l ExplosionItem
-ptr_Animals:		dc.l Animals		; $28
-ptr_Points:		dc.l Points
+ptr_Animals:		dc.l DeleteObject		; $28
+ptr_Points:		dc.l DeleteObject
 ptr_AutoDoor:		dc.l AutoDoor
 ptr_Chopper:		dc.l Chopper
 ptr_Jaws:		dc.l Jaws
