@@ -127,7 +127,7 @@ loc_C056:
 		bclr	#1,obStatus(a0)
 		move.w	(a1),d0
 		andi.w	#$3FF,d0
-		cmpi.w	#$155,d0
+		cmpi.w	#$14D,d0
 		bcs.s	loc_C09E
 		move.w	$30(a0),d0
 		asr.w	#3,d0
@@ -242,7 +242,7 @@ loc_C1AA:
 		clr.b	ob2ndRout(a0)
 		move.w	(a1),d0
 		andi.w	#$3FF,d0
-		cmpi.w	#$155,d0
+		cmpi.w	#$14D,d0
 		bcs.s	locret_C1F0
 		move.w	$30(a0),d0
 		asr.w	#3,d0
