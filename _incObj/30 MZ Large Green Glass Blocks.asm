@@ -75,6 +75,11 @@ Glass_Main:	; Routine 0
 
 	.Fail:
 		move.w	#$90,glass_dist(a0)
+		cmpi.b	#3,obSubtype(a0)
+		bne.s	.common
+		move.w	#$100,glass_dist(a0)
+
+.common:		
 		bset	#4,obRender(a0)
 
 Glass_Block012:	; Routine 2
@@ -179,11 +184,11 @@ loc_B54E:
 		bset	#0,$35(a0)
 		beq.s	loc_B582
 		bset	#7,$34(a0)
-		move.w	#$10,$36(a0)
+		move.w	#$20,$36(a0)
 		move.b	#$A,$38(a0)
-		cmpi.w	#$40,glass_dist(a0)
+		cmpi.w	#$80,glass_dist(a0)
 		bne.s	loc_B582
-		move.w	#$40,$36(a0)
+		move.w	#$80,$36(a0)
 
 loc_B582:
 		tst.b	$34(a0)

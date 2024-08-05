@@ -8,7 +8,7 @@ Giovanni_FG_Offset: equ $28
 Giovanni_BG_Offset: equ -$28
 
 GiovanniSplash:
-    move.b  #$E4,d0					; set music ID to "stop music"
+    move.b  #bgm_Stop,d0					; set music ID to "stop music"
     jsr     PlaySound_Special		; play ID
     jsr     PaletteFadeOut			; fade palettes out
     jsr     ClearScreen.w			; clear the plane mappings
