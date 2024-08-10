@@ -203,6 +203,11 @@ Solid_SideAir:
 ; ===========================================================================
 
 Solid_Ignore:
+; GIO: Sometimes, this code is ran without adequately setting Sonic's address, leading to unusual settings.
+; A safeguard was added that forces this code to run with Sonic's OST entry in a1.
+; The original address is backed up into the system stack.
+		move.l	a1,-(sp)
+		lea		(v_player).w,a1		
 		btst	#5,obStatus(a0)	; is Sonic pushing?
 		beq.s	Solid_Debug	; if not, branch
 		cmpi.b	#id_Roll,obAnim(a1)	; is Sonic in his jumping/rolling animation?
@@ -221,6 +226,7 @@ Solid_NotPushing:
 
 Solid_Debug:
 		moveq	#0,d4		; return no collision
+		movea.l	(sp)+,a1
 		rts	
 ; ===========================================================================
 
