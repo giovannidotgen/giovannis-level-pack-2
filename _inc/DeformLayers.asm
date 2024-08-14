@@ -25,6 +25,7 @@ DeformLayers:
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
 		move.w	(v_bg3screenposx).w,(v_bg3screenposx_dup_unused).w
 		move.w	(v_bg3screenposy).w,(v_bg3screenposy_dup_unused).w
+		add.l	#1,(v_timefromstart).w
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		add.w	d0,d0
@@ -159,10 +160,38 @@ loc_6402:
 		bsr.w	ScrollBlock3
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
 
+
+		move.l	(v_timefromstart).w,d0			; load X position
+		neg.l	d0					; reverse direction
+		asr.l	#$2,d0					; divide by 16
+		move.w	d0,(v_bgscroll_buffer).w			; set speed 1
+
+		move.l	(v_timefromstart).w,d0			; load X position
+		neg.l	d0					; reverse direction
+		asr.l	#$3,d0					; divide by 32
+		move.w	d0,(v_bgscroll_buffer+6).w			; set speed 3
+
+		move.w	(v_bgscroll_buffer).w,d0			
+		add.w	(v_bgscroll_buffer+6).w,d0
+		asr.l	#$1,d0
+		move.w	d0,(v_bgscroll_buffer+2).w
+
+		move.w	(v_bgscroll_buffer).w,d0			
+		add.w	(v_bgscroll_buffer+6).w,d0
+		add.w	(v_bgscroll_buffer+6).w,d0
+		add.w	(v_bgscroll_buffer+6).w,d0
+		asr.l	#$2,d0
+		move.w	d0,(v_bgscroll_buffer+4).w			; set speed 4	
+
 		move.w	(v_screenposx).w,d0			; load X position
 		neg.w	d0					; reverse direction
-		asr.w	#$03,d0					; divide by 8
-		move.w	d0,(v_bgscroll_buffer).w			; set speed 1
+		asr.w	#$4,d0					; divide by 8
+		move.w	d0,(v_bgscroll_buffer+8).w
+
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$3,d0					; divide by 8
+		move.w	d0,(v_bgscroll_buffer+$A).w
 
 		lea	DMZ_Act1(pc),a0			; load scroll data to use
 		bra.w	DeformScroll				; continue
@@ -173,7 +202,12 @@ loc_6402:
 ; Scroll data
 ; ---------------------------------------------------------------------------
 
-DMZ_Act1:	dc.w	$A800,  $1				; top 70 scroll
+DMZ_Act1:	dc.w	$A800,  $210
+			dc.w	$A802,	$10
+			dc.w	$A804,	$10
+			dc.w	$A806,	$20	
+			dc.w	$A808,	$20
+			DC.W	$A80A, 	$1
 			dc.w	$0000
 
 

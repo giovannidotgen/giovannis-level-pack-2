@@ -12,6 +12,7 @@ LevelSizeLoad:
 		move.b	d0,($FFFFF746).w
 		move.b	d0,($FFFFF748).w
 		move.b	d0,(v_dle_routine).w
+		move.l	d0,(v_timefromstart).w
 		move.w	(v_zone).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
