@@ -25,16 +25,22 @@ Smab_Main:	; Routine 0
 
 Smab_Solid:	; Routine 2
 
+sonicVelY:		equ $30		; GIO: Sonic's vertical speedd
 sonicAniFrame:	equ $32		; Sonic's current animation number
 .count:		equ $34		; number of blocks hit + previous stuff
 
+
+
 		move.w	(v_itembonus).w,$34(a0)
 		move.b	(v_player+obAnim).w,sonicAniFrame(a0) ; load Sonic's animation number
+		move.w	(v_player+obVelY).w,sonicVelY(a0) ;	load Sonic's horizontal speed		
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	#$11,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
+		cmpi.w  #-2,d4		; check if Sonic is hitting the player from below
+		beq.s   .frombelow		
 		btst	#3,obStatus(a0)	; has Sonic landed on the block?
 		bne.s	.smash		; if yes, branch
 
@@ -42,10 +48,17 @@ sonicAniFrame:	equ $32		; Sonic's current animation number
 		rts	
 ; ===========================================================================
 
+.frombelow:	; GIO
+		cmp.w   #-$300,sonicVelY(a0)			; test if Sonic is going at least 3ppf upwards
+		bgt.s   .notspinning					; if not, return
+		cmp.b   #id_Spring,sonicAniFrame(a0)	; test if Sonic is in the Spring animation
+		bne.s   .notspinning					; if not, return
+		bra.s   .smash2							; else, smash
+
 .smash:
 		cmpi.b	#id_Roll,sonicAniFrame(a0) ; is Sonic rolling/jumping?
 		bne.s	.notspinning	; if not, branch
-		move.w	.count(a0),(v_itembonus).w
+
 		bset	#2,obStatus(a1)
 		move.b	#$E,obHeight(a1)
 		move.b	#7,obWidth(a1)
@@ -55,6 +68,11 @@ sonicAniFrame:	equ $32		; Sonic's current animation number
 		bclr	#3,obStatus(a1)
 		move.b	#2,obRoutine(a1)
 		bclr	#3,obStatus(a0)
+		bra.s	.common
+	.smash2:
+		move.w  sonicVelY(a0),obVelY(a1)		; give Sonic his vertical speed back
+	.common:
+		move.w	.count(a0),(v_itembonus).w	
 		clr.b	obSolid(a0)
 		move.b	#1,obFrame(a0)
 		lea	(Smab_Speeds).l,a4 ; load broken fragment speed data

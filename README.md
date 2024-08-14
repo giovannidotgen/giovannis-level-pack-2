@@ -22,7 +22,11 @@ Also See: http://info.sonicretro.org/Project_Sonic_1:_Two-Eight
 
 Terms of use:
 - It is strictly forbidden to use any portion of the material presented within this repository for commercial gain;
-- You are allowed to use any amount of the code and assets provided within this repository for the creation of a ROM hack based on any of the original games from the Sonic the Hedgehog series;
-- Although not recommended, you are not kept from directly creating a ROM hack based on this repository;
-- As an exception to the above, usage of the "GIOVANNI.GEN" logo, the "GIOVANNI'S LEVEL PACK 2" logo, or other variations of the "GIOVANNI" logo, be they the Russo One versions or the Cinossu version (including its derivatives), in any form, without my explicit, written consent, is strictly forbidden;
-- You assume any and all responsibility, as far as usage of this repository is concerned.
+- You are welcome to use any amount of the code and assets provided within this repository for the creation of a ROM hack based on any of the original games from the Sonic the Hedgehog series;
+- It is not recommended, but not forbidden, to create a ROM hack based on this repository: however, giovanni.gen is not obligated to offer support.
+
+Exceptions to the above given permissions include the following:
+- Any usage of the "GIOVANNI", "GIOVANNI.GEN", "GIOVANNI'S LEVEL PACK 2" logos or derivatives in either the Russo One style, or the Cinossu style, for which reusage is forbidden;
+- Usage of the Drop Dash animation frames, for which permission for usage must be obtained from rosie_eclairs
+
+You assume any and all responsibility, as far as usage of this repository is concerned.
