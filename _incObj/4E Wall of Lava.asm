@@ -71,7 +71,7 @@ LWall_Action:	; Routine 4
 .movewall:
 		tst.b	lwall_flag(a0)	; is object set	to move?
 		beq.s	LWall_Solid	; if not, branch
-		move.w	#$180,obVelX(a0) ; set object speed
+		move.w	#$300,obVelX(a0) ; set object speed
 		subq.b	#2,$24(a0)
 
 LWall_Solid:	; Routine 2
