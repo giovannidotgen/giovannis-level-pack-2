@@ -128,12 +128,18 @@ loc_C056:
 		move.w	(a1),d0
 		andi.w	#$3FF,d0
 		cmpi.w	#$14D,d0
-		bcs.s	loc_C09E
+		bcs.s	.notlava
 		move.w	$30(a0),d0
 		asr.w	#3,d0
 		move.w	d0,obVelX(a0)
 		move.b	#1,$32(a0)
 		clr.w	$E(a0)
+		bra.s	loc_C09E
+
+.notlava:
+		clr.w	obVelX(a0)
+		clr.w	$E(a0)
+		clr.b	$32(a0)
 
 loc_C09E:
 		bra.s	loc_C0E6
