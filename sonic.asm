@@ -383,6 +383,10 @@ ptr_GM_GLP2LevelSelect:	bra.w GLP2LevelSelect	; Giovanni's Level Pack 2 Level Se
 
 ptr_GM_GLP2LevelEnd:	bra.w GLP2LevelEnd		; GLP2 Level End Card
 
+ptr_GM_Instructions:	bra.w GLP2Instructions
+
+ptr_GM_GLP2Credits:			bra.w GLP2Credits
+
 		rts	
 ; ===========================================================================
 
@@ -732,7 +736,7 @@ VBla_08:
 
 Demo_Time:
 		bsr.w	LoadTilesAsYouMove
-		bsr.w	GraduallyRefreshBackground	
+		jsr		GraduallyRefreshBackground	
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	ProcessDPLC2
@@ -1400,7 +1404,11 @@ QuickPLC:
 		
 		include "_inc\GLP2 Level Select.asm"
 		
-		include "_inc\GLP2 Level End Cards.asm"		
+		include "_inc\GLP2 Level End Cards.asm"	
+
+		include "_inc\GLP2 Instructions.asm"
+
+		include "_inc\GLP2 Credits.asm"		
 
 Pal_TitleCyc:	incbin	"palette\Cycle - Title Screen Water.bin"
 Pal_GHZCyc:	incbin	"palette\Cycle - GHZ.bin"

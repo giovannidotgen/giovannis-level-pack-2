@@ -52,7 +52,9 @@ id_Credits:	equ ptr_GM_Credits-GameModeArray; $1C
 id_Giovanni:	equ ptr_GM_Giovanni-GameModeArray ; $20
 id_GLP2Title:	equ ptr_GM_GLP2Title-GameModeArray ; $24
 id_LevelSelect:	equ ptr_GM_GLP2LevelSelect-GameModeArray ; $28
-id_LevelEnd:	equ ptr_GM_GLP2LevelEnd-GameModeArray ; $28
+id_LevelEnd:	equ ptr_GM_GLP2LevelEnd-GameModeArray ; $2C
+id_Instructions:	equ ptr_GM_Instructions-GameModeArray ; $30
+id_GLP2Credits:	equ ptr_GM_GLP2Credits-GameModeArray ; $34
 
 ; Levels
 id_GHZ:		equ 0

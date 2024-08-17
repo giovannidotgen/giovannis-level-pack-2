@@ -156,7 +156,7 @@ loc_6EB0:
 
 loc_6ED0:
 		move.w	#bgm_Boss,d0
-		bsr.w	PlaySound	; play boss music
+		jsr		PlaySound	; play boss music
 		move.b	#1,(f_lockscreen).w ; lock screen
 		addq.b	#2,(v_dle_routine).w
 		moveq	#plcid_GHZBoss,d0
@@ -235,7 +235,7 @@ DLE_LZ3:
 		beq.s	loc_6F28				; MJ: if so, branch to skip
 		move.l	#Level_LZ3NoWall,(v_lvllayoutfg).w	; MJ: Set wall version of act 3's layout to be read
 		move.w	#sfx_Rumbling,d0
-		bsr.w	PlaySound_Special ; play rumbling sound
+		jsr		PlaySound_Special ; play rumbling sound
 
 loc_6F28:
 		tst.b	(v_dle_routine).w
@@ -250,7 +250,7 @@ loc_6F28:
 
 loc_6F4A:
 		move.w	#bgm_Boss,d0
-		bsr.w	PlaySound	; play boss music
+		jsr		PlaySound	; play boss music
 		move.b	#1,(f_lockscreen).w ; lock screen
 		addq.b	#2,(v_dle_routine).w
 		moveq	#plcid_Boss,d0
@@ -410,7 +410,7 @@ DLE_MZ3boss:
 
 loc_70D0:
 		move.w	#bgm_Boss,d0
-		bsr.w	PlaySound	; play boss music
+		jsr		PlaySound	; play boss music
 		move.b	#1,(f_lockscreen).w ; lock screen
 		addq.b	#2,(v_dle_routine).w
 		moveq	#plcid_Boss,d0
@@ -475,7 +475,7 @@ DLE_SLZ3boss:
 
 loc_7144:
 		move.w	#bgm_Boss,d0
-		bsr.w	PlaySound	; play boss music
+		jsr		PlaySound	; play boss music
 		move.b	#1,(f_lockscreen).w ; lock screen
 		addq.b	#2,(v_dle_routine).w
 		moveq	#plcid_Boss,d0
@@ -558,7 +558,7 @@ DLE_SYZ3boss:
 
 loc_71EC:
 		move.w	#bgm_Boss,d0
-		bsr.w	PlaySound	; play boss music
+		jsr		PlaySound	; play boss music
 		move.b	#1,(f_lockscreen).w ; lock screen
 		moveq	#plcid_Boss,d0
 		bra.w	AddPLC		; load boss patterns
