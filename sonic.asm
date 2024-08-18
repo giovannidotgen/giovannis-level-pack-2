@@ -369,9 +369,9 @@ ptr_GM_Level:	bra.w	GM_Level	; Normal Level ($0C)
 
 ptr_GM_Special:	bra.w	GM_Special	; Special Stage	($10)
 
-ptr_GM_Cont:	bra.w	GM_Continue	; Continue Screen ($14)
+ptr_GM_Cont:	bra.w	JmpTo_GM_Continue	; Continue Screen ($14)
 
-ptr_GM_Ending:	bra.w	GM_Ending	; End of game sequence ($18)
+ptr_GM_Ending:	bra.w	JmpTo_GM_Ending	; End of game sequence ($18)
 
 ptr_GM_Credits:	bra.w	JmpTo_GM_Credits	; Credits ($1C)
 
@@ -584,6 +584,12 @@ Art_Text:	incbin	"artunc\menutext.bin" ; text used in level select and debug mod
 
 JmpTo_GM_Credits:
 		jmp		GM_Credits
+	
+JmpTo_GM_Continue:
+		jmp		GM_Continue
+		
+JmpTo_GM_Ending:
+		jmp		GM_Ending
 
 ; ---------------------------------------------------------------------------
 ; Vertical interrupt
@@ -4314,7 +4320,7 @@ TryAgainEnd:
 		move.w	#$8B03,(a6)	; line scroll mode
 		move.w	#$8720,(a6)	; set background colour (line 3; colour 0)
 		clr.b	(f_wtr_state).w
-		bsr.w	ClearScreen
+		jsr	 	ClearScreen
 
 		lea	(v_objspace).w,a1
 		moveq	#0,d0

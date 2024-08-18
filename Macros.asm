@@ -293,6 +293,23 @@ SonicDplcVer = 1
 		include	"_maps/MapMacros.asm"
 
 ; ---------------------------------------------------------------------------
+; grabbed from the S2 disassembly
+; ---------------------------------------------------------------------------
+
+vdpComm function addr,type,rwd,(((type&rwd)&3)<<30)|((addr&$3FFF)<<16)|(((type&rwd)&$FC)<<2)|((addr&$C000)>>14)
+tiles_to_bytes function addr,((addr&$7FF)<<5)
+
+; values for the type argument
+VRAM = %100001
+CRAM = %101011
+VSRAM = %100101
+
+; values for the rwd argument
+READ = %001100
+WRITE = %000111
+DMA = %100111
+
+; ---------------------------------------------------------------------------
 ; turn a sample rate into a djnz loop counter
 ; ---------------------------------------------------------------------------
 
