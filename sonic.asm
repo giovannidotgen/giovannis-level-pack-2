@@ -373,7 +373,7 @@ ptr_GM_Cont:	bra.w	GM_Continue	; Continue Screen ($14)
 
 ptr_GM_Ending:	bra.w	GM_Ending	; End of game sequence ($18)
 
-ptr_GM_Credits:	bra.w	GM_Credits	; Credits ($1C)
+ptr_GM_Credits:	bra.w	JmpTo_GM_Credits	; Credits ($1C)
 
 ptr_GM_Giovanni: bra.w	GiovanniSplash	; "GIOVANNI" Splash Screen
 
@@ -581,6 +581,10 @@ Art_Text:	incbin	"artunc\menutext.bin" ; text used in level select and debug mod
 			include "_inc\DMA Queue.asm"	
 
 ; ===========================================================================
+
+JmpTo_GM_Credits:
+		jmp		GM_Credits
+
 ; ---------------------------------------------------------------------------
 ; Vertical interrupt
 ; ---------------------------------------------------------------------------
@@ -675,7 +679,7 @@ VBla_14:
 
 VBla_04:
 		bsr.w	sub_106E
-		bsr.w	LoadTilesAsYouMove_BGOnly
+		jsr		LoadTilesAsYouMove_BGOnly
 		bsr.w	sub_1642
 		tst.w	(v_demolength).w
 		beq.w	.end
@@ -735,8 +739,8 @@ VBla_08:
 
 
 Demo_Time:
-		bsr.w	LoadTilesAsYouMove
-		jsr		GraduallyRefreshBackground	
+		jsr	LoadTilesAsYouMove
+		jsr	GraduallyRefreshBackground	
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	ProcessDPLC2
@@ -795,7 +799,7 @@ VBla_0C:
 		movem.l	d0-d7,(v_screenposx_dup).w
 		movem.l	(v_fg_scroll_flags).w,d0-d1
 		movem.l	d0-d1,(v_fg_scroll_flags_dup).w
-		bsr.w	LoadTilesAsYouMove
+		jsr	LoadTilesAsYouMove
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	sub_1642
@@ -5433,10 +5437,10 @@ LevelDataLoad:
 		movea.l	(a2)+,a0
 		lea	(v_16x16).w,a1	; RAM address for 16x16 mappings
 		move.w	#0,d0
-		bsr.w	EniDec
+		jsr  	EniDec
 		movea.l	(a2)+,a0
 		lea	(v_128x128).l,a1 ; RAM address for 128x128 mappings
-		bsr.w	KosDec
+		jsr  	KosDec
 		bsr.w	LevelLayoutLoad
 
 ; GIO: Palette loading code
@@ -5490,7 +5494,7 @@ LevelDataLoad:
 		moveq	#0,d0
 		move.b	(a2),d0
 		beq.s	.skipPLC	; if 2nd PLC is 0 (i.e. the ending sequence), branch
-		bsr.w	AddPLC		; load pattern load cues
+		jsr  	AddPLC		; load pattern load cues
 
 	.skipPLC:
 		rts	
@@ -8842,6 +8846,8 @@ Nem_MenuBox:	incbin "artnem\A menu box with a Shadow.bin"
 	even
 Tilemap_MenuBox:	incbin "tilemaps\Main Menu Box.bin"
 	even
+Tilemap_InstructionsBox:	incbin "tilemaps\Instructions Box.bin"
+	even	
 Nem_TitleCard:	incbin	"artnem\Title Cards.bin"
 		even
 Nem_Hud:	incbin	"artnem\HUD.bin"	; HUD (rings, time, score)

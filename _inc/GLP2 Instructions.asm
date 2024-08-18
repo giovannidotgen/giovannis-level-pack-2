@@ -38,7 +38,7 @@ GLP2Instructions:
     bsr.w   TilemapToVRAM	         	; flush mappings to VRAM	
 	
     lea     ($FF0000).l,a1				; load dump location
-    lea     (Tilemap_MenuBox).l,a0				; load compressed mappings address
+    lea     (Tilemap_InstructionsBox).l,a0				; load compressed mappings address
     move.w  #$2060,d0	             		; prepare pattern index value to patch to mappings
     jsr     EniDec						; decompress and dump
     lea     ($FF0000).l,a1				; load dump location
@@ -140,14 +140,16 @@ Instructions_TextFadeIn:
 Instructions_MainLoop:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
-    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
-    bmi.s   Instructions_StartPressed    ; if so, branch
+    move.b  (v_jpadpress1).w,d0        	
+	andi.b	#btnStart+btnB,d0	
+    bne.s   Instructions_StartPressed    ; if so, branch
 	bsr.w	Instructions_Controls
 	bsr.w	GLP2_Camera
 	bra.s	Instructions_MainLoop
  
 ; Quit Menu
 Instructions_StartPressed:
+	clr.w	(v_levselitem).w
     move.b  #id_GLP2Title,(v_gamemode).w      	; set the screen mode to Title Screen
     rts									; return
 
@@ -167,13 +169,13 @@ Instructions_Controls:
 		beq.s	.right	; if not, branch
 		subq.w	#1,d2		; subtract 1 to selection
 		bpl.s	.right
-		move.w  #1,d2     
+		move.w  #6,d2     
 		
 .right:
 		btst	#3,d1		; is right pressed?
 		beq.s	.refresh	; if not, branch
 		addq.w	#1,d2	; add 1 selection
-		cmp.w	#1,d2
+		cmp.w	#6,d2
 		ble.s	.refresh
 		move.w	#0,d2	
 		
@@ -188,54 +190,37 @@ Instructions_Controls:
 ; ===============================================================
 
 Instructions_Headings:
-	; lea	($C00000).l,a6
-	; lea	(Instructions_Heading1).l,a1 ; where to fetch the lines from	
-	; move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	; move.l	#$428C0003,4(a6)
-	; moveq	#12,d2		; number of characters to be rendered in a line -1
-	; bsr.w	SingleLineRender
-	
-	; ; MOST RINGS
-	; move.l	#$46080003,4(a6)
-	; moveq	#10,d2		; number of characters to be rendered in a line -1
-	; bsr.w	SingleLineRender
-
-	; ; BEST TIME
-	; move.l	#$47080003,4(a6)
-	; moveq	#9,d2		; number of characters to be rendered in a line -1
-	; bsr.w	SingleLineRender	
-
-	; ; EXITS
-	; move.l	#$4A080003,4(a6)
-	; moveq	#4,d2		; number of characters to be rendered in a line -1
-	; bsr.w	SingleLineRender
-	
-	; ; RED STAR RINGS
-	; move.l	#$4A2C0003,4(a6)
-	; moveq	#13,d2		; number of characters to be rendered in a line -1
-	; bsr.w	SingleLineRender
-	
-	; move.l	#$47220003,4(a6)
-	; move.w	#$A680+":"-$21,(a6)
-	
-	; move.l	#$47280003,4(a6)
-	; move.w	#$A680+":"-$21,(a6)
-
-	; rts
+	rts
 	
 
 ; ===============================================================
 
 Instructions_Body:
-	; lea	($C00000).l,a6
-	; lea	(Instructions_LevelNames).l,a1 ; where to fetch the lines from
-	; move.w	(v_levselitem).w,d1
-	; mulu.w	#11,d1
-	; adda.l	d1,a1	
-	; move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
-	; move.l	#$42A80003,4(a6)
-	; moveq	#10,d2		; number of characters to be rendered in a line -1
-	; bsr.w	SingleLineRender
+	lea	($C00000).l,a6
+	lea	(Instructions_Titles).l,a1 ; where to fetch the lines from
+	move.w	(v_levselitem).w,d1
+	mulu.w	#28,d1
+	adda.l	d1,a1	
+	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
+	move.l	#$428C0003,4(a6)
+	moveq	#27,d2		; number of characters to be rendered in a line -1
+	bsr.w	SingleLineRender
+	
+	moveq	#0,d1
+	lea	(Instructions_PageBodies).l,a1 ; where to fetch the lines from
+	move.w	(v_levselitem).w,d1
+	mulu.w	#32*14,d1	
+	adda.l	d1,a1
+	move.l	#$45080003,d4	; (CHANGE) starting screen position 
+	move.w	#$A680,d3	; which palette the font should use and where it is in VRAM
+	moveq	#13,d1		; number of lines of text to be displayed -1
+
+-
+	move.l	d4,4(a6)
+	moveq	#31,d2		; number of characters to be rendered in a line -1
+	bsr.w	SingleLineRender
+	addi.l	#(1*$800000),d4  ; replace number to the left with desired distance between each line
+	dbf	d1,-	
 
 	
 	; lea		(v_level_savedata).w,a3
@@ -355,3 +340,122 @@ Instructions_Body:
 	; dbf		d3,.loop
 	
 	rts
+	
+; ===============================================================
+; Raw Text Data
+; ===============================================================	
+	
+Instructions_Titles:
+	dc.b	"PAGE 1 - WELCOME!           "
+	dc.b	"PAGE 2 - WHAT IS THIS?      "	
+	dc.b	"PAGE 3 - CONTROLS (1 OF 2)  "		
+	dc.b	"PAGE 4 - CONTROLS (2 OF 2)  "			
+	dc.b	"PAGE 5 - EXITING LEVELS     "		
+	dc.b	"PAGE 6 - RED STAR RINGS     "			
+	dc.b	"PAGE 7 - BUILD INFORMATION  "				
+	
+Instructions_PageBodies:
+	dc.b	"WELCOME TO THE GIOVANNI'S LEVEL "
+	dc.b	"PACK 2 USER MANUAL!             "
+	dc.b	"TO SWITCH BETWEEN PAGES, PRESS  "
+	dc.b	"LEFT OR RIGHT. ONCE YOU ARE     "
+	dc.b	"FINISHED READING, PRESS START OR"
+	dc.b	"B TO RETURN TO THE TITLE SCREEN."
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+
+	dc.b	"GIOVANNI'S LEVEL PACK 2 IS A    "
+	dc.b	"MODIFIED VERSION OF THE ORIGINAL"
+	dc.b	"SONIC THE HEDGEHOG FOR THE SEGA "
+	dc.b	"MEGA DRIVE OR GENESIS, FEATURING"
+	dc.b	"2 LEVELS FOR YOU TO PLAY, WITH  "
+	dc.b	"MANY FUN OBJECTIVES TO ACHIEVE! "
+	dc.b	"                                "
+	dc.b	"DO NOT LET THE LOW LEVEL COUNT  "
+	dc.b	"DISAPPOINT YOU, FOR THESE TWO   "
+	dc.b	"LEVELS ARE PACKED WITH MANY     "
+	dc.b	"CHALLENGES, COLLECTIBLES, AND   "
+	dc.b	"OTHER THINGS THAT WILL HAVE YOU "
+	dc.b	"HOOKED TO THESE LEVELS!         "
+	dc.b	"                                "
+		
+	dc.b	"THE GAME CONTROLS AS YOU WOULD  "
+	dc.b	"EXPECT, WITH A FEW CHANGES:     "
+	dc.b	"- YOU CAN PERFORM THE SPIN DASH,"
+	dc.b	"  FROM SONIC 2;                 "
+	dc.b	"- YOU CAN PERFORM THE SUPER     "
+	dc.b	"  PEEL-OUT, FROM SONIC CD, WITH "
+	dc.b	"  THE ADDED BENEFIT OF BEING    "
+	dc.b	"  ABLE TO RELEASE IT WHENEVER;  "
+	dc.b	"- YOU CAN PERFORM THE DROP DASH,"
+	dc.b	"  FROM SONIC MANIA;             "
+	dc.b	"- SONIC 1'S SPEED CAPS, AND THE "
+	dc.b	"  ROLLING JUMP LOCK, ARE NO     "
+	dc.b	"  LONGER PRESENT                "
+	dc.b	"                                "		
+		
+	dc.b	"IF NECESSARY, YOU CAN QUIT THE  "
+	dc.b	"LEVEL AT ANY TIME BY PRESSING A "
+	dc.b	"WHILE THE GAME IS PAUSED.       "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "			
+	
+	dc.b	"YOU WILL NOT FIND A SIGNPOST    "
+	dc.b	"WAITING FOR YOU AT THE END OF   "
+	dc.b	"THE LEVEL.                      "
+	dc.b	"                                "
+	dc.b	"INSTEAD, YOU WILL HAVE TO SEEK  "
+	dc.b	"OUT ONE OF THREE GIANT RINGS TO "
+	dc.b	"CLEAR THE LEVEL. EACH HAS THREE "
+	dc.b	"OF THEM. CAN YOU FIND THEM ALL? "
+	dc.b	"                                "
+	dc.b	"EXITING A LEVEL CAN HAVE YOUR   "
+	dc.b	"BEST TIME AND HIGHEST RING      "
+	dc.b	"AMOUNT RECORDED IN YOUR SAVE    "
+	dc.b	"DATA! (OR NOT, IF YOU RECEIVED A"
+	dc.b	"WARNING AT LAUNCH)              "			
+
+	dc.b	"RED STAR RINGS ARE AN OPTIONAL  "
+	dc.b	"COLLECTIBLE.                    "
+	dc.b	"                                "
+	dc.b	"FIVE RED STAR RINGS ARE FOUND   "
+	dc.b	"IN EACH LEVEL. YOU MIGHT HAVE TO"
+	dc.b	"GO THROUGH THE LEVELS MULTIPLE  "
+	dc.b	"TIMES AND SCAN THEM CAREFULLY   "
+	dc.b	"TO FIND ALL OF THEM!            "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "			
+	
+	dc.b	"GIOVANNI'S LEVEL PACK 2         "
+	dc.b	"VERSION 1.0                     "
+	dc.b	"                                "
+	dc.b	"THIS IS A MODIFIED VERSION OF   "
+	dc.b	"SONIC THE HEDGEHOG, A PROPERTY  "
+	dc.b	"OF SEGA. IT WAS NOT DEVELOPED BY"
+	dc.b	"THEM, OR PUBLISHED UNDER A      "
+	dc.b	"LICENSE, OR WITH AUTHORIZATION. "
+	dc.b	"                                "
+	dc.b	"THIS MOD WAS MADE FOR           "
+	dc.b	"ENTERTAINMENT PURPOSES, AND IS  "
+	dc.b	"AVAILABLE FOR FREE ON           "
+	dc.b	"DOTGEN.ORG. IF YOU'VE PAID MONEY"
+	dc.b	"FOR THIS, YOU'VE BEEN SCAMMED.  "			
