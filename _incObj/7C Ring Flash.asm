@@ -129,6 +129,8 @@ Flash_EndLevel:	; Routine 4
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0	; get Exit ID
 		bset	d0,(a1)				; mark as found	
+		
+		bsr.w	SaveData
 			
 		move.b	#id_LevelEnd,(v_gamemode).w
 		bra.w	DeleteObject
@@ -173,3 +175,24 @@ Flash_LoadGFX:
 		
 Flash_DynPLC:
 		include "_maps\Ring Flash DPLC.asm"
+		
+SaveData:
+		move.l	a0,-(sp)
+		move.l	a1,-(sp)
+		tst.b	(SRAM_ErrorCode).w
+		bne.s	.return				; SRAM is not in use
+	
+		lea		(v_level_savedata).l,a1
+		lea		(SRAM_Start).l,a0
+
+.loop:
+		move.l	(a1)+,d0					; place RAM data in d0
+		movep.l	d0,(a0)						; put it in SRAM
+		adda.l	#8,a0						; advance SRAM pointer
+		cmpa.l	#SRAM_Firstrun,a0			; check if we're at the end
+		blt.s	.loop						; if we aren't yet, repeat	
+	
+.return:
+		movea.l	(sp)+,a1
+		movea.l	(sp)+,a0
+		rts

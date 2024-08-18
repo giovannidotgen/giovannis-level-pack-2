@@ -271,3 +271,5 @@ LSD_Rings: equ 4
 LSD_RedStar: equ 6
 LSD_Exits: equ 7
 LSD_SizeofEntry: equ 8
+SRAM_Start: equ $200003
+SRAM_Firstrun equ $200023

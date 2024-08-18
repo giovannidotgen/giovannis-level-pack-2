@@ -9,7 +9,7 @@
 
 	cpu 68000
 
-EnableSRAM:	equ 0	; change to 1 to enable SRAM
+EnableSRAM:	equ 1	; change to 1 to enable SRAM
 BackupSRAM:	equ 1
 AddressSRAM:	equ 3	; 0 = odd+even; 2 = even only; 3 = odd only
 
@@ -141,9 +141,9 @@ SRAMSupport:	if EnableSRAM=1
 		else
 		dc.l $20202020
 		endc
-		dc.l $20202020		; SRAM start ($200001)
-		dc.l $20202020		; SRAM end ($20xxxx)
-Notes:		dc.b "IF THIS GOT LEAKED LIKE THIS, THE LEAKER'S A DUMBASS" ; Notes (unused, anything can be put in this space, but it has to be 52 bytes.)
+		dc.l $00200001		; SRAM start ($200001)
+		dc.l $002000FF		; SRAM end ($20xxxx)
+Notes:		dc.b "DOTGEN.ORG                                          " ; Notes (unused, anything can be put in this space, but it has to be 52 bytes.)
 Region:		dc.b "JUE             " ; Region (Country code)
 EndOfHeader:
 
@@ -956,6 +956,64 @@ JoypadInit:
 
 
 SaveInit:
+
+		clr.b	(SRAM_ErrorCode).w		; clear the SRAM error code
+		move.b  #1,($A130F1).l    		; Enable SRAM writes (ROM being less than 2MB means I don't have to ever disable SRAM writes! :D)
+		lea 	(SRAM_Firstrun).l,a0    ; Get the firstrun string
+		movep.l 0(a0),d0       			; Put the contents in d0
+		move.l  #"GLP2",d1       		; get the keyword
+		cmp.l   d0,d1          			; was it written already?
+		beq.s	.success
+		
+		bsr.w	InitSRAM_PreloadData	; Load all default data if not found
+		lea 	(SRAM_Firstrun).l,a0    ; get firstrun string
+		movep.l 0(a0),d0       			; in d0
+		move.l  #"GLP2",d1       		; get the keyword
+		cmp.l	d0,d1					; was it found?
+		beq.w	InitSRAM_LoadData		; If it was, then put SRAM in RAM
+		bra.s	InitSRAM_Failsafe
+	
+.success:	
+		bset	#0,(Firstrun).w
+		bra.w	InitSRAM_LoadData
+		
+InitSRAM_PreloadData:
+		movep.l d1,0(a0)        ; Write the keyword in SRAM_Firstrun
+
+		clr.b	(Firstrun).w
+
+		lea		(SRAM_Start).l,a0
+		lea		(Save_Default).l,a1
+		moveq	#1,d0	
+		moveq	#(Save_Default_End-Save_Default)-1,d1
+	
+.loop1:
+.loop2:
+		move.b	(a1)+,(a0)
+		adda.l	#2,a0
+		dbf		d1,.loop2
+		
+		lea		(Save_Default).l,a1
+		moveq	#(Save_Default_End-Save_Default)-1,d1		
+		dbf		d0,.loop1
+		rts
+
+InitSRAM_LoadData:
+		lea		(SRAM_Start).l,a0
+		lea		(v_level_savedata).l,a1
+	
+.loop:
+		movep.l	(a0),d0						; place SRAM data in d0
+		move.l	d0,(a1)+					; put it in RAM
+		adda.l	#8,a0						; advance SRAM pointer
+		cmpa.l	#SRAM_Firstrun,a0			; check if we're at our destination
+		blt.s	.loop						; if we aren't yet, repeat
+
+		rts
+
+InitSRAM_Failsafe:
+		clr.b	(Firstrun).w
+		move.b	#1,(SRAM_ErrorCode).w	; Error code 1: SRAM not found.
 		lea		(v_level_savedata).w,a0
 		lea		(Save_Default).l,a1
 		moveq	#1,d0
@@ -977,7 +1035,8 @@ Save_Default:
 		dc.l	(9*$10000)+(59*$100)+59	; Best time
 		dc.w	0						; Most rings
 		dc.b	0						; Red Star Rings bitfield
-		dc.b	0						; Exits bitfield
+		dc.b	0						; Exits bitfield	
+Save_Default_End:
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	read joypad input, and send it to the RAM

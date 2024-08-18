@@ -304,6 +304,8 @@ v_lamp_redstar:	equ $FFFFFF86
 v_redstar_collection:	equ $FFFFFF8C	; Red Star Ring collection variables (5 byte array)
 v_exitfound:	equ	$FFFFFF91
 v_lamp_bgswapper:	equ $FFFFFF92
+SRAM_ErrorCode:	equ $FFFFFF94
+Firstrun:		equ $FFFFFF95
 
 v_scorecopy:	equ $FFFFFFC0	; score, duplicate (4 bytes)
 v_scorelife:	equ $FFFFFFC0	; points required for an extra life (4 bytes) (JP1 only)
