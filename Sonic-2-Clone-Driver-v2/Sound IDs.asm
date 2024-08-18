@@ -94,6 +94,7 @@ sfx_DropDash = 		SMPS_id(ptr_dropdash)
 sfx_Launch	=		SMPS_id(ptr_launch)
 sfx_PeeloutCharge = SMPS_id(ptr_peelcharge)
 sfx_PeeloutRelease = SMPS_id(ptr_peelrelease)
+sfx_Error	=	SMPS_id(ptr_error)
 sfx__Last =		SMPS_id(ptr_sndend)-1
 
 

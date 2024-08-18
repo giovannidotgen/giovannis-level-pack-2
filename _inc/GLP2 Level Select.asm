@@ -180,8 +180,9 @@ LevelSelect_TextFadeIn:
 LevelSelect_MainLoop:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
-    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
-    bmi.s   LevelSelect_StartPressed    ; if so, branch
+    move.b  (v_jpadpress1).w,d0        	
+	andi.b	#btnStart+btnA,d0	
+    bne.s   LevelSelect_StartPressed    ; if so, branch
 	bsr.w	LevelSelect_Controls
 	bsr.w	GLP2_Camera
 	bra.s	LevelSelect_MainLoop
@@ -256,10 +257,10 @@ LevelSelect_Controls:
 		
 .refresh:
 		move.w	d2,(v_levselitem).w
-		bra.w	LevelSelect_LevelInfo
-;		move.w	#SndID_Blip,d0
-;		jmp	(PlaySound).l			
-
+		bsr.w	LevelSelect_LevelInfo
+		move.w	#sfx_Switch,d0
+		jmp	(PlaySound).l	
+		
 ; ===============================================================
 ; Foreground Plane Graphics Rendering Routines
 ; ===============================================================

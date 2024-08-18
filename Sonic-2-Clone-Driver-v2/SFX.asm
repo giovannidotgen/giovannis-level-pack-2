@@ -66,6 +66,7 @@ ptr_dropdash:	SMPS_SFX_METADATA	SoundDropdash, $80, 0
 ptr_peelcharge:	SMPS_SFX_METADATA	SoundCharge, $80, 0
 ptr_peelrelease:	SMPS_SFX_METADATA	SoundRelease, $80, 0	
 ptr_launch:	SMPS_SFX_METADATA	SoundLaunch, $80, 0
+ptr_error:	SMPS_SFX_METADATA	SoundError, $80, 0
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
@@ -177,4 +178,5 @@ SoundCharge: include	"Sonic-2-Clone-Driver-v2/SFX/CD_Charge.asm"
 		even
 SoundRelease:	include "Sonic-2-Clone-Driver-v2/SFX/CD_Release.asm"
 		even
-		
+SoundError:	include "Sonic-2-Clone-Driver-v2/SFX/Error.asm"
+		even		

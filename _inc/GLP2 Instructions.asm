@@ -169,21 +169,21 @@ Instructions_Controls:
 		beq.s	.right	; if not, branch
 		subq.w	#1,d2		; subtract 1 to selection
 		bpl.s	.right
-		move.w  #6,d2     
+		move.w  #7,d2     
 		
 .right:
 		btst	#3,d1		; is right pressed?
 		beq.s	.refresh	; if not, branch
 		addq.w	#1,d2	; add 1 selection
-		cmp.w	#6,d2
+		cmp.w	#7,d2
 		ble.s	.refresh
 		move.w	#0,d2	
 		
 .refresh:
 		move.w	d2,(v_levselitem).w
-		bra.w	Instructions_Body
-;		move.w	#SndID_Blip,d0
-;		jmp	(PlaySound).l			
+		bsr.w	Instructions_Body
+		move.w	#sfx_Switch,d0
+		jmp	(PlaySound).l		
 
 ; ===============================================================
 ; Foreground Plane Graphics Rendering Routines
@@ -351,8 +351,9 @@ Instructions_Titles:
 	dc.b	"PAGE 3 - CONTROLS (1 OF 2)  "		
 	dc.b	"PAGE 4 - CONTROLS (2 OF 2)  "			
 	dc.b	"PAGE 5 - EXITING LEVELS     "		
-	dc.b	"PAGE 6 - RED STAR RINGS     "			
-	dc.b	"PAGE 7 - BUILD INFORMATION  "				
+	dc.b	"PAGE 6 - RED STAR RINGS     "		
+	dc.b	"PAGE 7 - SAVE DATA          "
+	dc.b	"PAGE 8 - BUILD INFORMATION  "				
 	
 Instructions_PageBodies:
 	dc.b	"WELCOME TO THE GIOVANNI'S LEVEL "
@@ -424,11 +425,11 @@ Instructions_PageBodies:
 	dc.b	"CLEAR THE LEVEL. EACH HAS THREE "
 	dc.b	"OF THEM. CAN YOU FIND THEM ALL? "
 	dc.b	"                                "
-	dc.b	"EXITING A LEVEL CAN HAVE YOUR   "
-	dc.b	"BEST TIME AND HIGHEST RING      "
-	dc.b	"AMOUNT RECORDED IN YOUR SAVE    "
-	dc.b	"DATA! (OR NOT, IF YOU RECEIVED A"
-	dc.b	"WARNING AT LAUNCH)              "			
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "
+	dc.b	"                                "			
 
 	dc.b	"RED STAR RINGS ARE AN OPTIONAL  "
 	dc.b	"COLLECTIBLE.                    "
@@ -444,6 +445,21 @@ Instructions_PageBodies:
 	dc.b	"                                "
 	dc.b	"                                "
 	dc.b	"                                "			
+	
+	dc.b	"EXITING A LEVEL WILL RECORD THE "
+	dc.b	"EXIT AS FOUND, AS WELL AS THE   "
+	dc.b	"RED STAR RINGS YOU'VE RETRIEVED "
+	dc.b	"DURING YOUR RUN, AND MAY EVEN   "
+	dc.b	"RESULT IN THE RECORDING OF A FEW"	
+	dc.b	"RECORDS!                        "
+	dc.b	"                                "
+	dc.b	"IF FOR WHATEVER REASON YOUR DATA"
+	dc.b	"CAN NOT BE SAVED, YOU WILL BE   "
+	dc.b	"WARNED IN THE GIOVANNI.GEN      "
+	dc.b	"SPLASH SCREEN. THAT VERY SAME   "
+	dc.b	"SCREEN ALLOWS YOU TO RESET YOUR "
+	dc.b	"SAVE DATA BY HOLDING A, B, AND  "
+	dc.b	"C DURING IT!                    "			
 	
 	dc.b	"GIOVANNI'S LEVEL PACK 2         "
 	dc.b	"VERSION 1.0                     "

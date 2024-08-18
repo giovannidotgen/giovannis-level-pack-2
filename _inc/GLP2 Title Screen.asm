@@ -151,8 +151,9 @@ GLP2_TextFadeIn:
 GLP2_MainLoop:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
-    tst.b   (v_jpadpress1).w           	; has player 1 pressed start button?
-    bmi.s   GLP2_StartPressed         	; if so, branch
+    move.b  (v_jpadpress1).w,d0        	
+	andi.b	#btnStart+btnA,d0	
+    bne.s   GLP2_StartPressed         	; if so, branch
 	bsr.s	GLP2_Camera
 	bsr.w	GLP2_MenuControls
 	bra.s	GLP2_MainLoop
@@ -248,6 +249,9 @@ GLP2_MenuControls:
 .refresh:
 		move.w	d0,(v_levselitem).w ; set new selection
 		bsr.w	GLP2_MenuText; refresh option names
+		move.w	#sfx_Switch,d0
+		jmp	(PlaySound).l		
+	
 	
 .noinput:
 		rts	

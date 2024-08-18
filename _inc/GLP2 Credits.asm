@@ -152,7 +152,7 @@ off_B2CA:
 
 ; credits text pointers for each screen of credits
 vram_pnt := vram_fg
-CreditsScreen_0:	creditsPtrs CreditText_GLP2_1,textLoc($0B,$0B), CreditText_GLP2_2,textLoc($09,$0D), CreditText_StaffCredits,textLoc($08,$11)
+CreditsScreen_0:	creditsPtrs CreditText_GLP2_1,textLoc($0B,$0A), CreditText_GLP2_2,textLoc($09,$0C), CreditText_StaffCredits,textLoc($08,$10)
 CreditsScreen_1:	creditsPtrs CreditText_ProjectLead,textLoc($02,$0B), CreditText_Giovanni,textLoc($02,$0F)
 CreditsScreen_2:	creditsPtrs CreditText_LevelLayouts,textLoc($02,$0B), CreditText_Giovanni,textLoc($02,$0F)
 CreditsScreen_3:	creditsPtrs CreditText_Programming,textLoc($02,$0A), CreditText_Giovanni,textLoc($02,$0E), CreditText_fuzzybit,textLoc($02,$10)
