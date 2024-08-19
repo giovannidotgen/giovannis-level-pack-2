@@ -93,7 +93,8 @@ MBlock_TypeIndex:dc.w MBlock_Type00-MBlock_TypeIndex, MBlock_Type01-MBlock_TypeI
 		dc.w MBlock_Type06-MBlock_TypeIndex, MBlock_Type07-MBlock_TypeIndex
 		dc.w MBlock_Type08-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
 		dc.w MBlock_Type0A-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
-		dc.w MBlock_Type0C-MBlock_TypeIndex
+		dc.w MBlock_Type0C-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
+		dc.w MBlock_Type0E-MBlock_TypeIndex
 ; ===========================================================================
 
 MBlock_Type00:
@@ -256,4 +257,50 @@ MBlock_Type0C:
 MBlock_0C_End:
 		clr.b	obSubtype(a0)	; change to type 00 (non-moving	type)
 		rts	
+; ===========================================================================
+
+MBlock_Type0E:
+		moveq	#0,d3
+		move.b	obActWid(a0),d3
+		add.w	d3,d3
+		moveq	#4,d1
+		btst	#0,obStatus(a0)
+		beq.s	.loc_10004
+		neg.w	d1
+		neg.w	d3
+
+.loc_10004:
+		tst.w	$36(a0)		; is platform set to move back?
+		bne.s	.Back	; if yes, branch
+		move.w	obX(a0),d0
+		sub.w	mblock_origX(a0),d0
+		cmp.w	d3,d0
+		beq.s	.Wait
+		add.w	d1,obX(a0)	; move platform
+		move.w	#300,$34(a0)	; set time delay to 5 seconds
+		rts	
+; ===========================================================================
+
+.Wait:
+		subq.w	#1,$34(a0)	; subtract 1 from time delay
+		bne.s	.locret_1002E	; if time remains, branch
+		move.w	#1,$36(a0)	; set platform to move back to its original position
+
+.locret_1002E:
+		rts	
+; ===========================================================================
+
+.Back:
+		move.w	obX(a0),d0
+		sub.w	mblock_origX(a0),d0
+		beq.s	.Reset
+		sub.w	d1,obX(a0)	; return platform to its original position
+		rts	
+; ===========================================================================
+
+.Reset:
+		clr.w	$36(a0)
+		subq.b	#1,obSubtype(a0)
+		rts	
+
 ; ===========================================================================

@@ -226,6 +226,7 @@ LevelSelect_StartPressed:
 	dbf		d2,.looprings
 	
 	clr.b	(v_lastlamp).w
+	clr.b	(f_timecount).w
 	move.b	#bgm_Fade,d0
 	bra.w	PlaySound_Special ; fade out music
 

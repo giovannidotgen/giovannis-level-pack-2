@@ -3139,7 +3139,10 @@ Level_LoadObj:
 		bsr.w	OscillateNumInit
 		move.b	#1,(f_scorecount).w ; update score counter
 		move.b	#1,(f_ringcount).w ; update rings counter
-		move.b	#1,(f_timecount).w ; update time counter
+		tst.b	(v_lastlamp).w	; are you starting from	a lamppost?
+		beq.s	.notimeupdate	; if not, branch
+		move.b	#1,(f_timecount).w ; don't update time counter yet
+	.notimeupdate:
 		move.b	#1,(f_redstar_update).w	; update Red Star Ring tracker
 		move.w	#0,(v_btnpushtime1).w
 		lea	(DemoDataPtr).l,a1 ; load demo data
@@ -3181,14 +3184,16 @@ Level_Delay:
 		move.w	#3,d1
 
 	Level_DelayLoop:
-		move.b	#8,(v_vbla_routine).w
+		move.b	#8,(v_vbla_routine).w	
 		bsr.w	WaitForVBla
+		move.b	#0,(f_timecount).w ; I want the timer to refresh only once			
 		dbf	d1,Level_DelayLoop
 
 		move.w	#$202F,(v_pfade_start).w ; fade in 2nd, 3rd & 4th palette lines
 		bsr.w	PalFadeIn_Alt
 
 Level_StartGame:
+		move.b	#1,(f_timecount).w ; NOW update time counter
 		bclr	#7,(v_gamemode).w ; subtract $80 from mode to end pre-level stuff
 
 ; ---------------------------------------------------------------------------

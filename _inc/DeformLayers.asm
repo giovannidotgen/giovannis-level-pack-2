@@ -439,15 +439,37 @@ Deform_SBZ:
 		
 		move.w	(v_bgscreenposy),(v_bgscrposy_dup).w		; save as VSRAM BG scroll position
 
-		move.w	(v_screenposx).w,d0			; load X position
-		neg.w	d0					; reverse direction
-		asr.w	#$01,d0					; divide by 2
+		move.l	(v_timefromstart).w,d0			; load X position
+		neg.l	d0					; reverse direction
+		asr.l	#$2,d0					; divide by 16
 		move.w	d0,(v_bgscroll_buffer).w			; set speed 1
+
+		move.l	(v_timefromstart).w,d0			; load X position
+		neg.l	d0					; reverse direction
+		asr.l	#$3,d0					; divide by 32
+		move.w	d0,(v_bgscroll_buffer+6).w			; set speed 3
+
+		move.w	(v_bgscroll_buffer).w,d0			
+		add.w	(v_bgscroll_buffer+6).w,d0
+		asr.l	#$1,d0
+		move.w	d0,(v_bgscroll_buffer+2).w
+
+		move.w	(v_bgscroll_buffer).w,d0			
+		add.w	(v_bgscroll_buffer+6).w,d0
+		add.w	(v_bgscroll_buffer+6).w,d0
+		add.w	(v_bgscroll_buffer+6).w,d0
+		asr.l	#$2,d0
+		move.w	d0,(v_bgscroll_buffer+4).w			; set speed 4	
 
 		move.w	(v_screenposx).w,d0			; load X position
 		neg.w	d0					; reverse direction
-		asr.w	#$02,d0					; divide by 4
-		move.w	d0,(v_bgscroll_buffer+2).w			; set speed 2
+		asr.w	#$3,d0					; divide by 4
+		move.w	d0,(v_bgscroll_buffer+8).w
+
+		move.w	(v_screenposx).w,d0			; load X position
+		neg.w	d0					; reverse direction
+		asr.w	#$2,d0					; divide by 2
+		move.w	d0,(v_bgscroll_buffer+$A).w
 
 		lea	DSBZ_Act1(pc),a0			; load scroll data to use
 		bra.w	DeformScroll				; continue
@@ -456,7 +478,12 @@ Deform_SBZ:
 ; Scroll data
 ; ---------------------------------------------------------------------------
 
-DSBZ_Act1:	dc.w	$A800,  $70				; top 70 scroll
+DSBZ_Act1:	dc.w	$A800,  $10
+			dc.w	$A802,	$10
+			dc.w	$A804,	$10
+			dc.w	$A806,	$10	
+			dc.w	$A808,	$1C0
+			DC.W	$A80A, 	$1
 			dc.w	$0000
 
 ; ===========================================================================

@@ -307,6 +307,7 @@ KillSonic:
 		bne.s	.dontdie	; if yes, branch
 		move.b	#0,(v_invinc).w	; remove invincibility
 		move.b	#0,(f_timecount).w	; freeze time
+		clr.b	(v_shield).w	; remove shield
 		move.l	(v_time).w,(v_lamp_time).w	; remember time
 		move.b	#6,obRoutine(a0)
 		jsr		Sonic_ResetOnFloor
