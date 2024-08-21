@@ -157,7 +157,7 @@ CreditsScreen_1:	creditsPtrs CreditText_ProjectLead,textLoc($02,$0B), CreditText
 CreditsScreen_2:	creditsPtrs CreditText_LevelLayouts,textLoc($02,$0B), CreditText_Giovanni,textLoc($02,$0F)
 CreditsScreen_3:	creditsPtrs CreditText_Programming,textLoc($02,$0A), CreditText_Giovanni,textLoc($02,$0E), CreditText_fuzzybit,textLoc($02,$10)
 CreditsScreen_4: 	creditsPtrs	CreditText_Playtesting,textLoc($02,$08), CreditText_fuzzybit,textLoc($02,$0C), CreditText_HazelSpooder,textLoc($02,$0E), CreditText_MDTravis,textLoc($02,$10), CreditText_ScrapSorra,textLoc($02,$12)
-CreditsScreen_5:	creditsPtrs CreditText_AdditionalFeedback,textLoc($02,$0B), CreditText_DAGarden,textLoc($02,$0F)
+CreditsScreen_5:	creditsPtrs CreditText_AdditionalFeedback,textLoc($02,$0A), CreditText_DAGarden,textLoc($02,$0E),	CreditText_djohe,textLoc($02,$10)
 CreditsScreen_6: 	creditsPtrs	CreditText_AdditionalArtwork,textLoc($02,$06), CreditText_Cinossu,textLoc($02,$0A), CreditText_Giovanni,textLoc($02,$0C), CreditText_MDTravis,textLoc($02,$0E), CreditText_Rosie,textLoc($02,$10), CreditText_Speems,textLoc($02,$12), CreditText_Tomatowave,textLoc($02,$14)
 CreditsScreen_7: 	creditsPtrs	CreditText_AdditionalCode,textLoc($02,$06), CreditText_Cinossu,textLoc($02,$0A), CreditText_Clownacy,textLoc($02,$0C), CreditText_DeltaW,textLoc($02,$0E), CreditText_devon,textLoc($02,$10), CreditText_djohe,textLoc($02,$12), CreditText_FraGag,textLoc($02,$14)
 CreditsScreen_8: 	creditsPtrs	CreditText_AdditionalCode,textLoc($02,$06), CreditText_Hixatas,textLoc($02,$0A), CreditText_Lightning,textLoc($02,$0C), CreditText_Kilo,textLoc($02,$0E), CreditText_kram1024,textLoc($02,$10), CreditText_MarkeyJester,textLoc($02,$12), CreditText_Mercury,textLoc($02,$14)
