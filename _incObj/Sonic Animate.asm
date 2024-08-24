@@ -90,9 +90,12 @@ Sonic_Animate:
 		andi.b	#$FC,obRender(a0)
 		eor.b	d1,d2
 		or.b	d2,obRender(a0)
+		tst.b	f_spindash(a0)	; GIO: is Sonic charging a Spin Dash or a Super Peel-Out?
+		bne.s	.dontpush		; GIO: if so, don't push regardless
 		btst	#5,obStatus(a0)	; is Sonic pushing something?
 		bne.w	.push		; if yes, branch
 
+	.dontpush:
 		lsr.b	#4,d0		; divide angle by $10
 		andi.b	#6,d0		; angle	must be	0, 2, 4	or 6
 		move.w	obInertia(a0),d2 ; get Sonic's speed

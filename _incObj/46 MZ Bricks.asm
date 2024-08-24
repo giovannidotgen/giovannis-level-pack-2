@@ -27,8 +27,8 @@ Brick_Main:	; Routine 0
 		move.w	#$5C0,$32(a0)
 
 Brick_Action:	; Routine 2
-		tst.b	obRender(a0)
-		bpl.s	.chkdel
+;		tst.b	obRender(a0)
+;		bpl.s	.chkdel
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0 ; get object type
 		andi.w	#7,d0		; read only the	1st digit
@@ -42,14 +42,8 @@ Brick_Action:	; Routine 2
 		bsr.w	SolidObject
 
 	.chkdel:
-		if Revision=0
-		bsr.w	DisplaySprite
 		out_of_range_S3.w	DeleteObject
-		rts	
-		else
-			out_of_range_S3.w	DeleteObject
-			bra.w	DisplaySprite
-		endc
+		bra.w	DisplaySprite
 ; ===========================================================================
 Brick_TypeIndex:dc.w Brick_Type00-Brick_TypeIndex
 		dc.w Brick_Type01-Brick_TypeIndex
@@ -71,6 +65,8 @@ Brick_Type02:
 loc_E888:
 		cmpi.w	#$90,d0		; is Sonic within $90 pixels of	the block?
 		bcc.s	Brick_Type01	; if not, resume wobbling
+		tst.b	obRender(a0)	; GIO: is the block on screen?
+		bpl.s	Brick_Type01	; GIO: if not, resume wobbling
 		move.b	#3,obSubtype(a0)	; if yes, make the block fall
 
 Brick_Type01:
