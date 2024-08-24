@@ -181,11 +181,19 @@ LevelSelect_MainLoop:
     move.b  #6,(v_vbla_routine).w			; set V-blank routine to run
     jsr 	WaitForVBla					; wait for V-blank (decreases "Demo_Time_left")
     move.b  (v_jpadpress1).w,d0        	
+	btst	#bitB,d0
+	bne.s	LevelSelect_BPressed
 	andi.b	#btnStart+btnA,d0	
     bne.s   LevelSelect_StartPressed    ; if so, branch
 	bsr.w	LevelSelect_Controls
 	bsr.w	GLP2_Camera
 	bra.s	LevelSelect_MainLoop
+ 
+; Back to Title Screen
+LevelSelect_BPressed:
+	clr.w	(v_levselitem).w
+    move.b  #id_GLP2Title,(v_gamemode).w      	; set the screen mode to Title Screen
+    rts									; return
  
 ; Quit Menu
 LevelSelect_StartPressed:
