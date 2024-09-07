@@ -155,7 +155,11 @@ SBall_Move:	; Routine 2
 		lsl.w	#6,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1
+		move.b	(a0),d1	; get ID of self
+		cmp.b	(a1),d1	; GIO: Normally, the object does not check that what it is deleting is actually an orb. This can have dangerous side effects!
+		bne.s	.notSelf					
 		bsr.w	DeleteChild
+	.notSelf:	
 		dbf	d2,.deleteloop ; delete all pieces of	chain
 
 		rts	

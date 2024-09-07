@@ -117,7 +117,11 @@ Hel_DelAll:
 		lsl.w	#6,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1		; get child address
+		move.b	(a0),d1	; get ID of self
+		cmp.b	(a1),d1	; GIO: Normally, the object does not check that what it is deleting is actually an orb. This can have dangerous side effects!
+		bne.s	.notSelf						
 		bsr.w	DeleteChild	; delete object
+	.notSelf:	
 		dbf	d2,Hel_DelLoop ; repeat d2 times (helix length)
 
 Hel_Delete:	; Routine 6
