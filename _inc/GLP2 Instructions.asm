@@ -462,7 +462,7 @@ Instructions_PageBodies:
 	dc.b	"C DURING IT!                    "			
 	
 	dc.b	"GIOVANNI'S LEVEL PACK 2         "
-	dc.b	"VERSION 1.0                     "
+	dc.b	"VERSION 1.0.1                   "
 	dc.b	"                                "
 	dc.b	"THIS IS A MODIFIED VERSION OF   "
 	dc.b	"SONIC THE HEDGEHOG, A PROPERTY  "

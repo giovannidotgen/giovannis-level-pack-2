@@ -126,10 +126,10 @@ loc_E0:
 	endc
 Console:	dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
 Date:		dc.b "DOTGENSTUDIOS.24" ; Copyright holder and release date (generally year)
-Title_Local:	dc.b "GIOVANNI'S LEVEL PACK 2 - v1.0                  " ; Domestic name
-Title_Int:	dc.b "GIOVANNI'S LEVEL PACK 2 - v1.0                  " ; International name
+Title_Local:	dc.b "GIOVANNI'S LEVEL PACK 2 - v1.0.1                " ; Domestic name
+Title_Int:	dc.b "GIOVANNI'S LEVEL PACK 2 - v1.0.1                " ; International name
 Serial:		
-		dc.b "DGS-GLP2-V012P"   ; Serial/version number        
+		dc.b "DGS-GLP2-V101R"   ; Serial/version number        
 Checksum: dc.w $0
 		dc.b "J               " ; I/O support
 RomStartLoc:	dc.l StartOfRom		; Start address of ROM
